@@ -21,6 +21,6 @@ def playSong():
 
 if __name__ == '__main__':
     try:
-        talker()
+        playSong()
     except rospy.ROSInterruptException:
         pass
