@@ -9,7 +9,7 @@ Created on Mon Jan 27 14:38:44 2020
 import rospy
 from std_msgs.msg import String
 
-def talker():
+def playSong():
     pub = rospy.Publisher('play_song', String, queue_size=10)
     rospy.init_node('songPlayer', anonymous=True)
     rate = rospy.Rate(1) # 1hz
