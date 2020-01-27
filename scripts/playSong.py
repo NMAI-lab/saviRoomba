@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
 # Created on Mon Jan 27 14:38:44 2020
 # @author: patrickgavigan
 
