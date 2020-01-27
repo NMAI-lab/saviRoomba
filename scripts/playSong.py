@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 27 14:38:44 2020
+# Created on Mon Jan 27 14:38:44 2020
+# @author: patrickgavigan
 
-@author: patrickgavigan
-"""
 import rospy
 from std_msgs.msg import String
 
