@@ -3,10 +3,10 @@
 # @author: patrickgavigan
 
 import rospy
-from std_msgs.msg import String
+#from std_msgs.msg import String
 
 def playSong():
-    pub = rospy.Publisher('play_song', String, queue_size=10)
+    pub = rospy.Publisher('play_song', ca_msgs/PlaySong, queue_size=10)
     rospy.init_node('songPlayer', anonymous=True)
     #rate = rospy.Rate(1) # 1hz
     #while not rospy.is_shutdown():
