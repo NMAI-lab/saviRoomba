@@ -14,7 +14,7 @@ def playSong():
     rospy.init_node('songPlayer', anonymous=True)
     #rate = rospy.Rate(1) # 1hz
     #while not rospy.is_shutdown():
-    message = True
+    message = False
     rospy.loginfo(message)
     pub.publish(message)
     #rate.sleep()
