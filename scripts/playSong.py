@@ -9,15 +9,29 @@ from std_msgs.msg import Bool
 
 def playSong():
     #pub = rospy.Publisher('playSong', PlaySong, queue_size=10)
-    pub = rospy.Publisher('debris_led', Bool, queue_size=10)
+    checkLedPub = rospy.Publisher('check_led', Bool, queue_size=10)
+    debrisLedPub = rospy.Publisher('debris_led', Bool, queue_size=10)
+    dockLedPub = rospy.Publisher('dock_led', Bool, queue_size=10)
+    powerLedPub = rospy.Publisher('power_led', Bool, queue_size=10)
+    spotLedPub = rospy.Publisher('spot_led', Bool, queue_size=10)
     
-    rospy.init_node('songPlayer', anonymous=True)
-    #rate = rospy.Rate(1) # 1hz
-    #while not rospy.is_shutdown():
-    message = False
-    rospy.loginfo(message)
-    pub.publish(message)
-    #rate.sleep()
+    message = True
+    
+    rospy.init_node('myTry', anonymous=True)
+    rate = rospy.Rate(1) # 1hz
+    while not rospy.is_shutdown():
+        if message == True:
+            message = False
+        else:
+            message = True
+        
+        rospy.loginfo(message)
+        checkLedPub.publish(message)
+        debrisLedPub.publish(message)
+        dockLedPub.publish(message)
+        powerLedPub.publish(message)
+        spotLedPub.publish(message)
+        rate.sleep()
 
 if __name__ == '__main__':
     try:
