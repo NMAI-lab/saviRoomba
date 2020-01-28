@@ -3,7 +3,7 @@
 # @author: patrickgavigan
 
 import rospy
-from create_autonomy import PlaySong
+from ca_msgs import PlaySong.msg
 #from std_msgs.msg import String
 
 def playSong():
