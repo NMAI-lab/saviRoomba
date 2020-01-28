@@ -3,15 +3,18 @@
 # @author: patrickgavigan
 
 import rospy
-from ca_msgs.msg import PlaySong
+#from ca_msgs.msg import PlaySong
 #from std_msgs.msg import String
+from std_msgs.msg import Bool
 
 def playSong():
-    pub = rospy.Publisher('playSong', PlaySong, queue_size=10)
+    #pub = rospy.Publisher('playSong', PlaySong, queue_size=10)
+    pub = rospy.Publisher('debris_led', Bool, queue_size=10)
+    
     rospy.init_node('songPlayer', anonymous=True)
     #rate = rospy.Rate(1) # 1hz
     #while not rospy.is_shutdown():
-    message = 1
+    message = True
     rospy.loginfo(message)
     pub.publish(message)
     #rate.sleep()
