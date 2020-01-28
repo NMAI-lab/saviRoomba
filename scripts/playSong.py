@@ -11,7 +11,7 @@ def playSong():
     message = 0
     
     rospy.init_node('songTry', anonymous=True)
-    rate = rospy.Rate(10) # 1hz
+    rate = rospy.Rate(0.1) # 1hz
     while not rospy.is_shutdown():
         if message < 3:
             message = message + 1
