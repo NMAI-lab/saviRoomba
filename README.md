@@ -1,30 +1,19 @@
-# savi_ros_demo
+# saviRoomba
 
-Welcome to the savi_ros_demo repository. This is a demo project which is intended to show how to setup a project with the savi_ros_bdi package, available at https://github.com/NMAI-lab/savi_ros_bdi. For instructions on how to set up the savi_ros_bdi package please see the savi_ros_bdi github page.
+This project connects an iRobot Create 2 to a BDI reasoner usign the savi_ros_bdi package, available at https://github.com/NMAI-lab/savi_ros_bdi, and the create_autonomy package, available at https://github.com/AutonomyLab/create_autonomy. Both of those packages are required dependencies for this project to work.
+
+This project was based off of the savi_ros_demo example project, available at https://github.com/NMAI-lab/savi_ros_demo.
 
 ## Overview
-This repository contains scripts that demonstrate the functionality of the savi_ros_bdi package for ros. The savi_ros_bdi package listens for perceptions on the ```perceptions``` topic and publishes actions that are to be executed to the ```actions``` topic. This demo contains scripts that generate example perceptions (see scripts/talker.py) as well as a script that listens to the requested actions and prints them to the terminal (see scripts/listener.py). Please note that these scripts are based on a tutorial on the ros website, available at http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28python%29.
-
-The repository also contains a simple AgentSpeak program, located at asl/demo.asl. This program simply requests the do(something) action whenever a message of the format time(T) is receive, regardless of the value of T. Users who are not familiar with AgentSpeek are recommended to visit http://jason.sourceforge.net/ and read the Jason book.
-
-Lastly, there is a resources directoy which contains settings.cfg as well as a bash script called configProject. The settings.cfg file contains the path to the AgentSpeak program as well as the name and type of the agent that is being programmed. The configProject script can be used to place the configProject file at the appropriate location in the savi_ros_bdi package.
+TBC
 
 ## Configuration and Setup
-These instructions assume that you already have a ros workspace with the savi_ros_bdi package set up, as per the instructions at that repository. This means that you have a ros workspace at ~/SAVI_ROS/rosjavaWorkspace which contains the savi_ros_bdi project, as described in the savi_ros_bdi Readme.
+These instructions assume that you already have a ros workspace with the savi_ros_bdi package set up, as per the instructions at that repository. It also assumes that the create_autonomy package has been setup. This means that you have a ros workspace at ~/Roomba/create_ws which contains the savi_ros_bdi project, as described in the savi_ros_bdi Readme.
 
 First, clone this repository to the src directory of your workspace.
 
 ```
-$ git clone https://github.com/NMAI-lab/savi_ros_demo.git
-```
-Please note that to build this project from scratch, this could have been done using the following:
-```
-$ cd ~/SAVI_ROS/rosjavaWorkspace/src
-$ catkin_create_pkg savi_ros_py std_msgs rospy roscpp
-$ cd savi_ros_py 
-$ mkdir scripts
-$ mkdir asl
-$ mkdir resources
+$ git clone https://github.com/NMAI-lab/saviRoomba.git
 ```
 The scripts folder holds the Python scripts used for publishing and subscribing to ros topics. The asl folder is the location of the AgentSpeak programs. Lastly, the resources folder contains settings.cfg, which needs to be copied to the savi_ros_bdi package for it to correctly configure the agent. There is also a bash script called configProject, which can be used for correctly moving this settings file to the correct location in the savi_ros_bdi package. To use this you must first update line 6 of this script with the correct directory location for the savi_ros_bdi package. Also, the settings.cfg file should be checked to confirm that the parameters are correct, most notably the location of the ASL file, the agent type and the agent name. This script can be run at the command line without parameters.
 ```
@@ -38,9 +27,8 @@ $ source devel/setup.bash
 ```
 
 ## Running
-Before running the the demo scripts, roscore and savi_ros_bdi.Main need to be running. Please see the savi_ros_bdi Readme for instructions. It is then recommended that you run the listener first, followed by the talker. These will each need to be executed in thir own terminals.
+Before running the the demo scripts, roscore and savi_ros_bdi.Main need to be running. Please see the savi_ros_bdi Readme for instructions. It is then recommended that you run the packages from this node. These will each need to be executed in thir own terminals.
 ```
-$ rosrun savi_ros_py listener.py
-$ rosrun savi_ros_py talker.py  
+$ rosrun saviRoomba packageName.py 
 ```
-With these scripts running you will see details of the execution print to the terminals. Talker prints the messages being sent to ros, savi_ros_bdi will receive these messages and then publish actions to be executed to the actions topic. The listener prints these messages to the terminal.
+With these scripts running you will see details of the execution print to the terminals.
