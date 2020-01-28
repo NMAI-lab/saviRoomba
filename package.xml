@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>savi_ros_py</name>
+  <name>saviRoomba</name>
   <version>0.0.0</version>
-  <description>The savi_ros_py package</description>
+  <description>The saviRoomba package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/savi_ros_py</url> -->
+  <!-- <url type="website">http://wiki.ros.org/saviRoomba</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -58,6 +58,7 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <exec_depend>create_autonomy</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
