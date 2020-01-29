@@ -8,7 +8,7 @@ from ca_msgs.msg import Bumper
 def callback(data):
     #rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
     print(data)
-    print("Bumper data is_light_center_right: " + data.is_light_center_right)
+    print("Bumper data is_light_center_right: " + str(data.is_light_center_right))
 
 def listener():
 
