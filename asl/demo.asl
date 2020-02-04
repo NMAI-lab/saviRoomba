@@ -2,9 +2,10 @@
  * Demo BDI program
  * This example BDI program performs the action
  * 'do(action)' whenever it receives a perception 
- * of the format 'time(1234)'.
+ * of the format 'bumper(_,_), where the underscores
+ * are boolean data'.
  * @author	Patrick Gavigan
- * @date	6 December 2019
+ * @date	4 February 2020
  */
 
-+time(_) <- do(something).
++bumper(_,_) <- do(something).
