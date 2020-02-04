@@ -8,4 +8,8 @@
  * @date	4 February 2020
  */
 
-+bumper(_,_) <- do(something).
++bumper(True,_) <- lights(True).
+
++bumper(_,True) <- lights(True).
+
++bumper(False,False) <- lights(False).
