@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-#
+#!/usr/bin/env python
+
 #Created on Tue Feb  4 14:52:12 2020
-#
 #@author: patrickgavigan
 
 import rospy
