@@ -37,6 +37,9 @@ def performAction(message):
     powerLedPub = rospy.Publisher('power_led', Bool, queue_size=10)
     spotLedPub = rospy.Publisher('spot_led', Bool, queue_size=10)
 
+    # Cast the message as a bool
+    message = bool(message)
+
     # Send the messages
     checkLedPub.publish(message)
     debrisLedPub.publish(message)
