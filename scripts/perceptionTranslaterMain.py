@@ -10,7 +10,21 @@ from ca_msgs.msg import Bumper
 
 # Receive the bumper message and call the publisher
 def receiveSensorData(sensorData):
-    perceptionMessage = "bumper(" + str(sensorData.is_left_pressed) + "," + str(sensorData.is_right_pressed) + ")"
+
+    # Get a string for leftPressedString
+    if (sensorData.is_left_pressed):
+        leftPressedString = "true"
+    else:
+        leftPressedString = "false"
+        
+    # Get a string for rightPressedString
+    if (sensorData.is_right_pressed):
+        rightPressedString = "true"
+    else:
+        rightPressedString = "false"
+    
+    # Build the perception message and publish
+    perceptionMessage = "bumper(" + leftPressedString + "," + rightPressedString + ")"
     publishAsPerception(perceptionMessage)
 
 
