@@ -13,11 +13,14 @@ from std_msgs.msg import Bool
 def receiveAction(sensorData):
     # Message will be of the format "lights(True)" or "lights(False)"
     # Extract the message usign regex
-    print("message was: " + str(sensorData))
+    sensorData = str(sensorData)
+    print("message was: " +sensorData)
     message = re.search(r'\((.*?)\)',sensorData).group(1)
 
     # Bullet proof in case it isn't a boolean value
-    if message != True:
+    if message == "true":
+        message = True
+    else:
         message = False
 
     # Perform the action    
