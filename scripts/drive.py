@@ -1,23 +1,35 @@
 #!/usr/bin/env python
 
 import rospy
-from geometry_msgs.msgs import Twist
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist
 
 def perform_drive(line):
 
-    line = str(line)
+    line = str(line.data)
 
     print("line was: " + line)
 
     driver = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
-    vel = Twist(Vector3(0.1, 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
+    vel_msg = Twist()
 
     if line == "center":
-        driver.publish(vel)
+        vel_msg.linear.x = 0.1
+        vel_msg.angular.z = 0
+        driver.publish(vel_msg)
+    elif line == "left":
+        vel_msg.linear.x = 0
+        vel_msg.angular.z = 0.1
+        driver.publish(vel_msg)
+    elif line == "right":
+        vel_msg.linear.x = 0
+        vel_msg.angular.z = -0.1
+        driver.publish(vel_msg)
     else:
-        vel = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
-        driver.publish(vel)
+        vel_msg.linear.x = 0
+        vel_msg.angular.z = 0
+        driver.publish(vel_msg)
 
 
 def getline():
@@ -32,3 +44,4 @@ if __name__ == '__main__':
         getline()
     except rospy.ROSInterruptException:
         pass
+

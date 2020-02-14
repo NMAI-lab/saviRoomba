@@ -26,7 +26,11 @@ def liner():
             line = "center"
         elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 1 and GPIO.input(left_sensor) == 1:
             line = "right"
+        elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 0 and GPIO.input(left_sensor) == 1:
+            line = "right"
         elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 1:
+            line = "left"
+        elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0:
             line = "left"
         elif GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
             line = "across"
