@@ -18,7 +18,7 @@ GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 def liner():
     pub = rospy.Publisher('linepath', String, queue_size=10)
     rospy.init_node('liner', anonymous=True)
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
 
