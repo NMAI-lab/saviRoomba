@@ -24,19 +24,19 @@ def liner():
     while not rospy.is_shutdown():
 
         if GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(left_sensor) == 1:
-            line = "position(false, true, false)"
+            line = "position(false,true,false)"
         elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 1 and GPIO.input(left_sensor) == 1:
-            line = "position(false, false, true)"
+            line = "position(false,false,true)"
         elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 0 and GPIO.input(left_sensor) == 1:
-            line = "position(false, true, true)"
+            line = "position(false,true,true)"
         elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 1:
-            line = "position(true, false, false)"
+            line = "position(true,false,false)"
         elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0:
-            line = "position(true, true, false)"
+            line = "position(true,true,false)"
         elif GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
-            line = "position(true, true, true)"
+            line = "position(true,true,true)"
         else:
-            line = "position(false, false, false)"
+            line = "position(false,false,false)"
         rospy.loginfo(line)
         pub.publish(line)
         rate.sleep()

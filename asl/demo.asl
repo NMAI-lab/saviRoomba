@@ -7,4 +7,16 @@
  * @date	6 December 2019
  */
 
-+time(_) <- do(something).
++position(false,true,false) <- drive(forward).
+
++position(true,true,false) <- drive(left).
+
++position(true,false,false) <- drive(left).
+
++position(false,true,true) <- drive(right).
+
++position(false,false,true) <- drive(right).
+
++position(false,false,false) <- drive(stop).
+
++position(true,true,true) <- drive(stop).
