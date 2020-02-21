@@ -4,8 +4,13 @@ import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 
-def perform_drive(line):
 
+def perform_action(action):
+    act = str(action.data)
+    print("action is: " + act)
+
+
+def perform_drive(line):
     line = str(line.data)
 
     print("line was: " + line)
@@ -32,16 +37,15 @@ def perform_drive(line):
         driver.publish(vel_msg)
 
 
-def getline():
-    rospy.init_node('getline', anonymous=True)
-    rospy.Subscriber('linepath', String, perform_drive)
+def decode_action():
+    rospy.init_node('actionDecoder', anonymous=True)
+    rospy.Subscriber('actions', String, perform_action)
 
     rospy.spin()
 
 
 if __name__ == '__main__':
     try:
-        getline()
+        decode_action()
     except rospy.ROSInterruptException:
         pass
-
