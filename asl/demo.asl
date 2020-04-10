@@ -1,10 +1,6 @@
 /**
- * Demo BDI program
- * This example BDI program performs the action
- * 'do(action)' whenever it receives a perception 
- * of the format 'time(1234)'.
- * @author	Patrick Gavigan
- * @date	6 December 2019
+ * @author	Chidiebere Onyedinma
+ * @date	6 April 2020
  */
 
  /* Rules */
@@ -30,22 +26,27 @@
 
  +!navigate
     : lineCenter
-    <- drive(forward).
+    <- drive(forward);
+    !navigate.
 
  +!navigate
     : lineRight
-    <- drive(right).
+    <- drive(right);
+    !navigate.
 
  +!navigate
     : lineLeft
-    <- drive(left).
+    <- drive(left);
+    !navigate.
 
  +!navigate
     : lineAcross
-    <- drive(stop).
+    <- drive(stop);
+    !navigate.
 
  +!navigate
     : lineLost
-    <- drive(stop).
+    <- drive(stop);
+    !navigate.
 
  +!navigate.
