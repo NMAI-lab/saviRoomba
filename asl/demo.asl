@@ -7,16 +7,43 @@
  * @date	6 December 2019
  */
 
-+position(false,true,false) <- drive(forward).
+ /* Rules */
 
-+position(true,true,false) <- drive(left).
+ lineCenter :-
+        position(center).
 
-+position(true,false,false) <- drive(left).
+ lineRight :-
+        position(right).
 
-+position(false,true,true) <- drive(right).
+ lineLeft :-
+        position(left).
 
-+position(false,false,true) <- drive(right).
+ lineAcross :-
+        position(true,true,true).
 
-+position(false,false,false) <- drive(stop).
+ lineLost :-
+        position(false,false,false).
 
-+position(true,true,true) <- drive(stop).
+ /* Plans */
+
+ +!navigate
+    : lineCenter
+    <- drive(forward).
+
+ +!navigate
+    : lineRight
+    <- drive(right).
+
+ +!navigate
+    : lineLeft
+    <- drive(left).
+
+ +!navigate
+    : lineAcross
+    <- drive(stop).
+
+ +!navigate
+    : lineLost
+    <- drive(stop).
+
+ +!navigate.

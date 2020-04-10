@@ -9,7 +9,6 @@ is_driving = False
 
 
 def perform_action(action):
-    global is_driving
 
     act = str(action.data)
     print("action is: " + act)
@@ -17,19 +16,14 @@ def perform_action(action):
     if re.search("drive", act):
         if re.search("forward", act):
             direction = "forward"
-            is_driving = True
         elif re.search("left", act):
             direction = "left"
-            is_driving = True
         elif re.search("right", act):
             direction = "right"
-            is_driving = True
         elif re.search("stop", act):
             direction = "stop"
-            is_driving = False
 
-        while is_driving:
-            perform_drive(direction)
+    perform_drive(direction)
 
 
 def perform_drive(direction):
