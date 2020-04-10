@@ -34,9 +34,9 @@ def liner():
         elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0:
             line = "position(left)"
         elif GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
-            line = "position(true,true,true)"
+            line = "position(across)"
         else:
-            line = "position(false,false,false)"
+            line = "position(lost)"
         rospy.loginfo(line)
         pub.publish(line)
         rate.sleep()

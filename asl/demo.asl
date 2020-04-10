@@ -19,12 +19,14 @@
         position(left).
 
  lineAcross :-
-        position(true,true,true).
+        position(across).
 
  lineLost :-
-        position(false,false,false).
+        position(lost).
 
  /* Plans */
+
+ !navigate.
 
  +!navigate
     : lineCenter
