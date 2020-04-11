@@ -17,9 +17,10 @@ time.sleep(2.0)
 
 def qrscanner():
     
-    pub = rospy.Publisher('postpoint', String, queue_size=10)
-    rospy.init_node('qrpost', anonymous=True)
-    rate = rospy.Rate(1)
+    pub = rospy.Publisher('perceptions', String, queue_size=10)
+    print("[INFO] publisher created...")
+    rospy.init_node('qrpostpoint', anonymous=True)
+    rate = rospy.Rate(2)
     
     while not rospy.is_shutdown():
         # grab the frame from the threaded video stream and resize it to
