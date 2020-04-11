@@ -37,7 +37,8 @@ def liner():
             line = "position(across)"
         else:
             line = "position(lost)"
-        rospy.loginfo(line)
+        sense = "{}, {}, {}".format(GPIO.input(left_sensor), GPIO.input(center_sensor), GPIO.input(right_sensor))
+        rospy.loginfo(sense)
         pub.publish(line)
         rate.sleep()
 
