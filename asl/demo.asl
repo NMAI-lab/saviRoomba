@@ -20,9 +20,29 @@
  lineLost :-
         position(lost).
 
+ destAhead :-
+        dest(N) &
+        postPoint(C) &
+        (N > C).
+
+ onTrack :-
+        postPoint() &
+        lineCenter.
+
+ destBehind :-
+        dest(N) &
+        postPoint(C) &
+        (N < C).
+
+ atDestination :-
+        dest(N) &
+        postPoint(C) &
+        (N == C).
+
  /* Plans */
 
  !navigate.
+ !deliver.
 
  +!navigate
     : lineCenter
@@ -48,5 +68,9 @@
     : lineLost
     <- drive(stop);
     !navigate.
+
++!deliver
+    : onTrack
+    <- !navigate.
 
  +!navigate.
