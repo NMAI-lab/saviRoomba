@@ -22,22 +22,24 @@
 
  destAhead :-
         dest(N) &
-        postPoint(C) &
+        postPoint(C,P) &
         (N > C).
-
- onTrack :-
-        postPoint() &
-        lineCenter.
 
  destBehind :-
         dest(N) &
-        postPoint(C) &
+        postPoint(C,P) &
         (N < C).
 
  atDestination :-
         dest(N) &
-        postPoint(C) &
-        (N == C).
+        postPoint(C,P) &
+        (N = C).
+
+ onTrack :-
+        postPoint(_,P) &
+        dest(N) &
+        (((N > P) & destAhead) | ((N < P) & destBehind))) &
+        lineCenter.
 
  /* Plans */
 
@@ -73,4 +75,9 @@
     : onTrack
     <- !navigate.
 
- +!navigate.
++!deliver
+    : atDestination
+   <- drive(stop);
+   -!navigate.
+
+ +!deliver.
