@@ -23,22 +23,22 @@ def liner():
 
     while not rospy.is_shutdown():
 
-        if GPIO.input(center_sensor) == 1 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
+        if GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(left_sensor) == 1:
             line = "position(center)"
-        elif GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0 and GPIO.input(left_sensor) == 0:
+        elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 1 and GPIO.input(left_sensor) == 1:
             line = "position(right)"
-        elif GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 1 and GPIO.input(left_sensor) == 0:
+        elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 0 and GPIO.input(left_sensor) == 1:
             line = "position(right)"
-        elif GPIO.input(left_sensor) == 1 and GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 0:
+        elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 1:
             line = "position(left)"
-        elif GPIO.input(left_sensor) == 1 and GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 1:
+        elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0:
             line = "position(left)"
-        elif GPIO.input(center_sensor) == 1 and GPIO.input(right_sensor) == 1 and GPIO.input(left_sensor) == 1:
+        elif GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
             line = "position(across)"
         else:
             line = "position(lost)"
         sense = "{}, {}, {}".format(GPIO.input(left_sensor), GPIO.input(center_sensor), GPIO.input(right_sensor))
-        rospy.loginfo(line)
+        rospy.loginfo(sense)
         pub.publish(line)
         rate.sleep()
 
