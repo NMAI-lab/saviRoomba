@@ -37,8 +37,8 @@ def qrscanner():
             # the barcode data is a bytes object so if we want to draw it
             # on our output image we need to convert it to a string first
             barcode_data = barcode.data.decode("utf-8")
-            
-            post_stop = "postPoint({})".format(barcode_data)
+            point = barcode_data.split("post")
+            post_stop = "postPoint({})".format(point[1])
             
         rospy.loginfo(post_stop)
         pub.publish(post_stop)
