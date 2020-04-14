@@ -9,7 +9,7 @@ message = "post1,post1"
 
 def remote_server():
     global message
-    message = "0.0,0.0"
+    message = "post1,post1"
 
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv.bind(('192.168.1.110', 12345))
