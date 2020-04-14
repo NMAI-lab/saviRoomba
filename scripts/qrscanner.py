@@ -17,7 +17,6 @@ time.sleep(2.0)
 
 def qrscanner():
     pub = rospy.Publisher('perceptions', String, queue_size=10)
-    pub_dest = rospy.Publisher('perceptions', String, queue_size=10)
     print("[INFO] publisher created...")
     rospy.init_node('qrpostpoint', anonymous=True)
     rate = rospy.Rate(2)
@@ -44,7 +43,6 @@ def qrscanner():
 
         rospy.loginfo(post_stop)
         pub.publish(post_stop)
-        pub_dest.publish("dest(4)")
         rate.sleep()
 
 
