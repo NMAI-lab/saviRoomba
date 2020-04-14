@@ -3,6 +3,7 @@
 import rospy
 import socket
 import threading
+from std_msgs.msg import String
 
 message = "post1,post1"
 
