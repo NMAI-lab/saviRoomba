@@ -12,7 +12,7 @@ def remote_server():
     message = "post1,post1"
 
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serv.bind(('192.168.1.110', 12345))
+    serv.bind(('192.168.1.98', 12345))
     serv.listen(5)
     while True:
         conn, addr = serv.accept()
