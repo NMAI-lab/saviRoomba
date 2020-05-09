@@ -71,13 +71,37 @@
     <- drive(stop);
     !navigate.
 
-+!deliver
+ +!deliver
     : onTrack
     <- !navigate.
 
-+!deliver
+ +!deliver
     : atDestination
-   <- drive(stop);
-   -!navigate.
+    <- drive(stop).
+
+ +!deliver
+    : batteryLow
+    <- !dock.
+
+ +!deliver
+    : batteryOK & docked
+    <- !undock.
 
  +!deliver.
+
+ +!dock
+    : not atDockPost & onTrack
+    <- !navigate;
+    !dock.
+
+ +!dock
+    : atDockPost & moving
+    <- drive(stop);
+    !dock.
+
+ +!dock
+    : atDockPost & not moving
+    <- dock_bot.
+
+ +!dock.
+
