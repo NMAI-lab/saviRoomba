@@ -3,6 +3,7 @@
 import rospy
 import re
 from std_msgs.msg import String
+from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
 
 is_driving = False
@@ -12,7 +13,7 @@ def perform_action(action):
 
     act = str(action.data)
     print("action is: " + act)
-
+    direction = ""
     if re.search("drive", act):
         if re.search("forward", act):
             direction = "forward"
@@ -22,13 +23,17 @@ def perform_action(action):
             direction = "right"
         elif re.search("stop", act):
             direction = "stop"
-
-    perform_drive(direction)
+        perform_drive(direction)
+    if act == "dock_bot":
+        docker = rospy.Publisher('dock', Empty, queue_size=10)
+        docker.publish()
+    elif act == "undock_bot":
+        docker = rospy.Publisher('undock', Empty, queue_size=10)
+        docker.publish()
 
 
 def perform_drive(direction):
     print("direction is: " + direction)
-
     driver = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
     vel_msg = Twist()
