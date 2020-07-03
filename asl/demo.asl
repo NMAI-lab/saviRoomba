@@ -133,19 +133,12 @@ onTrack :-
  * followPath
  * Follow the line.
  */
+ 
+ // Ideally, these plans could be combined using unification (see the last plan
+ // in this set).
 +!followPath
 	:	line(center)
 	<-	drive(forward);
-		!followPath.
-		
-+!followPath
-	:	line(right)
-	<-	drive(right);
-		!followPath.
-		
-+!followPath
-	:	line(left)
-	<-	drive(left);
 		!followPath.
 		
 +!followPath
@@ -156,6 +149,12 @@ onTrack :-
 +!followPath
 	:	line(lost)
 	<-	drive(stop);
+		!followPath.
+
+// Handle cases for left and right turns.
++!followPath
+	:	line(DIRECTION)
+	<-	drive(DIRECTION);
 		!followPath.
 		
  
