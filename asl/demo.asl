@@ -190,23 +190,38 @@ DestinationLeft :-
  * This is where the path planning stuff happens, deciding how to get to the
  * destination.
  */
- // TO DO: ADD THE NAVIGATION RULES HERE
- // THESE ARE FROM THE ORIGINAL CODE AND NEED TO BE UPDATED
 +!goToLocation
-	:	onTrack
+	:	destinationAhead
 	<-	!followPath.
 
 +!goToLocation
 	:	atDestination
 	<-	drive(stop).
+	
++!goToLocation
+	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
+	<-	drive(left);	// TODO: This (or something similar) needs to be implementd
+		!followPath.
+		
++!goToLocation
+	:	destinationRight	// TODO: Update to use unification for left, right, behind?
+	<-	drive(right);		// TODO: This (or something similar) needs to be implementd
+		!followPath.
+	
++!goToLocation
+	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
+	<-	drive(back);		// TODO: This (or something similar) needs to be implementd
+		!followPath.
 
 +!goToLocation
-	:	batteryLow
+	:	batteryLow	// Not sure if this is properly handled.
 	<-	!dock.
 
 +!goToLocation
 	:	batteryOK & docked
-	<-	!undock.
+	<-	!undock.	// Has this plan been implemented?
+	
+
 
 +!goToLocation.
 
