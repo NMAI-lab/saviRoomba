@@ -1,107 +1,278 @@
 /**
  * @author	Chidiebere Onyedinma
- * @date	6 April 2020
+ * @author	Patrick Gavigan
+ * @date	2 July 2020
+ */
+ 
+/**
+ * Main beliefs for the robot
+ * Mission is hard coded for now (need to update this)
+ */
+senderLocation(post1).		// The location of the mail sender
+receiverLocation(post4).	// The location of the mail receiver
+dockStation(post5).			// The location of the docking station
+
+/**
+ * Navigation rules
  */
 
- /* Rules */
+// Arrived at the destination
+atDestination :-
+	destination(DESTINATION) &
+	postPoint(DESTINATION,_).
 
- lineCenter :-
-        position(center).
+// Destination is the previously seen post point
+DestinationBehind :-
+	destinaton(DESTINATION) &
+	postPoint(_,DESTINATION).
 
- lineRight :-
-        position(right).
+// Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
+DestinationAhead :-
+ 	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	((CURRENT = post1) | CURRENT = post4) | CURRENT = post5)) &
+	not (PAST = CURRENT). 
+// Do we need to deal with the case where we were trying to drive off the end of
+// the map? Likely yes, not certain.
+	
+// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is
+// ahead of us.
+DestinationAhead :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post2 &
+	PAST = post1 &
+	not (DESTINATION = PAST).
+	
+// Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
+// ahead of us.
+DestinationBehind :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post2 &
+	PAST = post1 &
+	DESTINATION = PAST.
+	
+// Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
+// is behond of us.
+DestinationBehind :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post2 &
+	not (PAST = post1) &
+	not (DESTINATION = PAST).
+	
+// Rules @ post3, PAST = post4, DESTINATION = post5
+DestinationAhead :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post4 &
+	DESTINATION = post5.
 
- lineLeft :-
-        position(left).
+// Rules @ post3, PAST = post5, DESTINATION = post4
+DestinationAhead :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post5 &
+	DESTINATION = post4.
 
- lineAcross :-
-        position(across).
+// Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
+DestinationRight :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post5 &
+	((DESTINATION = post1) | (DESTINATION = post2)).
+	
+// Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
+DestinationLeft :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post4 &
+	((DESTINATION = post1) | (DESTINATION = post2)).
 
- lineLost :-
-        position(lost).
+// Rules @ post3, PAST = post2, DESTINATION = post1 or post2
+DestinationBehind :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post2 &
+	((DESTINATION = post1) | (DESTINATION = post2)).
 
- destAhead :-
-        dest(N) &
-        postPoint(C,P) &
-        (N > C).
+// Rules @ post3, PAST = post2, DESTINATION = post4
+DestinationRight :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post2 &
+	DESTINATION = post4.
 
- destBehind :-
-        dest(N) &
-        postPoint(C,P) &
-        (N < C).
+// Rules @ post3, PAST = post2, DESTINATION = post4
+DestinationLeft :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post2 &
+	DESTINATION = post5.
+	
+/**
+ * High level goals
+ */
+!deliverMail.		// Highest level task: Deliver mail from sender to receiver
+//!goToLocation.	// Go to a destination location (such as a post point)
+//!followPath.		// Follow the path (line on the ground) 
+//!dock.			// Dock the robot when it is time to recharge
 
- atDestination :-
-        dest(N) &
-        postPoint(C,P) &
-        (N = C).
+/**
+ * deliverMail
+ * Go get the mail from the sender, deliver it to the receiver if I have it
+ */
+ 
+ // Case where I have a sender location and don't yet have the mail, not 
+ // currently at the senderLocation.
+ +!deliverMail
+ 	: 	((not haveMail) &
+		senderLocation(SENDER) &
+		receiverLocation(RECEIVER) &
+		currentLocation(SENDER) & 
+		batteryOK)
+	<- 	+destination(SENDER);
+		!goToLocation;
+		!deliverMail.
+		
+// Case where I am at the sender location
+// Assume that the fact that I have arrived at the sender location means that 
+// I have the mail (this will need to be updated)
+ +!deliverMail
+ 	: 	((not haveMail) &
+		senderLocation(SENDER) &
+		receiverLocation(RECEIVER) &
+		currentLocation(SENDER) & 
+		batteryOK)
+	<- 	+haveMail;
+		//-senderLocation(_);	// Should we remove the sender location here?
+		!deliverMail.
+ 
+// Case where I have the mail and need to deliver it to the receiver
+ +!deliverMail
+ 	: 	(haveMail &
+		receiverLocation(RECEIVER) &
+		not currentLocation(RECEIVER) &
+		batteryOK)
+	<- 	!goToLocation;
+		!deliverMail.
+		
+// Case where I have the mail and am at the receiver location
+ +!deliverMail
+ 	: 	(haveMail &
+		receiverLocation(RECEIVER) &
+		currentLocation(RECEIVER) &
+		batteryOK)
+	<- 	-haveMail.
+		// -receiverLocation(_).	// Should we remove the receiver location here?
 
- onTrack :-
-        postPoint(_,P) &
-        dest(N) &
-        (((N > P) & destAhead) | ((N < P) & destBehind))) &
-        lineCenter.
+// Case where the battery is low
+ +!deliverMail
+ 	: 	(batteryLow &
+		dockStation(DOCK))	
+	<-	-destination(_);
+		+destination(DOCK);
+		!goToLocation.
+		
+// Catchall (suspect that this should not be needed)
++!deliverMail.
 
- /* Plans */
+/** 
+ * goToLocation
+ * This is where the path planning stuff happens, deciding how to get to the
+ * destination.
+ */
++!goToLocation
+	:	destinationAhead
+	<-	!followPath.
 
- !navigate.
- !deliver.
++!goToLocation
+	:	atDestination
+	<-	drive(stop).
+	
++!goToLocation
+	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
+	<-	drive(left);	// TODO: This (or something similar) needs to be implementd
+		!followPath.
+		
++!goToLocation
+	:	destinationRight	// TODO: Update to use unification for left, right, behind?
+	<-	drive(right);		// TODO: This (or something similar) needs to be implementd
+		!followPath.
+	
++!goToLocation
+	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
+	<-	drive(back);		// TODO: This (or something similar) needs to be implementd
+		!followPath.
 
- +!navigate
-    : lineCenter
-    <- drive(forward);
-    !navigate.
++!goToLocation
+	:	batteryLow	// Not sure if this is properly handled.
+	<-	!dock.
 
- +!navigate
-    : lineRight
-    <- drive(right);
-    !navigate.
++!goToLocation
+	:	batteryOK & docked
+	<-	!undock.	// Has this plan been implemented?
+	
 
- +!navigate
-    : lineLeft
-    <- drive(left);
-    !navigate.
 
- +!navigate
-    : lineAcross
-    <- drive(stop);
-    !navigate.
++!goToLocation.
 
- +!navigate
-    : lineLost
-    <- drive(stop);
-    !navigate.
 
- +!deliver
-    : onTrack
-    <- !navigate.
+/** 
+ * followPath
+ * Follow the line.
+ */
+ 
+ // Ideally, these plans could be combined using unification (see the last plan
+ // in this set). This would need a modification of the scripts that interpret 
+ // drive() action, or the script that generates the line() message (of both)
++!followPath
+	:	line(center)
+	<-	drive(forward);
+		!followPath.
+		
++!followPath
+	:	line(across)
+	<-	drive(stop);
+		!followPath.
 
- +!deliver
-    : atDestination
-    <- drive(stop).
++!followPath
+	:	line(lost)
+	<-	drive(stop);
+		!followPath.
 
- +!deliver
-    : batteryLow
-    <- !dock.
+// Handle cases for left and right turns.
++!followPath
+	:	line(DIRECTION)
+	<-	drive(DIRECTION);
+		!followPath.
+		
+ 
+/**
+ * dock
+ * Dock the robot at the charging station
+ */
++!dock
+ 	:	not atDockPost & onTrack
+	<-	!navigate;
+		!dock.
 
- +!deliver
-    : batteryOK & docked
-    <- !undock.
++!dock
+	:	atDockPost & moving
+	<-	drive(stop);
+    	!dock.
 
- +!deliver.
-
- +!dock
-    : not atDockPost & onTrack
-    <- !navigate;
-    !dock.
-
- +!dock
-    : atDockPost & moving
-    <- drive(stop);
-    !dock.
-
- +!dock
-    : atDockPost & not moving
-    <- dock_bot.
-
- +!dock.
++!dock
+	:	atDockPost & not moving
+	<-	dock_bot.
+	
++!dock. 
 
