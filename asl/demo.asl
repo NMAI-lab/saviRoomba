@@ -15,6 +15,7 @@ dockStation(post5).			// The location of the docking station
 /**
  * Navigation rules
  */
+ /*
 destAhead :-
 	destination(N) &
 	postPoint(C,P) &
@@ -35,6 +36,109 @@ onTrack :-
 	destination(N) &
 	(((N > P) & destAhead) | ((N < P) & destBehind)) &
 	line(center).
+*/
+
+// Arrived at the destination
+atDestination :-
+	destination(DESTINATION) &
+	postPoint(DESTINATION,_).
+
+// Destination is the previously seen post point
+destBehind :-
+	destinaton(DESTINATION) &
+	postPoint(_,DESTINATION).
+
+// Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
+ destAhead :-
+ 	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	((CURRENT = post1) | CURRENT = post4) | CURRENT = post5)) &
+	not (PAST = CURRENT). 
+// Do we need to deal with the case where we were trying to drive off the end of
+// the map? Likely yes, not certain.
+	
+// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is
+// ahead of us.
+destAhead :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post2 &
+	PAST = post1 &
+	not (DESTINATION = PAST).
+	
+// Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
+// ahead of us.
+destBehind :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post2 &
+	PAST = post1 &
+	DESTINATION = PAST.
+	
+// Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
+// is behond of us.
+destBehind :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post2 &
+	not (PAST = post1) &
+	not (DESTINATION = PAST).
+	
+// Rules @ post3, PAST = post4, DESTINATION = post5
+destAhead :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post4 &
+	DESTINATION = post5.
+
+// Rules @ post3, PAST = post5, DESTINATION = post4
+destAhead :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post5 &
+	DESTINATION = post4.
+
+// Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
+destRight :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post5 &
+	((DESTINATION = post1) | (DESTINATION = post2)).
+	
+// Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
+destLeft :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post4 &
+	((DESTINATION = post1) | (DESTINATION = post2)).
+
+// Rules @ post3, PAST = post2, DESTINATION = post1 or post2
+destBehind :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post2 &
+	((DESTINATION = post1) | (DESTINATION = post2)).
+
+// Rules @ post3, PAST = post2, DESTINATION = post4
+destRight :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post2 &
+	DESTINATION = post4.
+
+// Rules @ post3, PAST = post2, DESTINATION = post4
+destLeft :-
+	destination(DESTINATION) &
+	postPoint(CURRENT,PAST) &
+	CURRENT = post3 &
+	PAST = post2 &
+	DESTINATION = post5.
 	
 /**
  * High level goals
@@ -135,7 +239,8 @@ onTrack :-
  */
  
  // Ideally, these plans could be combined using unification (see the last plan
- // in this set).
+ // in this set). This would need a modification of the scripts that interpret 
+ // drive() action, or the script that generates the line() message (of both)
 +!followPath
 	:	line(center)
 	<-	drive(forward);
