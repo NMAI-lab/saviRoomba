@@ -15,28 +15,6 @@ dockStation(post5).			// The location of the docking station
 /**
  * Navigation rules
  */
- /*
-destAhead :-
-	destination(N) &
-	postPoint(C,P) &
-	(N > C).
-
-destBehind :-
-	destination(N) &
-	postPoint(C,P) &
-	(N < C).
-	
-atDestination :-
-	destination(N) &
-	postPoint(C,P) &
-	(N = C).
-
-onTrack :-
-	postPoint(_,P) &
-	destination(N) &
-	(((N > P) & destAhead) | ((N < P) & destBehind)) &
-	line(center).
-*/
 
 // Arrived at the destination
 atDestination :-
@@ -44,12 +22,12 @@ atDestination :-
 	postPoint(DESTINATION,_).
 
 // Destination is the previously seen post point
-destBehind :-
+DestinationBehind :-
 	destinaton(DESTINATION) &
 	postPoint(_,DESTINATION).
 
 // Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
- destAhead :-
+DestinationAhead :-
  	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	((CURRENT = post1) | CURRENT = post4) | CURRENT = post5)) &
@@ -59,7 +37,7 @@ destBehind :-
 	
 // Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is
 // ahead of us.
-destAhead :-
+DestinationAhead :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
@@ -68,7 +46,7 @@ destAhead :-
 	
 // Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
 // ahead of us.
-destBehind :-
+DestinationBehind :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
@@ -77,7 +55,7 @@ destBehind :-
 	
 // Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
 // is behond of us.
-destBehind :-
+DestinationBehind :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
@@ -85,7 +63,7 @@ destBehind :-
 	not (DESTINATION = PAST).
 	
 // Rules @ post3, PAST = post4, DESTINATION = post5
-destAhead :-
+DestinationAhead :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -93,7 +71,7 @@ destAhead :-
 	DESTINATION = post5.
 
 // Rules @ post3, PAST = post5, DESTINATION = post4
-destAhead :-
+DestinationAhead :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -101,7 +79,7 @@ destAhead :-
 	DESTINATION = post4.
 
 // Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
-destRight :-
+DestinationRight :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -109,7 +87,7 @@ destRight :-
 	((DESTINATION = post1) | (DESTINATION = post2)).
 	
 // Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
-destLeft :-
+DestinationLeft :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -117,7 +95,7 @@ destLeft :-
 	((DESTINATION = post1) | (DESTINATION = post2)).
 
 // Rules @ post3, PAST = post2, DESTINATION = post1 or post2
-destBehind :-
+DestinationBehind :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -125,7 +103,7 @@ destBehind :-
 	((DESTINATION = post1) | (DESTINATION = post2)).
 
 // Rules @ post3, PAST = post2, DESTINATION = post4
-destRight :-
+DestinationRight :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -133,7 +111,7 @@ destRight :-
 	DESTINATION = post4.
 
 // Rules @ post3, PAST = post2, DESTINATION = post4
-destLeft :-
+DestinationLeft :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
