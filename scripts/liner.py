@@ -16,6 +16,23 @@ GPIO.setup(center_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
+def get_line():
+    if GPIO.input(center_sensor) == 1 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
+        return "c"
+    elif GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0 and GPIO.input(left_sensor) == 0:
+        return "r"
+    elif GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 1 and GPIO.input(left_sensor) == 0:
+        return "r"
+    elif GPIO.input(left_sensor) == 1 and GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 0:
+        return "l"
+    elif GPIO.input(left_sensor) == 1 and GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 1:
+        return "l"
+    elif GPIO.input(center_sensor) == 1 and GPIO.input(right_sensor) == 1 and GPIO.input(left_sensor) == 1:
+        return "a"
+    else:
+        return "ll"
+    
+
 def liner():
     pub = rospy.Publisher('perceptions', String, queue_size=10)
     rospy.init_node('liner', anonymous=True)
@@ -23,20 +40,16 @@ def liner():
 
     while not rospy.is_shutdown():
 
-        if GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(left_sensor) == 1:
-            line = "position(center)"
-        elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 1 and GPIO.input(left_sensor) == 1:
-            line = "position(right)"
-        elif GPIO.input(right_sensor) == 0 and GPIO.input(center_sensor) == 0 and GPIO.input(left_sensor) == 1:
-            line = "position(right)"
-        elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 1:
-            line = "position(left)"
-        elif GPIO.input(left_sensor) == 0 and GPIO.input(right_sensor) == 1 and GPIO.input(center_sensor) == 0:
-            line = "position(left)"
-        elif GPIO.input(center_sensor) == 0 and GPIO.input(right_sensor) == 0 and GPIO.input(left_sensor) == 0:
-            line = "position(across)"
+        if get_line() == "c":
+            line = "line(center)"
+        elif get_line() == "r":
+            line = "line(right)"
+        elif get_line() == "l":
+            line = "line(left)"
+        elif get_line() == "a":
+            line = "line(across)"
         else:
-            line = "position(lost)"
+            line = "line(lost)"
         sense = "{}, {}, {}".format(GPIO.input(left_sensor), GPIO.input(center_sensor), GPIO.input(right_sensor))
         rospy.loginfo(sense)
         pub.publish(line)

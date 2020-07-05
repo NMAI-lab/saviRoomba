@@ -200,17 +200,17 @@ DestinationLeft :-
 	
 +!goToLocation
 	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
-	<-	drive(left);	// TODO: This (or something similar) needs to be implementd
+	<-	turn(left);	// TODO: This (or something similar) needs to be implementd
 		!followPath.
 		
 +!goToLocation
 	:	destinationRight	// TODO: Update to use unification for left, right, behind?
-	<-	drive(right);		// TODO: This (or something similar) needs to be implementd
+	<-	turn(right);		// TODO: This (or something similar) needs to be implementd
 		!followPath.
 	
 +!goToLocation
 	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
-	<-	drive(back);		// TODO: This (or something similar) needs to be implementd
+	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
 		!followPath.
 
 +!goToLocation
@@ -239,10 +239,6 @@ DestinationLeft :-
 	<-	drive(forward);
 		!followPath.
 		
-+!followPath
-	:	line(across)
-	<-	drive(stop);
-		!followPath.
 
 +!followPath
 	:	line(lost)

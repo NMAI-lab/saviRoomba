@@ -12,7 +12,7 @@ def remote_server():
     message = "post1,post1"
 
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serv.bind(('192.168.1.98', 12345))
+    serv.bind(('192.168.1.146', 12345))
     serv.listen(5)
     while True:
         conn, addr = serv.accept()
@@ -42,7 +42,7 @@ def parse_msg():
             continue
 
         point = params[1].split("post")
-        dest = "dest({})".format(point[1])
+        dest = "destination({})".format(point[1])
 
         rospy.loginfo(dest)
         pub.publish(dest)
