@@ -137,7 +137,7 @@ DestinationLeft :-
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		currentLocation(SENDER) & 
+		not currentLocation(SENDER) &
 		batteryOK)
 	<- 	+destination(SENDER);
 		!goToLocation;
@@ -153,7 +153,7 @@ DestinationLeft :-
 		currentLocation(SENDER) & 
 		batteryOK)
 	<- 	+haveMail;
-		//-senderLocation(_);	// Should we remove the sender location here?
+		-destination(_);
 		!deliverMail.
  
 // Case where I have the mail and need to deliver it to the receiver
@@ -162,7 +162,8 @@ DestinationLeft :-
 		receiverLocation(RECEIVER) &
 		not currentLocation(RECEIVER) &
 		batteryOK)
-	<- 	!goToLocation;
+	<- 	+destination(RERCEIVER);
+		!goToLocation;
 		!deliverMail.
 		
 // Case where I have the mail and am at the receiver location
@@ -171,7 +172,8 @@ DestinationLeft :-
 		receiverLocation(RECEIVER) &
 		currentLocation(RECEIVER) &
 		batteryOK)
-	<- 	-haveMail.
+	<- 	-haveMail;
+		-destination(_).
 		// -receiverLocation(_).	// Should we remove the receiver location here?
 
 // Case where the battery is low
