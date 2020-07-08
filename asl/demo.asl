@@ -182,7 +182,8 @@ DestinationLeft :-
 		dockStation(DOCK))	
 	<-	-destination(_);
 		+destination(DOCK);
-		!goToLocation.
+		!goToLocation;
+		!deliverMail.
 		
 // Catchall (suspect that this should not be needed)
 +!deliverMail
@@ -216,13 +217,13 @@ DestinationLeft :-
 	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
 		!followPath.
 
-+!goToLocation
-	:	batteryLow	// Not sure if this is properly handled.
-	<-	!dock.
+//+!goToLocation
+//	:	batteryLow	// Not sure if this is properly handled.
+//	<-	!dock.
 
-+!goToLocation
-	:	batteryOK & docked
-	<-	!undock.	// Has this plan been implemented?
+//+!goToLocation
+//	:	batteryOK & docked
+//	<-	!undock.	// Has this plan been implemented?
 	
 
 
