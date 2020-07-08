@@ -246,8 +246,7 @@ DestinationLeft :-
 
 +!followPath
 	:	line(lost)
-	<-	drive(stop);
-		!followPath.
+	<-	drive(stop).
 
 // Handle cases for left and right turns.
 +!followPath
