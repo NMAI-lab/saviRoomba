@@ -185,7 +185,8 @@ DestinationLeft :-
 		!goToLocation.
 		
 // Catchall (suspect that this should not be needed)
-+!deliverMail.
++!deliverMail
+	<-	!deliverMail.
 
 /** 
  * goToLocation
