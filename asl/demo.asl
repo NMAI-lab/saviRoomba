@@ -137,7 +137,7 @@ DestinationLeft :-
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		not currentLocation(SENDER) &
+		not postPoint(SENDER,_) &
 		batteryOK)
 	<- 	+destination(SENDER);
 		!goToLocation;
@@ -150,7 +150,7 @@ DestinationLeft :-
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		currentLocation(SENDER) & 
+		postPoint(SENDER,_) & 
 		batteryOK)
 	<- 	+haveMail;
 		-destination(_);
@@ -160,7 +160,7 @@ DestinationLeft :-
  +!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		not currentLocation(RECEIVER) &
+		not postPoint(RECEIVER,_) &
 		batteryOK)
 	<- 	+destination(RERCEIVER);
 		!goToLocation;
@@ -170,7 +170,7 @@ DestinationLeft :-
  +!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		currentLocation(RECEIVER) &
+		postPoint(RECEIVER,_) &
 		batteryOK)
 	<- 	-haveMail;
 		-destination(_).
@@ -182,7 +182,7 @@ DestinationLeft :-
 		dockStation(DOCK))	
 	<-	-destination(_);
 		+destination(DOCK);
-		!goToLocation;
+		!dock;
 		!deliverMail.
 		
 // Catchall (suspect that this should not be needed)
@@ -260,18 +260,12 @@ DestinationLeft :-
  * Dock the robot at the charging station
  */
 +!dock
- 	:	not atDockPost & onTrack
-	<-	!navigate;
+ 	:	dockStation(DOCK) & not postPoint(DOCK,_)
+	<-	!goToLocation;
 		!dock.
 
 +!dock
-	:	atDockPost & moving
+	:	dockStation(DOCK) & postPoint(DOCK,_)
 	<-	drive(stop);
-    	!dock.
-
-+!dock
-	:	atDockPost & not moving
-	<-	dock_bot.
-	
-+!dock. 
+		dock_bot.
 
