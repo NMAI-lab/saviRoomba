@@ -137,7 +137,7 @@ DestinationLeft :-
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		currentLocation(SENDER) & 
+		not postPoint(SENDER,_) &
 		batteryOK)
 	<- 	+destination(SENDER);
 		!goToLocation;
@@ -150,28 +150,30 @@ DestinationLeft :-
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		currentLocation(SENDER) & 
+		postPoint(SENDER,_) & 
 		batteryOK)
 	<- 	+haveMail;
-		//-senderLocation(_);	// Should we remove the sender location here?
+		-destination(_);
 		!deliverMail.
  
 // Case where I have the mail and need to deliver it to the receiver
  +!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		not currentLocation(RECEIVER) &
+		not postPoint(RECEIVER,_) &
 		batteryOK)
-	<- 	!goToLocation;
+	<- 	+destination(RERCEIVER);
+		!goToLocation;
 		!deliverMail.
 		
 // Case where I have the mail and am at the receiver location
  +!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		currentLocation(RECEIVER) &
+		postPoint(RECEIVER,_) &
 		batteryOK)
-	<- 	-haveMail.
+	<- 	-haveMail;
+		-destination(_).
 		// -receiverLocation(_).	// Should we remove the receiver location here?
 
 // Case where the battery is low
@@ -180,10 +182,12 @@ DestinationLeft :-
 		dockStation(DOCK))	
 	<-	-destination(_);
 		+destination(DOCK);
-		!goToLocation.
+		!dock;
+		!deliverMail.
 		
 // Catchall (suspect that this should not be needed)
-+!deliverMail.
++!deliverMail
+	<-	!deliverMail.
 
 /** 
  * goToLocation
@@ -213,13 +217,13 @@ DestinationLeft :-
 	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
 		!followPath.
 
-+!goToLocation
-	:	batteryLow	// Not sure if this is properly handled.
-	<-	!dock.
+//+!goToLocation
+//	:	batteryLow	// Not sure if this is properly handled.
+//	<-	!dock.
 
-+!goToLocation
-	:	batteryOK & docked
-	<-	!undock.	// Has this plan been implemented?
+//+!goToLocation
+//	:	batteryOK & docked
+//	<-	!undock.	// Has this plan been implemented?
 	
 
 
@@ -242,8 +246,7 @@ DestinationLeft :-
 
 +!followPath
 	:	line(lost)
-	<-	drive(stop);
-		!followPath.
+	<-	drive(stop).
 
 // Handle cases for left and right turns.
 +!followPath
@@ -257,18 +260,12 @@ DestinationLeft :-
  * Dock the robot at the charging station
  */
 +!dock
- 	:	not atDockPost & onTrack
-	<-	!navigate;
+ 	:	dockStation(DOCK) & not postPoint(DOCK,_)
+	<-	!goToLocation;
 		!dock.
 
 +!dock
-	:	atDockPost & moving
+	:	dockStation(DOCK) & postPoint(DOCK,_)
 	<-	drive(stop);
-    	!dock.
-
-+!dock
-	:	atDockPost & not moving
-	<-	dock_bot.
-	
-+!dock. 
+		dock_bot.
 
