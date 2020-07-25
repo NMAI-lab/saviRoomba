@@ -6,7 +6,7 @@
 # @author: Patrick Gavigan
 
 import rospy
-from savi_a_star.msg import navigationSolution, navigationProblem
+#from savi_a_star.msg import navigationSolution, navigationProblem
 
 from RouteSearcher import RouteSearcher
 
@@ -14,11 +14,11 @@ from RouteSearcher import RouteSearcher
 def performSearch(data, args):
     (publisher, searcher) = args
 
-    solution = navigationSolution()
-    solution.path = list(searcher.astar(data.start,data.finish))
+    #solution = navigationSolution()
+    solutionPath = list(searcher.astar(data.start,data.finish))
     
-    rospy.loginfo(solution)
-    publisher.publish(solution)    
+    #rospy.loginfo(solution)
+    #publisher.publish(solution)    
 
 
 def rosMain():

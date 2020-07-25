@@ -11,6 +11,7 @@
 from astar import AStar
 import math
 import json
+import numpy as np
 
 class RouteSearcher(AStar):
 
@@ -40,3 +41,32 @@ class RouteSearcher(AStar):
         neighbourNodes = self.nodeGraph[node]
         neighbourNames = [a_tuple[0] for a_tuple in neighbourNodes]
         return neighbourNames
+    
+    # Returns a direction for where to go to continue on the journey
+    def getNextDirection(self, current, previous, dest):
+        (xCurrent, yCurrent) = self.nodeLocations[current]
+        (xPrevious, yPrevious) = self.nodeLocations[previous]
+        (xDest, yDest) = self.nodeLocations[dest]
+        
+        current = np.array([xCurrent, yCurrent])
+        previous = np.array([xPrevious, yPrevious])
+        destination = np.array([xDest, yDest])
+        
+        currentDirection = current - previous
+        desiredDirection = destination - current
+ 
+        print(currentDirection)
+        print(desiredDirection)
+        
+#        distance = [xCurrent - xPrevious, yCurrent - yPrevious]
+#        norm = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+#        currentDirection = [distance[0] / norm, distance[1] / norm]
+        
+        
+        
+#        desiredDirection = 1
+        
+#        return "DestLeft"
+    
+    #def getDirectionRange(A, B):
+        
