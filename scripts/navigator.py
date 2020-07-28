@@ -10,17 +10,23 @@ from RouteSearcher import RouteSearcher
 def rosMain():
     print("Hello")
     
-    start = 'E'
-    finish = 'B'
+    start = "1"
+    finish = "4"
     
     # Setup the searcher
     searcher = RouteSearcher()
     
-    searcher.getNextDirection('C', 'E', 'B')
+    searcher.getNextDirection("2", "1", "4")
     
     solutionPath = list(searcher.astar(start,finish))
 
-    print(str(solutionPath))
+    print("Solution path: " + str(solutionPath))
+    
+    print(str(solutionPath[0]))
+    print(str(solutionPath[1]))
+    print(str(solutionPath[2]))
+   
+
 
 if __name__ == '__main__':
     #try:
