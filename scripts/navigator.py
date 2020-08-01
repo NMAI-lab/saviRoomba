@@ -16,7 +16,7 @@ def rosMain():
     # Setup the searcher
     searcher = RouteSearcher()
     
-    searcher.getNextDirection("2", "1", "4")
+    searcher.getDestinationBearing("3", "5", "2")
     
     solutionPath = list(searcher.astar(start,finish))
 
@@ -25,12 +25,19 @@ def rosMain():
     print(str(solutionPath[0]))
     print(str(solutionPath[1]))
     print(str(solutionPath[2]))
-   
+
+def unitTest():
+    # Setup the searcher
+    searcher = RouteSearcher()
+    
+    turn = searcher.getNextDirection("3", "4", "2")
+    print("Turn: " + turn)
+       
 
 
 if __name__ == '__main__':
     #try:
-    rosMain()
+    unitTest()
 #    except rospy.ROSInterruptException:
 #        pass
         
