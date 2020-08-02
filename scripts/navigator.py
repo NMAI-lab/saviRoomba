@@ -29,10 +29,27 @@ def rosMain():
 def unitTest():
     # Setup the searcher
     searcher = RouteSearcher()
+    searcher.setDestination("7")
     
-    turn = searcher.getNextDirection("3", "4", "2")
-    print("Turn: " + turn)
-       
+    searcher.setDestination("2")
+    turn = searcher.getNextDirection("4", "3")
+    print("Turn should be left: " + turn)
+    
+    searcher.setDestination("2")
+    turn = searcher.getNextDirection("5", "3")
+    print("Turn should be right: " + turn)
+    
+    searcher.setDestination("5")
+    turn = searcher.getNextDirection("4", "3")
+    print("Turn should be forward: " + turn)
+    
+    searcher.setDestination("4")
+    turn = searcher.getNextDirection("5", "3")
+    print("Turn should be forward: " + turn)
+    
+    searcher.setDestination("3")
+    turn = searcher.getNextDirection("1", "2")
+    print("Turn should be left: " + turn)
 
 
 if __name__ == '__main__':

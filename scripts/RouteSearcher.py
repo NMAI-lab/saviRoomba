@@ -25,6 +25,9 @@ class RouteSearcher(AStar):
         # Load node locations
         f = open('nodeLocations.json')
         self.nodeLocations = json.load(f)
+        
+        # assign a dummy value for the destination until we have one specified
+        self.setDestination(-1)
 
      # Compute the distance between two (x,y) tuples
     def heuristic_cost_estimate(self, n1, n2):      
@@ -47,30 +50,28 @@ class RouteSearcher(AStar):
         return vector / np.linalg.norm(vector)
     
     # Returns the angle in radians between vectors 'v1' and 'v2'::
-    # >>> angle_between((1, 0, 0), (0, 1, 0))
-    # 1.5707963267948966
-    # >>> angle_between((1, 0, 0), (1, 0, 0))
-    # 0.0
-    # >>> angle_between((1, 0, 0), (-1, 0, 0))
-    # 3.141592653589793
     def anglBetweenRad(self, v1, v2):
         v1_u = self.unitVector(v1)
         v2_u = self.unitVector(v2)
-        return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
+        
+        dot = np.dot(v1_u,v2_u)
+        det = np.linalg.det([v1_u, v2_u])
+        
+        return math.atan2(det, dot)  # atan2(y, x) or atan2(sin, cos)
        
         
     def angleBetweenDeg(self, v1, v2):
         return self.anglBetweenRad(v1, v2) * 180 / np.pi
     
     # Returns a direction for where to go to continue on the journey
-    def getDestinationBearing(self, current, previous, dest):
+    def getNextPointBearing(self, previous, current, nextPoint):
         (xCurrent, yCurrent) = self.nodeLocations[current]
         (xPrevious, yPrevious) = self.nodeLocations[previous]
-        (xDest, yDest) = self.nodeLocations[dest]
+        (xNextPoint, yNextPoint) = self.nodeLocations[nextPoint]
         
         current = np.array([xCurrent, yCurrent])
         previous = np.array([xPrevious, yPrevious])
-        destination = np.array([xDest, yDest])
+        destination = np.array([xNextPoint, yNextPoint])
         
         currentDirection = current - previous
         desiredDirection = destination - current
@@ -78,7 +79,7 @@ class RouteSearcher(AStar):
         #print("current direction: " + str(currentDirection))
         #print("Desired direction: " + str(desiredDirection))
                 
-        turnAngle = self.angleBetweenDeg(currentDirection, desiredDirection)
+        turnAngle = self.angleBetweenDeg(desiredDirection, currentDirection)
         #print("Turn angle: " + str(turnAngle))
         return turnAngle
     
@@ -93,12 +94,16 @@ class RouteSearcher(AStar):
         else:
             nextPoint = solutionPath[1]
             current = solutionPath[0]
-            return self.getDestinationBearing(current, previous, nextPoint)        
+            return self.getNextPointBearing(previous, current, nextPoint)        
     
     
-    def getNextDirection(self, current, previous, dest):
+    def getNextDirection(self, previous, current):
+        # Deal with the special case where there is no destination set
+        if self.destination == -1:
+            return "next(noDestination)"
+        
         # Deal with special case where we are already at the destination
-        if current == dest:
+        if current == self.destination:
             return "next(arrived)"
     
         # Deal with special case where there is no previous location
@@ -106,8 +111,10 @@ class RouteSearcher(AStar):
             return "next(forward)"  # Try straight ahead, no other way to know what direction you are facing
                                     # TODO: Investigate if there are alternatives to this (perhaps pick something from the graph at random)
         
-        solutionPath = list(self.astar(current,dest))
+        solutionPath = list(self.astar(current,self.destination))
         bearing = self.getNextTurnAngle(solutionPath, previous)
+
+        print("bearing: " + str(bearing))
         
         # Deal with only positive numbers        
         while bearing < 0:
@@ -117,6 +124,8 @@ class RouteSearcher(AStar):
         while bearing > 360:
             bearing = bearing - 360
             
+        print("bearing: " + str(bearing))
+
         # Case where it is more or less straight ahead
         if ((bearing >= (360 - 45)) or (bearing < 45)):
             return "next(forward)"
@@ -132,4 +141,16 @@ class RouteSearcher(AStar):
         # Case where it is more or less to the left (all that is left)
         else:
             return "next(left)"
+        
+    def setDestination(self, destination):
+        if destination == -1:
+            self.destination = -1
+            return
+        
+        try:
+            self.nodeLocations[destination]     # Check if the location exists
+            self.destination = destination      # No exception, set the destination
+        except:
+            # print("No location " + str(destination))
+            return
         
