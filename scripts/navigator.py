@@ -4,27 +4,46 @@
 
 # @author: Patrick Gavigan
 
-#import rospy
+import rospy
 from RouteSearcher import RouteSearcher
+from std_msgs.msg import String
 
-def rosMain():
-    print("Hello")
-    
-    start = "1"
-    finish = "4"
-    
-    # Setup the searcher
-    searcher = RouteSearcher()
-    
-    searcher.getDestinationBearing("3", "5", "2")
-    
-    solutionPath = list(searcher.astar(start,finish))
+# def sendDirection(data, args):
+#     (publisher, searcher) = args
 
-    print("Solution path: " + str(solutionPath))
+#     #solution = navigationSolution()
+#     solution = list(searcher.astar(data.start,data.finish))
     
-    print(str(solutionPath[0]))
-    print(str(solutionPath[1]))
-    print(str(solutionPath[2]))
+#     rospy.loginfo(solution)
+#     publisher.publish(solution)    
+
+# def updateDestination(data, args):
+#     (searcher) = args
+    
+#     # Check if this is a setDestiantion() message
+#     if "setDestination" in data:
+        
+#         searcher.setDestination(dest)
+
+# def rosMain():
+    
+#     # Setup the searcher
+#     searcher = RouteSearcher()
+    
+#     # Init the node
+#     rospy.init_node('navigator', anonymous=True)
+
+#     # Setup the publisher for the result
+#     publisher = rospy.Publisher('perceptions', String, queue_size=10)
+    
+#     # Listen for post point messages on the perceptions topic
+#     rospy.Subscriber('perceptions', String, performSearch, (publisher, searcher))
+    
+#     # Launch the tester
+#     #tester()
+
+#     # spin() simply keeps python from exiting until this node is stopped
+#     rospy.spin()
 
 def unitTest():
     # Setup the searcher
