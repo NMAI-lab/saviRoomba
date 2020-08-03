@@ -114,7 +114,7 @@ class RouteSearcher(AStar):
         solutionPath = list(self.astar(current,self.destination))
         bearing = self.getNextTurnAngle(solutionPath, previous)
 
-        print("bearing: " + str(bearing))
+        # print("bearing: " + str(bearing))
         
         # Deal with only positive numbers        
         while bearing < 0:
@@ -128,19 +128,19 @@ class RouteSearcher(AStar):
 
         # Case where it is more or less straight ahead
         if ((bearing >= (360 - 45)) or (bearing < 45)):
-            return "next(forward)"
+            return "direction(forward)"
         
         # Case where it is more or less the the right
         elif (bearing >= (90-45)) and (bearing < (90+45)):
-            return "next(right)"
+            return "direction(right)"
         
         # Case where it is more or less behind
         elif (bearing >= (180-45)) and (bearing < (180+45)):
-            return "next(behind)"
+            return "direction(behind)"
         
         # Case where it is more or less to the left (all that is left)
         else:
-            return "next(left)"
+            return "direction(left)"
         
     def setDestination(self, destination):
         if destination == -1:

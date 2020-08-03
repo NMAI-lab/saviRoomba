@@ -7,44 +7,61 @@
 import rospy
 from RouteSearcher import RouteSearcher
 from std_msgs.msg import String
+import re
 
-# def sendDirection(data, args):
-#     (publisher, searcher) = args
-
-#     #solution = navigationSolution()
-#     solution = list(searcher.astar(data.start,data.finish))
+# Send the direction update
+def sendDirection(data, args):
+    (publisher, searcher) = args
     
-#     rospy.loginfo(solution)
-#     publisher.publish(solution)    
-
-# def updateDestination(data, args):
-#     (searcher) = args
+    # Get the parameters from message of the form "postPoint(current, previous)"
+    parameterString = re.search(r'\((.*?)\)',data).group(1)
     
-#     # Check if this is a setDestiantion() message
-#     if "setDestination" in data:
-        
-#         searcher.setDestination(dest)
-
-# def rosMain():
+    # Remove any whitespace
+    parameterString = parameterString.replace(" ", "")
     
-#     # Setup the searcher
-#     searcher = RouteSearcher()
-    
-#     # Init the node
-#     rospy.init_node('navigator', anonymous=True)
+    # Get the parameters
+    parameters = parameterString.split(',')
+    current = parameters[0]
+    previous = parameters[1]
 
-#     # Setup the publisher for the result
-#     publisher = rospy.Publisher('perceptions', String, queue_size=10)
-    
-#     # Listen for post point messages on the perceptions topic
-#     rospy.Subscriber('perceptions', String, performSearch, (publisher, searcher))
-    
-#     # Launch the tester
-#     #tester()
+    # Get the next direction solution    
+    solution = searcher.getNextDirection(previous, current)
 
-#     # spin() simply keeps python from exiting until this node is stopped
-#     rospy.spin()
+    # Publish    
+    rospy.loginfo("Navigation solution: " + solution)
+    publisher.publish(solution)
 
+
+# Set destination action
+def doAction(data, args):
+    (searcher) = args
+
+    if "setDest" in data:
+        dest = re.search(r'\((.*?)\)',data).group(1)
+        rospy.loginfo("Setting dest to " + dest)
+        searcher.setDestination()
+
+# Main program
+def rosMain():
+    # Setup the searcher
+    searcher = RouteSearcher()
+    
+    # Init the node
+    rospy.init_node('navigator', anonymous=True)
+
+    # Subscribe to actions, watch for setDest messages
+    rospy.Subscriber('actions', String, doAction, (searcher))
+
+    # Setup the publisher for the result
+    publisher = rospy.Publisher('perceptions', String, queue_size=10)
+    
+    # Listen for post point messages on the perceptions topic
+    rospy.Subscriber('postPoint', String, sendDirection, (publisher, searcher))
+
+    # spin() simply keeps python from exiting until this node is stopped
+    rospy.spin()
+
+# Unit tests for the search methods
 def unitTest():
     # Setup the searcher
     searcher = RouteSearcher()
@@ -72,8 +89,8 @@ def unitTest():
 
 
 if __name__ == '__main__':
-    #try:
-    unitTest()
-#    except rospy.ROSInterruptException:
-#        pass
+    try:
+        rosMain()
+    except rospy.ROSInterruptException:
+        pass
         
