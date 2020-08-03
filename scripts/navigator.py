@@ -13,6 +13,7 @@ import re
 def sendDirection(data, args):
     (publisher, searcher) = args
     
+    # Extract the message
     data = data.data
     
     # Get the parameters from message of the form "postPoint(current, previous)"
@@ -38,12 +39,13 @@ def sendDirection(data, args):
 def doAction(data, args):
     (searcher) = args
     
+    # Extract the message
     data = data.data
 
     if "setDest" in data:
         dest = re.search(r'\((.*?)\)',data).group(1)
         rospy.loginfo("Setting dest to " + dest)
-        searcher.setDestination()
+        searcher.setDestination(dest)
 
 # Main program
 def rosMain():
