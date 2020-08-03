@@ -268,4 +268,3 @@ DestinationLeft :-
 	:	dockStation(DOCK) & postPoint(DOCK,_)
 	<-	drive(stop);
 		dock_bot.
-
