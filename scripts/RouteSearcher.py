@@ -104,11 +104,11 @@ class RouteSearcher(AStar):
         
         # Deal with special case where we are already at the destination
         if current == self.destination:
-            return "next(arrived)"
+            return "direction(arrived)"
     
         # Deal with special case where there is no previous location
         if previous == -1:
-            return "next(forward)"  # Try straight ahead, no other way to know what direction you are facing
+            return "direction(forward)"  # Try straight ahead, no other way to know what direction you are facing
                                     # TODO: Investigate if there are alternatives to this (perhaps pick something from the graph at random)
         
         solutionPath = list(self.astar(current,self.destination))
