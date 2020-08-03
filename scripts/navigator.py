@@ -13,6 +13,8 @@ import re
 def sendDirection(data, args):
     (publisher, searcher) = args
     
+    data = data.data
+    
     # Get the parameters from message of the form "postPoint(current, previous)"
     parameterString = re.search(r'\((.*?)\)',data).group(1)
     
@@ -35,6 +37,8 @@ def sendDirection(data, args):
 # Set destination action
 def doAction(data, args):
     (searcher) = args
+    
+    data = data.data
 
     if "setDest" in data:
         dest = re.search(r'\((.*?)\)',data).group(1)
