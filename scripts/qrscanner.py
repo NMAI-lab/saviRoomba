@@ -4,7 +4,6 @@ from imutils.video import VideoStream
 from pyzbar import pyzbar
 import rospy
 from std_msgs.msg import String
-import datetime
 import imutils
 import time
 
@@ -16,7 +15,9 @@ time.sleep(2.0)
 
 
 def qrscanner():
-    pub = rospy.Publisher('perceptions', String, queue_size=10)
+    postPointPublisher = rospy.Publisher('postPoint', String, queue_size=10)
+    perceptionsPublisher = rospy.Publisher('perceptions', String, queue_size=10)
+    
     print("[INFO] publisher created...")
     rospy.init_node('qrpostpoint', anonymous=True)
     rate = rospy.Rate(2)
@@ -42,7 +43,8 @@ def qrscanner():
             last_point = point[1]
 
         rospy.loginfo(post_stop)
-        pub.publish(post_stop)
+        postPointPublisher.publish(post_stop)
+        perceptionsPublisher.publish(post_stop)
         rate.sleep()
 
 
