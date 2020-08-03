@@ -42,9 +42,9 @@ def doAction(data, args):
     # Extract the message
     data = data.data
 
-    if "setDest" in data:
+    if "setDestination" in data:
         dest = re.search(r'\((.*?)\)',data).group(1)
-        rospy.loginfo("Setting dest to " + dest)
+        rospy.loginfo("Setting destination to " + dest)
         searcher.setDestination(dest)
 
 # Main program

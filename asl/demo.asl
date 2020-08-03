@@ -1,7 +1,7 @@
 /**
  * @author	Chidiebere Onyedinma
  * @author	Patrick Gavigan
- * @date	2 July 2020
+ * @date	3 August 2020
  */
  
 /**
@@ -18,106 +18,21 @@ dockStation(post5).			// The location of the docking station
 
 // Arrived at the destination
 atDestination :-
-	destination(DESTINATION) &
-	postPoint(DESTINATION,_).
+	(destination(DESTINATION) & postPoint(DESTINATION,_)) | direction(arrived).
 
 // Destination is the previously seen post point
 DestinationBehind :-
-	destinaton(DESTINATION) &
-	postPoint(_,DESTINATION).
+	(destinaton(DESTINATION) & postPoint(_,DESTINATION)) | direction(behind).
 
-// Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
-DestinationAhead :-
- 	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	((CURRENT = post1) | CURRENT = post4) | CURRENT = post5)) &
-	not (PAST = CURRENT). 
-// Do we need to deal with the case where we were trying to drive off the end of
-// the map? Likely yes, not certain.
+DestinationAhead :- 
+	direction(forward).
 	
-// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is
-// ahead of us.
-DestinationAhead :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	PAST = post1 &
-	not (DESTINATION = PAST).
-	
-// Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
-// ahead of us.
-DestinationBehind :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	PAST = post1 &
-	DESTINATION = PAST.
-	
-// Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
-// is behond of us.
-DestinationBehind :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	not (PAST = post1) &
-	not (DESTINATION = PAST).
-	
-// Rules @ post3, PAST = post4, DESTINATION = post5
-DestinationAhead :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post4 &
-	DESTINATION = post5.
-
-// Rules @ post3, PAST = post5, DESTINATION = post4
-DestinationAhead :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post5 &
-	DESTINATION = post4.
-
-// Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
 DestinationRight :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post5 &
-	((DESTINATION = post1) | (DESTINATION = post2)).
+	direction(right).
 	
-// Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
 DestinationLeft :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post4 &
-	((DESTINATION = post1) | (DESTINATION = post2)).
+	direction(left).
 
-// Rules @ post3, PAST = post2, DESTINATION = post1 or post2
-DestinationBehind :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	((DESTINATION = post1) | (DESTINATION = post2)).
-
-// Rules @ post3, PAST = post2, DESTINATION = post4
-DestinationRight :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	DESTINATION = post4.
-
-// Rules @ post3, PAST = post2, DESTINATION = post4
-DestinationLeft :-
-	destination(DESTINATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	DESTINATION = post5.
-	
 /**
  * High level goals
  */
@@ -139,7 +54,7 @@ DestinationLeft :-
 		receiverLocation(RECEIVER) &
 		not postPoint(SENDER,_) &
 		batteryOK)
-	<- 	+destination(SENDER);
+	<- 	!setDestination(SENDER);
 		!goToLocation;
 		!deliverMail.
 		
@@ -153,7 +68,6 @@ DestinationLeft :-
 		postPoint(SENDER,_) & 
 		batteryOK)
 	<- 	+haveMail;
-		-destination(_);
 		!deliverMail.
  
 // Case where I have the mail and need to deliver it to the receiver
@@ -162,7 +76,7 @@ DestinationLeft :-
 		receiverLocation(RECEIVER) &
 		not postPoint(RECEIVER,_) &
 		batteryOK)
-	<- 	+destination(RERCEIVER);
+	<- 	!setDestination(RERCEIVER);
 		!goToLocation;
 		!deliverMail.
 		
@@ -172,9 +86,7 @@ DestinationLeft :-
 		receiverLocation(RECEIVER) &
 		postPoint(RECEIVER,_) &
 		batteryOK)
-	<- 	-haveMail;
-		-destination(_).
-		// -receiverLocation(_).	// Should we remove the receiver location here?
+	<- 	-haveMail.
 
 // Case where the battery is low
  +!deliverMail
@@ -217,16 +129,6 @@ DestinationLeft :-
 	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
 		!followPath.
 
-//+!goToLocation
-//	:	batteryLow	// Not sure if this is properly handled.
-//	<-	!dock.
-
-//+!goToLocation
-//	:	batteryOK & docked
-//	<-	!undock.	// Has this plan been implemented?
-	
-
-
 +!goToLocation.
 
 
@@ -243,7 +145,6 @@ DestinationLeft :-
 	<-	drive(forward);
 		!followPath.
 		
-
 +!followPath
 	:	line(lost)
 	<-	drive(stop).
@@ -254,7 +155,6 @@ DestinationLeft :-
 	<-	drive(DIRECTION);
 		!followPath.
 		
- 
 /**
  * dock
  * Dock the robot at the charging station
@@ -268,4 +168,12 @@ DestinationLeft :-
 	:	dockStation(DOCK) & postPoint(DOCK,_)
 	<-	drive(stop);
 		dock_bot.
+		
+/**
+ * Set the destination of the robot
+ */
++!setDestination(DESTINATION)
+	<-	-destination(_);
+		+destination(DESTINATION);
+		setDestination(DESTINATION).
 
