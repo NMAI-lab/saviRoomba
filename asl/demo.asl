@@ -168,6 +168,7 @@ DestinationLeft :-
 	:	dockStation(DOCK) & postPoint(DOCK,_)
 	<-	drive(stop);
 		dock_bot.
+
 		
 /**
  * Set the destination of the robot
@@ -176,4 +177,4 @@ DestinationLeft :-
 	<-	-destination(_);
 		+destination(DESTINATION);
 		setDestination(DESTINATION).
-
+    
