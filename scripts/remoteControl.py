@@ -6,15 +6,15 @@ import threading
 import drive
 from geometry_msgs.msg import Twist
 
-message = "0.0,0.0"
+message = "0.0,0.0,0"
 
 
 def remote_server():
     global message
-    message = "0.0,0.0"
+    message = "0.0,0.0,0"
 
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serv.bind(('192.168.1.146', 12345))
+    serv.bind(('192.168.1.89', 12345))
     serv.listen(5)
     while True:
         conn, addr = serv.accept()
@@ -43,27 +43,32 @@ def controller():
 
         params = message.split(",")
 
-        if len(params) < 2:
+        if len(params) < 3:
             continue
 
         # print(params)
 
         z = float(params[0])
         x = float(params[1])
-
-        if z < 0.0:
-            cmd_msg.angular.z = drive.valueMap(z, -0.001, -1.0, 0.01, 4.25)
-        elif z > 0.0:
-            cmd_msg.angular.z = drive.valueMap(z, 0.001, 1.0, -0.01, -4.25)
-        else:
-            cmd_msg.angular.z = 0.0
-
-        if x < 0.0:
-            cmd_msg.linear.x = drive.valueMap(x, -0.001, -1.0, 0.01, 0.5)
-        elif x > 0.0:
-            cmd_msg.linear.x = drive.valueMap(x, 0.001, 1.0, -0.01, -0.5)
-        else:
+        s = int(params[2])
+        
+        
+        if s == 2:
             cmd_msg.linear.x = 0.0
+            if z < 0.0:
+                cmd_msg.angular.z = drive.valueMap(z, -0.001, -1.0, 0.01, 0.3)
+            elif z > 0.0:
+                cmd_msg.angular.z = drive.valueMap(z, 0.001, 1.0, -0.01, -0.3)
+            else:
+                cmd_msg.angular.z = 0.0
+        elif s == 1:
+            cmd_msg.angular.z = 0.0
+            if x < 0.0:
+                cmd_msg.linear.x = drive.valueMap(x, -0.001, -1.0, 0.01, 0.1)
+            elif x > 0.0:
+                cmd_msg.linear.x = drive.valueMap(x, 0.001, 1.0, -0.01, -0.1)
+            else:
+                cmd_msg.linear.x = 0.0
 
         rospy.loginfo(cmd_msg)
         pub.publish(cmd_msg)
