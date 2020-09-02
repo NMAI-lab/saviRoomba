@@ -5,7 +5,7 @@ This project connects an iRobot Create 2 to a BDI reasoner usign the savi_ros_bd
 This project was based off of the savi_ros_demo example project, available at https://github.com/NMAI-lab/savi_ros_demo.
 
 ## Overview
-TBC
+A presentation video that explains this project is available at https://youtu.be/mHNSlqaH8Uc.
 
 ## Configuration and Setup
 These instructions assume that you already have a ros workspace with the savi_ros_bdi package set up, as per the instructions at that repository. It also assumes that the create_autonomy package has been setup. This means that you have a ros workspace at ~/Roomba/create_ws which contains the savi_ros_bdi project, as described in the savi_ros_bdi Readme.
@@ -32,7 +32,7 @@ The following is the proceedure for running the applications. You will need to r
 ### roscore
 Open a terminal window and connect to the robot. Run roscore; this starts the main ROS process. Leave this terminal window open and set it aside: `roscore`
 
-OPTIONAL: Once roscore is running, you can verify that it is running by examining the topics that are being published. In a new terminal window run the following to list the topics: `rostopic list`
+Optional: Once roscore is running, you can verify that it is running by examining the topics that are being published. In a new terminal window run the following to list the topics: `rostopic list`
 
 ### create_autonomy
 Start the create_autonomy module. The documentation for this module is at: https://github.com/AutonomyLab/create_autonomy and http://wiki.ros.org/create_autonomy. The proceedure is under the "Running the driver" headding.
@@ -41,7 +41,8 @@ Optional: In a new terminal window, run `rostopic list` to verify that the creat
 
 ### savi_ros_bdi
 Run savi_ros_bdi using the proceedure documented at https://github.com/NMAI-lab/savi_ros_bdi.
-OPTIONAL: Run `rostopic list` to verify that the application is running. The publishers and subscribers include perceptions, actions, inbox and outbox.
+
+Optional: Run `rostopic list` to verify that the application is running. The publishers and subscribers include perceptions, actions, inbox and outbox.
 
 ### saviRoomba application node
 With the other tools running, it is now possible to start the application node applications. EAch of these applications will need to be run in it's own terminal window. (TODO: simplify this process with a launch script).
