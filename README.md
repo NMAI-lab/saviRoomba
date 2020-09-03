@@ -45,14 +45,8 @@ Run savi_ros_bdi using the proceedure documented at https://github.com/NMAI-lab/
 Optional: Run `rostopic list` to verify that the application is running. The publishers and subscribers include perceptions, actions, inbox and outbox.
 
 ### saviRoomba application node
-With the other tools running, it is now possible to start the application node applications. EAch of these applications will need to be run in it's own terminal window. (TODO: simplify this process with a launch script).
-
-To run individual packages, use the following:
-1. Source the setup.bash file: `source devel/setup.bash`
-1. Run each package using `rosrun saviRoomba packageName.py` and substituting packageName for the file name of each package. The packages needed include the following:
-   1. battery_manager: Provides the agent with perceptions related to the battery state of charge.
-   1. actionDecoder: Decodes action commands from the agent and executes the actions.
-   1. app_receiver: Receives messages from the user application (updates needed to this module)
-   1. liner: Driver for the line sensor
-   1. logger: Used for tracking the run time performance of the software execution. Generates a CSV file with time stamps of the perceptions and actions that are published to ROS.
-   1. qr_scanner: Responsible for reading QR codes on the ground using a camera. Publishes these so that the agent can know the position of the robot.
+With the other tools running, it is now possible to start the application node applications. To do this, open a new terminal window and run the following:
+```
+$ source devel/setup.bash
+$ roslaunch saviRoomba roomba.launch
+```
