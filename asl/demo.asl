@@ -137,7 +137,7 @@ destinationLeft :-
 	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		not postPoint(SENDER,_) &
+		postPoint(SENDER,_) & 
 		batteryOK)
 	<- 	+destination(SENDER);
 		!goToLocation;
