@@ -251,7 +251,8 @@ destinationLeft :-
 
 // Handle cases for left and right turns.
 +!followPath
-	:	line(DIRECTION)
+	:	line(DIRECTION) &
+		((DIRECTION = left) | (DIRECTION = right))
 	<-	drive(DIRECTION);
 		!followPath.
 		
