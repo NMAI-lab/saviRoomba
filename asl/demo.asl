@@ -193,31 +193,36 @@ destinationLeft :-
  */
 +!goToLocation
 	:	destinationAhead
-	<-	!followPath;
+	<-	run(1);
+		!followPath;
 		!goToLocation.
 
 +!goToLocation
 	:	atDestination
-	<-	drive(stop).
+	<-	run(2);
+		drive(stop).
 	
 +!goToLocation
 	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
-	<-	turn(left);	// TODO: This (or something similar) needs to be implementd
+	<-	run(3);
+		turn(left);	// TODO: This (or something similar) needs to be implementd
 		!followPath;
 		!goToLocation.
 		
 +!goToLocation
 	:	destinationRight	// TODO: Update to use unification for left, right, behind?
-	<-	turn(right);		// TODO: This (or something similar) needs to be implementd
+	<-	run(4);
+		turn(right);		// TODO: This (or something similar) needs to be implementd
 		!followPath;
 		!goToLocation.
 	
 +!goToLocation
 	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
-	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
+	<-	run(5);
+		turn(left);		// TODO: This (or something similar) needs to be implementd
 		!followPath;
 		!goToLocation.
-
+/*
 +!goToLocation
 	:	batteryLow	// Not sure if this is properly handled.
 	<-	!dock;
@@ -227,9 +232,10 @@ destinationLeft :-
 	:	batteryOK & docked
 	<-	!undock;
 		!goToLocation.	// Has this plan been implemented?
-	
+*/
 +!goToLocation
-	<-	!followPath.
+	<-	run(6);
+		!followPath.
 
 
 /** 
