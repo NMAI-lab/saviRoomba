@@ -20,7 +20,8 @@ def qrscanner():
     print("[INFO] publisher created...")
     rospy.init_node('qrpostpoint', anonymous=True)
     rate = rospy.Rate(2)
-    last_point = -1
+    currentPostPoint = -1
+    previousPostPoint = -1
 
     while not rospy.is_shutdown():
         # grab the frame from the threaded video stream and resize it to
@@ -28,21 +29,18 @@ def qrscanner():
         frame = vs.read()
         frame = imutils.resize(frame, width=400)
 
-        post_stop = "postPoint({})".format(last_point)
-
         # find the barcodes in the frame and decode each of the barcodes
         barcodes = pyzbar.decode(frame)
 
         for barcode in barcodes:
             # the barcode data is a bytes object so if we want to draw it
             # on our output image we need to convert it to a string first
-            barcode_data = barcode.data.decode("utf-8")
-            point = barcode_data.split("post")
-            post_stop = "postPoint({},{})".format(point[1], last_point)
-            last_point = point[1]
+            currentPostPoint = barcode.data.decode("utf-8")
+            postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
+            previousPostPoint = currentPostPoint
 
-        rospy.loginfo(post_stop)
-        pub.publish(post_stop)
+        rospy.loginfo(postPointPerception)
+        pub.publish(postPointPerception)
         rate.sleep()
 
 
