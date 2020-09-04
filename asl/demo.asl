@@ -121,9 +121,9 @@ destinationLeft :-
 /**
  * High level goals
  */
-!deliverMail.		// Highest level task: Deliver mail from sender to receiver
+//!deliverMail.		// Highest level task: Deliver mail from sender to receiver
 //!goToLocation.	// Go to a destination location (such as a post point)
-//!followPath.		// Follow the path (line on the ground) 
+!followPath.		// Follow the path (line on the ground) 
 //!dock.			// Dock the robot when it is time to recharge
 
 /**
