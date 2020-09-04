@@ -252,6 +252,8 @@ destinationLeft :-
 	<-	drive(DIRECTION);
 		!followPath.
 		
++!followPath
+	<-	!followPath.
  
 /**
  * dock
