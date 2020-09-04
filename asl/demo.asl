@@ -11,7 +11,6 @@
 senderLocation(post1).		// The location of the mail sender
 receiverLocation(post4).	// The location of the mail receiver
 dockStation(post5).			// The location of the docking station
-destination(post5).
 
 /**
  * Navigation rules
@@ -122,8 +121,8 @@ destinationLeft :-
 /**
  * High level goals
  */
-//!deliverMail.		// Highest level task: Deliver mail from sender to receiver
-!goToLocation.	// Go to a destination location (such as a post point)
+!deliverMail.		// Highest level task: Deliver mail from sender to receiver
+//!goToLocation.	// Go to a destination location (such as a post point)
 //!followPath.		// Follow the path (line on the ground) 
 //!dock.			// Dock the robot when it is time to recharge
 
@@ -135,12 +134,14 @@ destinationLeft :-
  // Case where I have a sender location and don't yet have the mail, not 
  // currently at the senderLocation.
 +!deliverMail
-	: 	((~ haveMail) &
+	: 	(not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		postPoint(SENDER,_) & 
-		batteryOK)
-	<- 	+destination(SENDER);
+		postPoint(OTHER,_) & 
+		not (OTHER = SENDER) &
+		batteryOK
+	<- 	-destination(_);
+		+destination(SENDER);
 		!goToLocation;
 		!deliverMail.
 		
@@ -148,43 +149,49 @@ destinationLeft :-
 // Assume that the fact that I have arrived at the sender location means that 
 // I have the mail (this will need to be updated)
 +!deliverMail
- 	: 	((~ haveMail) &
+ 	: 	(not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
 		postPoint(SENDER,_) & 
-		batteryOK)
+		batteryOK
 	<- 	+haveMail;
 		//-senderLocation(_);	// Should we remove the sender location here?
 		!deliverMail.
  
 // Case where I have the mail and need to deliver it to the receiver
 +!deliverMail
- 	: 	(haveMail &
+ 	: 	haveMail &
 		receiverLocation(RECEIVER) &
-		not postPoint(RECEIVER,_) &
-		batteryOK)
-	<- 	!goToLocation;
+		postPoint(OTHER,_) &
+		not (OTHER = RECEIVER) &
+		batteryOK
+	<- 	-destination(_);
+		+destination(RECEIVER);
+		!goToLocation;
 		!deliverMail.
 		
 // Case where I have the mail and am at the receiver location
 +!deliverMail
- 	: 	(haveMail &
+ 	: 	haveMail &
 		receiverLocation(RECEIVER) &
-		postPoint(RECEIVER,_) &
-		batteryOK)
-	<- 	-haveMail.
+		postPoint(RECEIVER,_) //&
+		//batteryOK
+	<- 	-haveMail;
+		!deliverMail.
 		// -receiverLocation(_).	// Should we remove the receiver location here?
 
 // Case where the battery is low
 +!deliverMail
- 	: 	(batteryLow &
+	: 	(batteryLow &
 		dockStation(DOCK))	
 	<-	-destination(_);
 		+destination(DOCK);
-		!goToLocation.
+		!goToLocation;
+		!deliverMail.
 		
 // Catchall (suspect that this should not be needed)
-+!deliverMail.
++!deliverMail
+	<-	!deliverMail.
 
 /** 
  * goToLocation
@@ -193,34 +200,29 @@ destinationLeft :-
  */
 +!goToLocation
 	:	destinationAhead
-	<-	run(1);
-		//!followPath;
+	<-	!followPath;
 		!goToLocation.
 
 +!goToLocation
 	:	atDestination
-	<-	run(2);
-		drive(stop).
+	<-	drive(stop).
 	
 +!goToLocation
 	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
-	<-	run(3);
-		turn(left);	// TODO: This (or something similar) needs to be implementd
-		//!followPath;
+	<-	turn(left);	// TODO: This (or something similar) needs to be implementd
+		!followPath;
 		!goToLocation.
 		
 +!goToLocation
 	:	destinationRight	// TODO: Update to use unification for left, right, behind?
-	<-	run(4);
-		turn(right);		// TODO: This (or something similar) needs to be implementd
-		//!followPath;
+	<-	turn(right);		// TODO: This (or something similar) needs to be implementd
+		!followPath;
 		!goToLocation.
 	
 +!goToLocation
 	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
-	<-	run(5);
-		turn(left);		// TODO: This (or something similar) needs to be implementd
-		//!followPath;
+	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
+		!followPath;
 		!goToLocation.
 /*
 +!goToLocation
@@ -232,12 +234,12 @@ destinationLeft :-
 	:	batteryOK & docked
 	<-	!undock;
 		!goToLocation.	// Has this plan been implemented?
-*/
+*
 +!goToLocation
 	<-	run(6);
 		!goToLocation;
 		!followPath.
-
+*/
 
 /** 
  * followPath
@@ -247,12 +249,10 @@ destinationLeft :-
  // Ideally, these plans could be combined using unification (see the last plan
  // in this set). This would need a modification of the scripts that interpret 
  // drive() action, or the script that generates the line() message (of both)
- /*
 +!followPath
 	:	line(center)
 	<-	drive(forward);
 		!followPath.
-		
 
 +!followPath
 	:	line(lost) | line(across)
@@ -269,11 +269,11 @@ destinationLeft :-
 		
 +!followPath
 	<-	!followPath.
- */
+
 /**
  * dock
  * Dock the robot at the charging station
- *
+ */
 +!dock
  	:	not atDockPost & onTrack
 	<-	!navigate;
@@ -288,6 +288,5 @@ destinationLeft :-
 	:	atDockPost & not moving
 	<-	dock_bot.
 	
-+!dock. 
-*/
++!dock.
 
