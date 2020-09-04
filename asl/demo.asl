@@ -134,7 +134,7 @@ destinationLeft :-
  // Case where I have a sender location and don't yet have the mail, not 
  // currently at the senderLocation.
 +!deliverMail
-	: 	((not haveMail) &
+	: 	((~ haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
 		postPoint(SENDER,_) & 
@@ -147,7 +147,7 @@ destinationLeft :-
 // Assume that the fact that I have arrived at the sender location means that 
 // I have the mail (this will need to be updated)
 +!deliverMail
- 	: 	((not haveMail) &
+ 	: 	((~ haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
 		postPoint(SENDER,_) & 
