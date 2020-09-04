@@ -37,14 +37,16 @@ def qrscanner():
         for barcode in barcodes:
             # the barcode data is a bytes object so if we want to draw it
             # on our output image we need to convert it to a string first
-            if previousPostPoint != currentPostPoint:
-                previousPostPoint = currentPostPoint
             currentPostPoint = barcode.data.decode("utf-8")
             postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
-            
 
         rospy.loginfo(postPointPerception)
         pub.publish(postPointPerception)
+        
+        # Update the previous post point
+        if previousPostPoint != currentPostPoint:
+            previousPostPoint = currentPostPoint
+        
         rate.sleep()
 
 
