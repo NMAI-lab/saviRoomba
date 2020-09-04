@@ -137,7 +137,7 @@ destinationLeft :-
 	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		currentLocation(SENDER) & 
+		postPoint(SENDER,_) & 
 		batteryOK)
 	<- 	+destination(SENDER);
 		!goToLocation;
@@ -150,7 +150,7 @@ destinationLeft :-
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		currentLocation(SENDER) & 
+		postPoint(SENDER,_) & 
 		batteryOK)
 	<- 	+haveMail;
 		//-senderLocation(_);	// Should we remove the sender location here?
@@ -160,7 +160,7 @@ destinationLeft :-
 +!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		not currentLocation(RECEIVER) &
+		not postPoint(RECEIVER,_) &
 		batteryOK)
 	<- 	!goToLocation;
 		!deliverMail.
@@ -169,7 +169,7 @@ destinationLeft :-
 +!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		currentLocation(RECEIVER) &
+		postPoint(RECEIVER,_) &
 		batteryOK)
 	<- 	-haveMail.
 		// -receiverLocation(_).	// Should we remove the receiver location here?
