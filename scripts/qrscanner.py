@@ -23,6 +23,8 @@ def qrscanner():
     currentPostPoint = -1
     previousPostPoint = -1
 
+    postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
+
     while not rospy.is_shutdown():
         # grab the frame from the threaded video stream and resize it to
         # have a maximum width of 400 pixels
@@ -31,8 +33,6 @@ def qrscanner():
 
         # find the barcodes in the frame and decode each of the barcodes
         barcodes = pyzbar.decode(frame)
-
-        postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
 
         for barcode in barcodes:
             # the barcode data is a bytes object so if we want to draw it
