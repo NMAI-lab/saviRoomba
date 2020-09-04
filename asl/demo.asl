@@ -11,6 +11,7 @@
 senderLocation(post1).		// The location of the mail sender
 receiverLocation(post4).	// The location of the mail receiver
 dockStation(post5).			// The location of the docking station
+destination(post5).
 
 /**
  * Navigation rules
@@ -122,8 +123,8 @@ destinationLeft :-
  * High level goals
  */
 //!deliverMail.		// Highest level task: Deliver mail from sender to receiver
-//!goToLocation.	// Go to a destination location (such as a post point)
-!followPath.		// Follow the path (line on the ground) 
+!goToLocation.	// Go to a destination location (such as a post point)
+//!followPath.		// Follow the path (line on the ground) 
 //!dock.			// Dock the robot when it is time to recharge
 
 /**
@@ -221,8 +222,6 @@ destinationLeft :-
 	:	batteryOK & docked
 	<-	!undock.	// Has this plan been implemented?
 	
-
-
 +!goToLocation.
 
 
@@ -243,6 +242,7 @@ destinationLeft :-
 +!followPath
 	:	line(lost) | line(across)
 	<-	drive(left);
+		drive(forward);
 		!followPath.
 
 // Handle cases for left and right turns.
