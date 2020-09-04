@@ -22,22 +22,22 @@ atDestination :-
 	postPoint(DESTINATION,_).
 
 // Destination is the previously seen post point
-DestinationBehind :-
+destinationBehind :-
 	destinaton(DESTINATION) &
 	postPoint(_,DESTINATION).
 
 // Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
-DestinationAhead :-
+destinationAhead :-
  	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
-	((CURRENT = post1) | CURRENT = post4) | CURRENT = post5)) &
+	((CURRENT = post1) | (CURRENT = post4) | (CURRENT = post5)) &
 	not (PAST = CURRENT). 
 // Do we need to deal with the case where we were trying to drive off the end of
 // the map? Likely yes, not certain.
 	
 // Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is
 // ahead of us.
-DestinationAhead :-
+destinationAhead :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
@@ -46,7 +46,7 @@ DestinationAhead :-
 	
 // Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
 // ahead of us.
-DestinationBehind :-
+destinationBehind :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
@@ -55,7 +55,7 @@ DestinationBehind :-
 	
 // Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
 // is behond of us.
-DestinationBehind :-
+destinationBehind :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
@@ -63,7 +63,7 @@ DestinationBehind :-
 	not (DESTINATION = PAST).
 	
 // Rules @ post3, PAST = post4, DESTINATION = post5
-DestinationAhead :-
+destinationAhead :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -71,7 +71,7 @@ DestinationAhead :-
 	DESTINATION = post5.
 
 // Rules @ post3, PAST = post5, DESTINATION = post4
-DestinationAhead :-
+destinationAhead :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -79,7 +79,7 @@ DestinationAhead :-
 	DESTINATION = post4.
 
 // Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
-DestinationRight :-
+destinationRight :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -87,7 +87,7 @@ DestinationRight :-
 	((DESTINATION = post1) | (DESTINATION = post2)).
 	
 // Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
-DestinationLeft :-
+destinationLeft :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -95,7 +95,7 @@ DestinationLeft :-
 	((DESTINATION = post1) | (DESTINATION = post2)).
 
 // Rules @ post3, PAST = post2, DESTINATION = post1 or post2
-DestinationBehind :-
+destinationBehind :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -103,7 +103,7 @@ DestinationBehind :-
 	((DESTINATION = post1) | (DESTINATION = post2)).
 
 // Rules @ post3, PAST = post2, DESTINATION = post4
-DestinationRight :-
+destinationRight :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -111,7 +111,7 @@ DestinationRight :-
 	DESTINATION = post4.
 
 // Rules @ post3, PAST = post2, DESTINATION = post4
-DestinationLeft :-
+destinationLeft :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post3 &
@@ -133,8 +133,8 @@ DestinationLeft :-
  
  // Case where I have a sender location and don't yet have the mail, not 
  // currently at the senderLocation.
- +!deliverMail
- 	: 	((not haveMail) &
++!deliverMail
+	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
 		currentLocation(SENDER) & 
@@ -146,7 +146,7 @@ DestinationLeft :-
 // Case where I am at the sender location
 // Assume that the fact that I have arrived at the sender location means that 
 // I have the mail (this will need to be updated)
- +!deliverMail
++!deliverMail
  	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
@@ -157,7 +157,7 @@ DestinationLeft :-
 		!deliverMail.
  
 // Case where I have the mail and need to deliver it to the receiver
- +!deliverMail
++!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
 		not currentLocation(RECEIVER) &
@@ -166,7 +166,7 @@ DestinationLeft :-
 		!deliverMail.
 		
 // Case where I have the mail and am at the receiver location
- +!deliverMail
++!deliverMail
  	: 	(haveMail &
 		receiverLocation(RECEIVER) &
 		currentLocation(RECEIVER) &
@@ -175,7 +175,7 @@ DestinationLeft :-
 		// -receiverLocation(_).	// Should we remove the receiver location here?
 
 // Case where the battery is low
- +!deliverMail
++!deliverMail
  	: 	(batteryLow &
 		dockStation(DOCK))	
 	<-	-destination(_);
@@ -264,11 +264,10 @@ DestinationLeft :-
 +!dock
 	:	atDockPost & moving
 	<-	drive(stop);
-    	!dock.
+	   	!dock.
 
 +!dock
 	:	atDockPost & not moving
 	<-	dock_bot.
 	
 +!dock. 
-
