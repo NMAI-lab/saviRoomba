@@ -23,7 +23,7 @@ def qrscanner():
     currentPostPoint = -1
     previousPostPoint = -1
 
-    postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
+
 
     while not rospy.is_shutdown():
         # grab the frame from the threaded video stream and resize it to
@@ -37,15 +37,16 @@ def qrscanner():
         for barcode in barcodes:
             # the barcode data is a bytes object so if we want to draw it
             # on our output image we need to convert it to a string first
-            currentPostPoint = barcode.data.decode("utf-8")
-            postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
+            newPostPoint = barcode.data.decode("utf-8")
+            
+            # Check if the post point changed, update history if necessary
+            if newPostPoint != currentPostPoint:
+                previousPostPoint = currentPostPoint
+                currentPostPoint = newPostPoint
 
+        postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
         rospy.loginfo(postPointPerception)
         pub.publish(postPointPerception)
-        
-        # Update the previous post point
-        if previousPostPoint != currentPostPoint:
-            previousPostPoint = currentPostPoint
         
         rate.sleep()
 
