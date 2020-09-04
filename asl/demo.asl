@@ -198,7 +198,7 @@ destinationLeft :-
 +!goToLocation
 	:	destinationAhead
 	<-	run(1);
-		!followPath;
+		//!followPath;
 		!goToLocation.
 
 +!goToLocation
@@ -210,21 +210,21 @@ destinationLeft :-
 	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
 	<-	run(3);
 		turn(left);	// TODO: This (or something similar) needs to be implementd
-		!followPath;
+		//!followPath;
 		!goToLocation.
 		
 +!goToLocation
 	:	destinationRight	// TODO: Update to use unification for left, right, behind?
 	<-	run(4);
 		turn(right);		// TODO: This (or something similar) needs to be implementd
-		!followPath;
+		//!followPath;
 		!goToLocation.
 	
 +!goToLocation
 	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
 	<-	run(5);
 		turn(left);		// TODO: This (or something similar) needs to be implementd
-		!followPath;
+		//!followPath;
 		!goToLocation.
 /*
 +!goToLocation
@@ -239,6 +239,7 @@ destinationLeft :-
 */
 +!goToLocation
 	<-	run(6);
+		!goToLocation;
 		!followPath.
 
 
