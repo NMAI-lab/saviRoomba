@@ -36,9 +36,9 @@ destinationAhead :-
 // Do we need to deal with the case where we were trying to drive off the end of
 // the map? Likely yes, not certain.
 	
-// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is
-// ahead of us.
-destinationAhead :-
+// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is to
+// the left of us.
+destinationLeft :-
 	destination(DESTINATION) &
 	postPoint(CURRENT,PAST) &
 	CURRENT = post2 &
