@@ -248,7 +248,7 @@ destinationLeft :-
 
 +!followPath
 	:	line(lost) | line(across)
-	<-	turn(left);
+	<-	drive(left);
 		drive(forward);
 		!followPath.
 
