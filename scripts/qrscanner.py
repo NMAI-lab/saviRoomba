@@ -32,12 +32,15 @@ def qrscanner():
         # find the barcodes in the frame and decode each of the barcodes
         barcodes = pyzbar.decode(frame)
 
+        postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
+
         for barcode in barcodes:
             # the barcode data is a bytes object so if we want to draw it
             # on our output image we need to convert it to a string first
+            previousPostPoint = currentPostPoint
             currentPostPoint = barcode.data.decode("utf-8")
             postPointPerception = "postPoint({},{})".format(currentPostPoint, previousPostPoint)
-            previousPostPoint = currentPostPoint
+            
 
         rospy.loginfo(postPointPerception)
         pub.publish(postPointPerception)
