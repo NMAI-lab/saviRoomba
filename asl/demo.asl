@@ -244,6 +244,7 @@ destinationLeft :-
  // Ideally, these plans could be combined using unification (see the last plan
  // in this set). This would need a modification of the scripts that interpret 
  // drive() action, or the script that generates the line() message (of both)
+ /*
 +!followPath
 	:	line(center)
 	<-	drive(forward);
@@ -265,11 +266,11 @@ destinationLeft :-
 		
 +!followPath
 	<-	!followPath.
- 
+ */
 /**
  * dock
  * Dock the robot at the charging station
- */
+ *
 +!dock
  	:	dockStation(DOCK) & not postPoint(DOCK,_)
 	<-	!goToLocation;
@@ -285,3 +286,5 @@ destinationLeft :-
 	<-	dock_bot.
 	
 +!dock. 
+*/
+
