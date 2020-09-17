@@ -1,7 +1,7 @@
 /**
  * @author	Chidiebere Onyedinma
  * @author	Patrick Gavigan
- * @date	2 July 2020
+ * @date	3 August 2020
  */
  
 /**
@@ -118,13 +118,34 @@ destinationLeft :-
 	PAST = post2 &
 	DESTINATION = post5.
 	
+/*
+NAVIGATION WITH NEW MODULE
+
+// Arrived at the destination
+atDestination :-
+	(destination(DESTINATION) & postPoint(DESTINATION,_)) | direction(arrived).
+
+// Destination is the previously seen post point
+destinationBehind :-
+	(destinaton(DESTINATION) & postPoint(_,DESTINATION)) | direction(behind).
+
+destinationAhead :- 
+	direction(forward).
+	
+destinationRight :-
+	direction(right).
+	
+destinationLeft :-
+	direction(left).
+*/
+
 /**
  * High level goals
  */
 !deliverMail.		// Highest level task: Deliver mail from sender to receiver
 //!goToLocation.	// Go to a destination location (such as a post point)
 //!followPath.		// Follow the path (line on the ground) 
-//!dock.			// Dock the robot when it is time to recharge
+//!manageBattery.	// Dock the robot when it is time to recharge
 
 /**
  * deliverMail
@@ -133,65 +154,64 @@ destinationLeft :-
  
  // Case where I have a sender location and don't yet have the mail, not 
  // currently at the senderLocation.
-+!deliverMail
-	: 	(not haveMail) &
+ +!deliverMail
+ 	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		postPoint(OTHER,_) & 
-		not (OTHER = SENDER) &
-		batteryOK
-	<- 	-destination(_);
-		+destination(SENDER);
+		(not postPoint(SENDER,_)))// &
+		//battery(ok))
+	<- 	do(1);
+		setDestination(SENDER);
 		!goToLocation;
 		!deliverMail.
 		
 // Case where I am at the sender location
 // Assume that the fact that I have arrived at the sender location means that 
 // I have the mail (this will need to be updated)
-+!deliverMail
- 	: 	(not haveMail) &
+ +!deliverMail
+ 	: 	((not haveMail) &
 		senderLocation(SENDER) &
 		receiverLocation(RECEIVER) &
-		postPoint(SENDER,_) & 
-		batteryOK
-	<- 	+haveMail;
-		//-senderLocation(_);	// Should we remove the sender location here?
+		postPoint(SENDER,_))// & 
+		//battery(ok))
+	<- 	do(2);
+		+haveMail;
+		.broadcast(tell, mailUpdate(collected));
 		!deliverMail.
  
 // Case where I have the mail and need to deliver it to the receiver
-+!deliverMail
- 	: 	haveMail &
+ +!deliverMail
+ 	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		postPoint(OTHER,_) &
-		not (OTHER = RECEIVER) &
-		batteryOK
-	<- 	-destination(_);
-		+destination(RECEIVER);
+		not postPoint(RECEIVER,_))// &
+		//battery(ok))
+	<- 	do(3);
+		!setDestination(RECEIVER);
 		!goToLocation;
 		!deliverMail.
 		
 // Case where I have the mail and am at the receiver location
-+!deliverMail
- 	: 	haveMail &
+ +!deliverMail
+ 	: 	(haveMail &
 		receiverLocation(RECEIVER) &
-		postPoint(RECEIVER,_) //&
-		//batteryOK
-	<- 	-haveMail;
+		postPoint(RECEIVER,_))// &
+		//battery(ok))
+	<- 	do(4);
+		-haveMail;
+		.broadcast(tell, mailUpdate(delivered));
 		!deliverMail.
-		// -receiverLocation(_).	// Should we remove the receiver location here?
 
 // Case where the battery is low
-+!deliverMail
-	: 	(batteryLow &
-		dockStation(DOCK))	
-	<-	-destination(_);
-		+destination(DOCK);
-		!goToLocation;
-		!deliverMail.
-		
-// Catchall (suspect that this should not be needed)
-+!deliverMail
-	<-	!deliverMail.
+// +!deliverMail
+// 	: 	(battery(low) &
+//		dockStation(DOCK))	
+//	<-	do(5);
+//		!manageBattery;
+		//-destination(_);
+		//+destination(DOCK);
+		//!dock;
+//		!deliverMail.
+
 
 /** 
  * goToLocation
@@ -200,46 +220,36 @@ destinationLeft :-
  */
 +!goToLocation
 	:	destinationAhead
-	<-	!followPath;
+	<-	do(6);
+		drive(forward);
+		!followPath;
 		!goToLocation.
 
 +!goToLocation
 	:	atDestination
-	<-	drive(stop).
+	<-	do(7);
+		drive(stop).
 	
 +!goToLocation
 	:	destinationLeft	// TODO: Update to use unification for left, right, behind?
-	<-	turn(left);	// TODO: This (or something similar) needs to be implementd
+	<-	do(8);
+		turn(left);	// TODO: This (or something similar) needs to be implementd
 		!followPath;
 		!goToLocation.
 		
 +!goToLocation
 	:	destinationRight	// TODO: Update to use unification for left, right, behind?
-	<-	turn(right);		// TODO: This (or something similar) needs to be implementd
+	<-	do(9);
+		turn(right);		// TODO: This (or something similar) needs to be implementd
 		!followPath;
 		!goToLocation.
 	
 +!goToLocation
 	:	destinationBehind	// TODO: Update to use unification for left, right, behind?
-	<-	turn(left);		// TODO: This (or something similar) needs to be implementd
+	<-	do(10);
+		turn(left);		// TODO: This (or something similar) needs to be implementd
 		!followPath;
 		!goToLocation.
-/*
-+!goToLocation
-	:	batteryLow	// Not sure if this is properly handled.
-	<-	!dock;
-		!goToLocation.
-
-+!goToLocation
-	:	batteryOK & docked
-	<-	!undock;
-		!goToLocation.	// Has this plan been implemented?
-*
-+!goToLocation
-	<-	run(6);
-		!goToLocation;
-		!followPath.
-*/
 
 /** 
  * followPath
@@ -250,43 +260,83 @@ destinationLeft :-
  // in this set). This would need a modification of the scripts that interpret 
  // drive() action, or the script that generates the line() message (of both)
 +!followPath
-	:	line(center)
-	<-	drive(forward);
-		!followPath.
-
+	:	line(center)// &
+		//not postPoint(_,_)
+	<-	do(12);
+		drive(forward).
+		
 +!followPath
-	:	line(lost) | line(across)
-	<-	drive(left);
-		drive(forward);
-		!followPath.
+	:	line(lost)// & 
+		//not postPoint(_,_)
+	<-	do(13);
+		drive(spiral).
 
 // Handle cases for left and right turns.
 +!followPath
-	:	line(DIRECTION) &
-		((DIRECTION = left) | (DIRECTION = right))
-	<-	drive(DIRECTION);
-		!followPath.
+	:	line(DIRECTION) //& 
+		//not postPoint(_,_)
+	<-	do(14);
+		drive(DIRECTION).
 		
-+!followPath
-	<-	!followPath.
-
+		
 /**
- * dock
- * Dock the robot at the charging station
+ * manageBattery
+ * Go to the dock station to charge the battery
  */
-+!dock
- 	:	not atDockPost & onTrack
-	<-	!navigate;
-		!dock.
+ // Low battery, not at the dock station, need to set the destination to the 
+ // dock station and go there
++!manageBattery
+	:	battery(low) & dockStation(DOCK) & dest(DEST) & (not (DOCK = DEST) & 
+		not postPoint(DOCK,_))
+	<-	do(16);
+		!setDestination(DOCK); 
+		!goToLocation;
+		!manageBattery.
+		
+// We are at the station, dock to charge the battery
++!manageBattery
+	: 	battery(low) & dockStation(DOCK) & postPoint(DOCK,_)
+	<-	do(17);
+		drive(stop);
+		station(dock);
+		.broadcast(tell, battery(charging));
+		!manageBattery.
+		
+// We are at the station, charging is done, undock
++!manageBattery
+	: 	battery(full)
+	<-	do(18);
+		.broadcast(tell, battery(charged));
+		station(undock);
+		!manageBattery.
 
-+!dock
-	:	atDockPost & moving
-	<-	drive(stop);
-	   	!dock.
-
-+!dock
-	:	atDockPost & not moving
-	<-	dock_bot.
+		
+/**
+ * Set the destination of the robot
+ */
++!setDestination(DESTINATION)
+	<-	do(20);
+		-destination(_);
+		+destination(DESTINATION);
+		setDestination(DESTINATION).	// Used with new navigation module only
+		
+		
+/**
+ * Default plans, in case things go wrong.
+ */
++!deliverMail
+	<-	do(5);
+		!deliverMail.
+		
++!goToLocation
+	<-	do(11);
+		!followPath;
+		!goToLocation.
+		
+// Default follow path. try again if it didn't work
++!followPath
+	<- 	do(15).
 	
-+!dock.
-
++!manageBattery
+	<-	do(19);
+		!manageBattery.
