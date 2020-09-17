@@ -4,6 +4,7 @@ import rospy
 from std_msgs.msg import String
 import RPi.GPIO as GPIO
 
+# Initialize GPIO
 GPIO.setmode(GPIO.BOARD)
 
 right_sensor = 8
@@ -16,13 +17,14 @@ GPIO.setup(center_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(left_sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
-def get_line():
+# Get the sesor data
+def getLine():
     centerLED = GPIO.input(center_sensor)
     leftLED = GPIO.input(left_sensor)
     rightLED = GPIO.input(right_sensor)
     LEDs = (leftLED, centerLED, rightLED)
     
-    # 0 indicates the location of the line
+    # Interpret the data; 0 indicates the location of the line
     if LEDs == (1,0,1):
         result = "c"
     elif (LEDs == (1,1,0)) or (LEDs == (1,0,0)):
@@ -36,35 +38,27 @@ def get_line():
         
     return (result, LEDs)
     
-
-def liner():
-    pub = rospy.Publisher('perceptions', String, queue_size=10)
-    rospy.init_node('liner', anonymous=True)
+# Poll the sensors, publish data
+def rosMain():
+    # Initialize the node
+    pub = rospy.Publisher('line', String, queue_size=10)
+    rospy.init_node('lineSensor', anonymous=True)
     rate = rospy.Rate(10)
 
+    
     while not rospy.is_shutdown():
-
-        (linePosition, LEDs) = get_line()        
-
-        if linePosition == "c":
-            line = "line(center)"
-        elif linePosition == "r":
-            line = "line(right)"
-        elif linePosition == "l":
-            line = "line(left)"
-        elif linePosition == "a":
-            line = "line(across)"
-        else:
-            line = "line(lost)"
-        sense = "{}, {}, {}".format(LEDs[0], LEDs[1], LEDs[2])
-        rospy.loginfo(sense)
-        pub.publish(line)
+        
+        # Get the sensor data
+        (linePosition, LEDs) = getLine()
+        rospy.loginfo("Line sensor data: " + str(linePosition) + ", " + str(LEDs))
+        pub.publish(linePosition)
         rate.sleep()
 
 
+# Run the program
 if __name__ == '__main__':
     try:
-        liner()
+        rosMain()
     except rospy.ROSInterruptException:
         GPIO.cleanup()
         pass
