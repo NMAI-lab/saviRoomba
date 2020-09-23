@@ -6,6 +6,5 @@
   <node name="perceptionTranslatorBattery" pkg="saviRoomba" type="perceptionTranslatorBattery.py" />
   <node name="perceptionTranslatorLine" pkg="saviRoomba" type="perceptionTranslatorLine.py" />
   <node name="perceptionTranslatorQr" pkg="saviRoomba" type="perceptionTranslatorQr.py" />
-  <!-- <node name="userTester" pkg="saviRoomba" type="userTester.py" /> -->
   <node name="driverCamera" pkg="saviRoomba" type="driverCamera.py" />
 </launch>
