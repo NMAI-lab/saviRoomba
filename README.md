@@ -47,6 +47,13 @@ Optional: Run `rostopic list` to verify that the application is running. The pub
 ### saviRoomba application node
 With the other tools running, it is now possible to start the application node applications. To do this, open a new terminal window and run the following:
 ```
-$ source devel/setup.bash
+$ source devel_isolated/setup.bash
 $ roslaunch saviRoomba roomba.launch
 ```
+
+Lastly, it is necessary to start the user interface. This is necessary in order to tell the robot the location of the docking station as well as to command it to perform the mail delivery mission. In a new terminal window run the following:
+```
+$ source devel_isolated/setup.bash
+$ rosrun saviRoomba userInterface.py
+```
+Follow the prompts in the terminal to start the robot. The interface will also prin all messages that are sent to and from the robot. These messages are very useful for troubleshooting.
