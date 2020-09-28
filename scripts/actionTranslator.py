@@ -34,6 +34,10 @@ def decodeAction(data, args):
     elif re.search("turn", action):
         turn(drivePublisher,parameter)
     
+    # Deal with passing setDestination action to the appropriate topic
+    elif re.search("setDestination", action):
+        destinationPublisher.publish(parameter)
+    
     # Deal with invalid action
     else:
         rospy.loginfo("Invalid action ignored")
@@ -84,8 +88,9 @@ def rosMain():
     drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     dockPublisher = rospy.Publisher('dock', Empty, queue_size=10)
     undockPublisher = rospy.Publisher('undock', Empty, queue_size=10)
+    destinationPublisher = rospy.Publisher('setDestination', String, queue_size=10)
     rospy.init_node('actionTranslator', anonymous=True)
-    rospy.Subscriber('actions', String, decodeAction, (drivePublisher, dockPublisher, undockPublisher))
+    rospy.Subscriber('actions', String, decodeAction, (drivePublisher, dockPublisher, undockPublisher, destinationPublisher))
     rospy.spin()
 
 # Start things up
