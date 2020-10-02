@@ -346,6 +346,14 @@ destination(LOCATION,LOCATION,left) :-
 	<-	.broadcast(tell, followPath(lost));
 		drive(spiral);
 		!followPath.
+		
+// Line is accross, use the turn(left) action to re center it
++!followPath
+	:	line(across) & 
+		(not postPoint(_,_))
+	<-	.broadcast(tell, followPath(across));
+		drive(left);
+		!followPath.
 
 // Handle cases for left and right turns.
 +!followPath
