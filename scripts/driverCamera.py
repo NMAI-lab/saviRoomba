@@ -10,7 +10,7 @@ import time
 
 # Initialize the video stream and allow the camera sensor to warm up
 vs = VideoStream(src=0).start()
-time.sleep(2.0)
+time.sleep(4.0)
 
 def rosMain():
     # Initialize the node
