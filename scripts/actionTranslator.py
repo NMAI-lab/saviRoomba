@@ -12,7 +12,7 @@ def decodeAction(data, args):
     
     # Get the parameters
     action = str(data.data)
-    (drivePublisher, dockPublisher, undockPublisher) = args
+    (drivePublisher, dockPublisher, undockPublisher, destinationPublisher) = args
     rospy.loginfo("Action: " + action)
     
     # Handle the docking station cases
