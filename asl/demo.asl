@@ -1,121 +1,7 @@
 /**
  * @author	Patrick Gavigan
- * @date	23 September 2020
+ * @date	16 October 2020
  */
- 
-/**
- * Navigation rules
- * TODO: Replace with navigation module
- *
-
-// Destination has not yet been set
-destination(LOCATION,unknown,unknown) :-
-	not setDestination(A).
-	
-// Destination was set previously but it isn't where we want to go right now.
-destination(LOCATION,old,unknown) :-
-	setDestination(OTHER) &
-	not (OTHER = LOCATION).
- 
-// Arrived at the destination
-destination(LOCATION,LOCATION,arrived) :-
-	setDestination(LOCATION) &
-	postPoint(LOCATION,_).
-
-// Destination is the previously seen post point
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(_,LOCATION).
-
-// Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
-destination(LOCATION,LOCATION,forward) :-
- 	setDestination(LOCATION) &
-	postPoint(CURRENT,_) &
-	((CURRENT = post1) | (CURRENT = post4) | (CURRENT = post5)) &
-	not (CURRENT = LOCATION). 
-
-// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is to
-// the left of us.
-destination(LOCATION,LOCATION,left) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	PAST = post1.
-	
-// Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
-// ahead of us.
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	PAST = post1 &
-	LOCATION = PAST.
-
-// Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
-// is behind of us.
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	not (PAST = post1) &
-	not (LOCATION = PAST).
-	
-// Rules @ post3, PAST = post4, DESTINATION = post5
-destination(LOCATION,LOCATION,forward) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post4 &
-	LOCATION = post5.
-
-// Rules @ post3, PAST = post5, DESTINATION = post4
-destination(LOCATION,LOCATION,forward) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post5 &
-	LOCATION = post4.
-
-// Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
-destination(LOCATION,LOCATION,right) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post5 &
-	((LOCATION = post1) | (LOCATION = post2)).
-	
-// Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
-destination(LOCATION,LOCATION,left) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post4 &
-	((LOCATION = post1) | (LOCATION = post2)).
-
-// Rules @ post3, PAST = post2, DESTINATION = post1 or post2
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	((LOCATION = post1) | (LOCATION = post2)).
-
-// Rules @ post3, PAST = post2, DESTINATION = post4
-destination(LOCATION,LOCATION,right) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	LOCATION = post4.
-
-// Rules @ post3, PAST = post2, DESTINATION = post4
-destination(LOCATION,LOCATION,left) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	LOCATION = post5.
-*/
 
 /**
  * +battery(low)
@@ -128,8 +14,7 @@ destination(LOCATION,LOCATION,left) :-
 +battery(low)
 	:	(not charging) & 
 		dockStation(DOCK) &
-		mailMission(SENDER,RECEIVER) //&
-		//postPoint(_,_)
+		mailMission(SENDER,RECEIVER)
 	<-	+charging;
 		.drop_all_intentions;
 		.broadcast(tell, battery(chargingNeeded));
@@ -145,8 +30,7 @@ destination(LOCATION,LOCATION,left) :-
 +battery(low)
 	:	(not charging) &
 		dockStation(DOCK) &
-		not mailMission(SENDER,RECEIVER) //&
-		//postPoint(_,_)
+		not mailMission(SENDER,RECEIVER)
 	<-	+charging;
 		.broadcast(tell, battery(chargingNeeded));
 		.broadcast(tell, battery(noMissionToInterrupt));
@@ -256,10 +140,7 @@ destination(LOCATION,LOCATION,left) :-
  * LOCATION: The location we want to go to
  * SET_DESTINATION: The location that the agent has set itself to navigate to
  * DIRECTION: The direction that the agent needs to go in order to move toward 
- *				SED_DESTINATION
- *
- * Note: The robot needs to have a post point visible to start things off or 
- * this won't work properly.
+ *				setDestination
  */
 
  // Case where the robot has not yet set a destination to navigate to. Need to 
@@ -267,7 +148,6 @@ destination(LOCATION,LOCATION,left) :-
 +!goTo(LOCATION,_)
 	:	direction(unknown,_)
 	<-	.broadcast(tell, navigationUpdate(setDestination,LOCATION));
-		//+setDestination(LOCATION);	// Make a mental note that the destination has been set
 		setDestination(LOCATION);	// Set the destination in the navigation module
 		!goTo(LOCATION,1).
 
@@ -276,8 +156,6 @@ destination(LOCATION,LOCATION,left) :-
 	:	direction(OLD,_) &
 		(not (OLD = LOCATION))
 	<-	.broadcast(tell, navigationUpdate(updateDestination,LOCATION));
-		//-setDestination(_);			// Remove old mental note about destination
-		//+setDestination(LOCATION);	// Make a mental note that the destination has been set
 		setDestination(LOCATION);	// Set the destination in the navigation module
 		!goTo(LOCATION,1).
 		
@@ -285,7 +163,6 @@ destination(LOCATION,LOCATION,left) :-
 +!goTo(LOCATION,_)
 	:	direction(LOCATION,arrived)
 	<-	.broadcast(tell, navigationUpdate(arrived));
-		//-setDestination(LOCATION);	// Remove old mental note about destination
 		drive(stop).
 	
 // Destination is behind us: turn and start following the path.
