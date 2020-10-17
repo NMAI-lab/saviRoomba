@@ -75,8 +75,10 @@ def getTwistMesg(parameter):
         message.linear.x = 0
         message.angular.z = -0.1
     elif parameter == "spiral":
-        message.linear.x = 0.1
-        message.angular.z = 0.1
+        #message.linear.x = 0.1
+        #message.angular.z = 0.1
+        message.linear.x = 0
+        message.angular.z = 0
     else:                           # Stop
         message.linear.x = 0
         message.angular.z = 0
