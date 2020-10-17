@@ -207,15 +207,17 @@
  
  // Case where the postPoint is visible, no driving.
  +!followPath
- 	:	postPoint(A,B)
-	<-	.broadcast(tell, followPath(PostPointStop,A,B));
+ 	:	postPoint(_,_) | 
+		direction(_,_)
+	<-	.broadcast(tell, followPath(PostPointStop));
 		drive(stop).
  
  
 // Line is center, no post point, drive forward
 +!followPath
 	:	line(center) &
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(center));
 		drive(forward);
 		!followPath.
@@ -223,7 +225,8 @@
 // Line is lost, use the spiral action to try and find it.
 +!followPath
 	:	line(lost) & 
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(lost));
 		drive(spiral);
 		!followPath.
@@ -231,7 +234,8 @@
 // Line is accross, use the turn(left) action to re center it
 +!followPath
 	:	line(across) & 
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(across));
 		drive(left);
 		!followPath.
@@ -240,7 +244,8 @@
 +!followPath
 	:	line(DIRECTION) & 
 		((DIRECTION = left) | (DIRECTION = right)) &
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(DIRECTION));
 		drive(DIRECTION);
 		!followPath.
@@ -268,6 +273,7 @@
 // don't want to lose the followPath intention.
 +!followPath
 	<-	.broadcast(tell, followPath(default));
+		drive(stop);	// Safest thing to do is not drive anywhere until something more useful is perceived.
 		!followPath. 
 
 // Ensure recursion while we are waiting for the battery to charge.
