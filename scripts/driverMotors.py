@@ -107,7 +107,8 @@ def rosMain():
         lineValue = getLine()[0]
         message = Twist()
         lastTurn = "l"
-                
+        rospy.loginfo(lineValue)
+        
         if lineValue == "c":
             message = getTwistMesg(lineValue)
         elif lineValue == "l":
