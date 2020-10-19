@@ -13,6 +13,10 @@ def translatePerception(data, args):
     (perceptionPublisher, postPointPublisher) = args
     qr = data.data
     
+    acceptable = ["post1", "post2", "post3", "post4", "post5"]
+    if not (qr in acceptable):
+        return
+    
     # Get access to the global variables (a bit hacky)
     global previous
     global current
