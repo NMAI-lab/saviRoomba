@@ -6,64 +6,64 @@ Created on Mon Oct 19 14:24:23 2020
 """
 
 import rospy
-import re
-from std_msgs.msg import String
-from std_msgs.msg import Empty
+#import re
+#from std_msgs.msg import String
+#from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
 from driverLineSensor import getLine
 
-def decodeAction(data, args):
+# def decodeAction(data, args):
     
-    # Get the parameters
-    action = str(data.data)
-    (drivePublisher, dockPublisher, undockPublisher, destinationPublisher) = args
-    rospy.loginfo("Action: " + action)
+#     # Get the parameters
+#     action = str(data.data)
+#     (drivePublisher, dockPublisher, undockPublisher, destinationPublisher) = args
+#     rospy.loginfo("Action: " + action)
     
-    # Handle the docking station cases
-    if action == "station(dock)":
-        dockPublisher.publish()
-    elif action == "station(undock)":
-        undockPublisher.publish()   # Publish to the undock topic
-        turn(drivePublisher,"left") # Turn the robot around
+#     # Handle the docking station cases
+#     if action == "station(dock)":
+#         dockPublisher.publish()
+#     elif action == "station(undock)":
+#         undockPublisher.publish()   # Publish to the undock topic
+#         turn(drivePublisher,"left") # Turn the robot around
         
-    # Extract the action parameter between the brackets
-    parameter = re.search('\((.*)\)', action).group(1)
+#     # Extract the action parameter between the brackets
+#     parameter = re.search('\((.*)\)', action).group(1)
     
-    # Deal with drive action
-    if re.search("drive", action):
-        drive(drivePublisher,parameter)
+#     # Deal with drive action
+#     if re.search("drive", action):
+#         drive(drivePublisher,parameter)
         
-    # Deal with turn message (similar to drive action but continues until the 
-    # line sensor detects "c")
-    elif re.search("turn", action):
-        turn(drivePublisher,parameter)
+#     # Deal with turn message (similar to drive action but continues until the 
+#     # line sensor detects "c")
+#     elif re.search("turn", action):
+#         turn(drivePublisher,parameter)
     
-    # Deal with passing setDestination action to the appropriate topic
-    elif re.search("setDestination", action):
-        destinationPublisher.publish(parameter)
+#     # Deal with passing setDestination action to the appropriate topic
+#     elif re.search("setDestination", action):
+#         destinationPublisher.publish(parameter)
     
-    # Deal with invalid action
-    else:
-        rospy.loginfo("Invalid action ignored")
+#     # Deal with invalid action
+#     else:
+#         rospy.loginfo("Invalid action ignored")
 
-# Turn command, repeated drive commands until the lince sensor detects c again
-def turn(publisher, parameter):
+# # Turn command, repeated drive commands until the lince sensor detects c again
+# def turn(publisher, parameter):
     
-    # Get the turn started
-    drive(publisher,parameter)
+#     # Get the turn started
+#     drive(publisher,parameter)
     
-    # Keep turning until the line is centered again
-    while getLine()[0] != "c":
-            drive(publisher,parameter)
+#     # Keep turning until the line is centered again
+#     while getLine()[0] != "c":
+#             drive(publisher,parameter)
             
-    # Stop, once the line is centered again
-    drive(publisher, "stop")
+#     # Stop, once the line is centered again
+#     drive(publisher, "stop")
 
 
-# Drive command for the robot
-def drive(publisher, parameter):
-    message = getTwistMesg(parameter)
-    publisher.publish(message)
+# # Drive command for the robot
+# def drive(publisher, parameter):
+#     message = getTwistMesg(parameter)
+#     publisher.publish(message)
         
 # Get the message to send to the robot in order to drive it
 def getTwistMesg(parameter):
