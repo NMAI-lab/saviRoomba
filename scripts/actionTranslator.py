@@ -93,8 +93,8 @@ def getTwistMesg(parameter, drive):
             message.linear.x = 0.05
             message.angular.z = 0.1
         
-    if (drive == False) and (parameter != "forward"):
-        message.linear.x = 0
+    #if (drive == False) and (parameter != "forward"):
+    #    message.linear.x = 0
     
     return message
 
