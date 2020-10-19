@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-#"""
-#Created on Mon Oct 19 14:24:23 2020
+#!/usr/bin/env python
 
-#@author: Patrick
-#"""
 
 import rospy
 #import re
