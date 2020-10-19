@@ -70,16 +70,16 @@ def getTwistMesg(parameter, drive):
     global lastTurn
     
     if parameter == "forward":
-        message.linear.x = 0.1
+        message.linear.x = 0.05
         message.angular.z = 0
     elif parameter == "left":
         lastTurn = parameter
-        message.linear.x = 0.05
-        message.angular.z = 0.1
+        message.linear.x = 0.01
+        message.angular.z = 0.05
     elif parameter == "right":
         lastTurn = parameter
-        message.linear.x = 0.05
-        message.angular.z = -0.1
+        message.linear.x = 0.01
+        message.angular.z = -0.05
     elif parameter == "stop":
         #message.linear.x = 0.1
         #message.angular.z = 0.1
@@ -87,11 +87,11 @@ def getTwistMesg(parameter, drive):
         message.angular.z = 0
     else:                           # Line lost or across
         if lastTurn == "right":
-            message.linear.x = 0.05
-            message.angular.z = -0.1
+            message.linear.x = 0.01
+            message.angular.z = -0.05
         else:
-            message.linear.x = 0.05
-            message.angular.z = 0.1
+            message.linear.x = 0.01
+            message.angular.z = 0.05
         
     #if (drive == False) and (parameter != "forward"):
     #    message.linear.x = 0
