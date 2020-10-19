@@ -7,6 +7,8 @@ from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
 from driverLineSensor import getLine
 
+lastTurn = "left"
+
 # Decode and execute the action
 def decodeAction(data, args):
     
@@ -50,39 +52,50 @@ def turn(publisher, parameter):
     
     # Keep turning until the line is centered again
     while getLine()[0] != "c":
-            drive(publisher,parameter)
+            drive(publisher,parameter, False)
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
 
 
 # Drive command for the robot
-def drive(publisher, parameter):
-    message = getTwistMesg(parameter)
+def drive(publisher, parameter, driveParam = True):
+    message = getTwistMesg(parameter, driveParam)
     publisher.publish(message)
         
 # Get the message to send to the robot in order to drive it
-def getTwistMesg(parameter):
+def getTwistMesg(parameter, drive):
     message = Twist()
+    
+    global lastTurn
     
     if parameter == "forward":
         message.linear.x = 0.1
         message.angular.z = 0
     elif parameter == "left":
-        message.linear.x = 0
+        lastTurn = parameter
+        message.linear.x = 0.05
         message.angular.z = 0.1
     elif parameter == "right":
-        message.linear.x = 0
+        lastTurn = parameter
+        message.linear.x = 0.05
         message.angular.z = -0.1
-    elif parameter == "spiral":
+    elif parameter == "stop":
         #message.linear.x = 0.1
         #message.angular.z = 0.1
         message.linear.x = 0
         message.angular.z = 0
-    else:                           # Stop
-        message.linear.x = 0
-        message.angular.z = 0
+    else:                           # Line lost or across
+        if lastTurn == "right":
+            message.linear.x = 0.05
+            message.angular.z = -0.1
+        else:
+            message.linear.x = 0.05
+            message.angular.z = 0.1
         
+    if (drive == False) and (parameter != "forward"):
+        message.linear.x = 0
+    
     return message
 
 # Main execution
