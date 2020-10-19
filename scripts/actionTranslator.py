@@ -87,10 +87,10 @@ def getTwistMesg(parameter, drive):
         message.angular.z = 0
     else:                           # Line lost or across
         if lastTurn == "right":
-            message.linear.x = 0.01
+            message.linear.x = 0.005
             message.angular.z = -0.05
         else:
-            message.linear.x = 0.01
+            message.linear.x = 0.005
             message.angular.z = 0.05
         
     #if (drive == False) and (parameter != "forward"):
