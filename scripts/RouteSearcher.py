@@ -19,11 +19,11 @@ class RouteSearcher(AStar):
     def __init__(self):
             
         # Load node graph
-        f = open('nodeGraph.json')
+        f = open('/home/pi/create_ws/src/saviRoomba/scripts/nodeGraph.json')
         self.nodeGraph = json.load(f)
         
         # Load node locations
-        f = open('nodeLocations.json')
+        f = open('/home/pi/create_ws/src/saviRoomba/scripts/nodeLocations.json')
         self.nodeLocations = json.load(f)
         
         # assign a dummy value for the destination until we have one specified
