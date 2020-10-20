@@ -39,10 +39,10 @@ def decodeAction(data, args):
 
     
     global actionBusy
-    print("Action Busy: " + str(actionBusy))
+    #print("Action Busy: " + str(actionBusy))
     if not actionBusy:
         actionBusy = True
-        print(action)
+        #print(action)
     
         # Deal with drive action
         if re.search("drive", action):
@@ -62,32 +62,32 @@ def decodeAction(data, args):
             rospy.loginfo("Invalid action ignored")
             
         actionBusy = False
-        print("all done")
+        #print("all done")
 
 # Turn command, repeated drive commands until the lince sensor detects c again
 def turn(publisher, parameter):
-    print("in turn method")
+    #print("in turn method")
     
     # Get the turn started
     drive(publisher,parameter)
     
     # Keep turning until the line is centered again
     i = 0
-    while (getLine()[0] != "c") or (i < 50):
+    while (getLine()[0] != "c") or (i < 500):
         drive(publisher,parameter, False)
         i += 1
             
-        print("in turn method i :" + str(i))
+        #print("in turn method i :" + str(i))
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
-    print("done turning")
+    #print("done turning")
 
 
 # Drive command for the robot
 def drive(publisher, parameter, driveParam = True):
     message = getTwistMesg(parameter, driveParam)
-    print("drive method")
+    #print("drive method")
     publisher.publish(message)
         
 # Get the message to send to the robot in order to drive it
@@ -113,7 +113,7 @@ def getTwistMesg(parameter, drive):
         message.linear.x = 0
         message.angular.z = 0
     elif parameter == "back":
-        print("drive Back spot")
+        #print("drive Back spot")
         message.linear.x = -0.1
         message.linear.z = 0
     else:                           # Line lost or across
