@@ -1,121 +1,8 @@
 /**
  * @author	Patrick Gavigan
- * @date	23 September 2020
- */
- 
-/**
- * Navigation rules
- * TODO: Replace with navigation module
+ * @date	16 October 2020
  */
 
-// Destination has not yet been set
-destination(LOCATION,unknown,unknown) :-
-	not setDestination(A).
-	
-// Destination was set previously but it isn't where we want to go right now.
-destination(LOCATION,old,unknown) :-
-	setDestination(OTHER) &
-	not (OTHER = LOCATION).
- 
-// Arrived at the destination
-destination(LOCATION,LOCATION,arrived) :-
-	setDestination(LOCATION) &
-	postPoint(LOCATION,_).
-
-// Destination is the previously seen post point
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(_,LOCATION).
-
-// Rules @ post1, post4, and post5: at the edge of the map, everything is ahead
-destination(LOCATION,LOCATION,forward) :-
- 	setDestination(LOCATION) &
-	postPoint(CURRENT,_) &
-	((CURRENT = post1) | (CURRENT = post4) | (CURRENT = post5)) &
-	not (CURRENT = LOCATION). 
-
-// Rules @ post2, PAST = post1, (not DESTINATION = post1): Everything else is to
-// the left of us.
-destination(LOCATION,LOCATION,left) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	PAST = post1.
-	
-// Rules @ post2, PAST = post1, DESTINATION = post1: Everything else is
-// ahead of us.
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	PAST = post1 &
-	LOCATION = PAST.
-
-// Rules @ post2, not (PAST = post1), not (DESTINATION = post1): Everything else
-// is behind of us.
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post2 &
-	not (PAST = post1) &
-	not (LOCATION = PAST).
-	
-// Rules @ post3, PAST = post4, DESTINATION = post5
-destination(LOCATION,LOCATION,forward) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post4 &
-	LOCATION = post5.
-
-// Rules @ post3, PAST = post5, DESTINATION = post4
-destination(LOCATION,LOCATION,forward) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post5 &
-	LOCATION = post4.
-
-// Rules @ post3, PAST = post5, DESTINATION = post1 or post 2
-destination(LOCATION,LOCATION,right) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post5 &
-	((LOCATION = post1) | (LOCATION = post2)).
-	
-// Rules @ post3, PAST = post4, DESTINATION = post1 or post 2
-destination(LOCATION,LOCATION,left) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post4 &
-	((LOCATION = post1) | (LOCATION = post2)).
-
-// Rules @ post3, PAST = post2, DESTINATION = post1 or post2
-destination(LOCATION,LOCATION,behind) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	((LOCATION = post1) | (LOCATION = post2)).
-
-// Rules @ post3, PAST = post2, DESTINATION = post4
-destination(LOCATION,LOCATION,right) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	LOCATION = post4.
-
-// Rules @ post3, PAST = post2, DESTINATION = post4
-destination(LOCATION,LOCATION,left) :-
-	setDestination(LOCATION) &
-	postPoint(CURRENT,PAST) &
-	CURRENT = post3 &
-	PAST = post2 &
-	LOCATION = post5.
-	
 /**
  * +battery(low)
  * When the battery(low) perception is received, we need to pickup the goal
@@ -127,8 +14,7 @@ destination(LOCATION,LOCATION,left) :-
 +battery(low)
 	:	(not charging) & 
 		dockStation(DOCK) &
-		mailMission(SENDER,RECEIVER) //&
-		//postPoint(_,_)
+		mailMission(SENDER,RECEIVER)
 	<-	+charging;
 		.drop_all_intentions;
 		.broadcast(tell, battery(chargingNeeded));
@@ -144,8 +30,7 @@ destination(LOCATION,LOCATION,left) :-
 +battery(low)
 	:	(not charging) &
 		dockStation(DOCK) &
-		not mailMission(SENDER,RECEIVER) //&
-		//postPoint(_,_)
+		not mailMission(SENDER,RECEIVER)
 	<-	+charging;
 		.broadcast(tell, battery(chargingNeeded));
 		.broadcast(tell, battery(noMissionToInterrupt));
@@ -255,38 +140,34 @@ destination(LOCATION,LOCATION,left) :-
  * LOCATION: The location we want to go to
  * SET_DESTINATION: The location that the agent has set itself to navigate to
  * DIRECTION: The direction that the agent needs to go in order to move toward 
- *				SED_DESTINATION
- *
- * Note: The robot needs to have a post point visible to start things off or 
- * this won't work properly.
+ *				setDestination
  */
 
  // Case where the robot has not yet set a destination to navigate to. Need to 
  // set the destination.
 +!goTo(LOCATION,_)
-	:	destination(_,unknown,_)
+	:	direction(unknown,_)
 	<-	.broadcast(tell, navigationUpdate(setDestination,LOCATION));
-		+setDestination(LOCATION);	// **** Remove + for navigation module
+		setDestination(LOCATION);	// Set the destination in the navigation module
 		!goTo(LOCATION,1).
 
  // The robot has a different destination than the one we need to go to.
  +!goTo(LOCATION,_)
-	:	destination(LOCATION,old,_)
+	:	direction(OLD,_) &
+		(not (OLD = LOCATION))
 	<-	.broadcast(tell, navigationUpdate(updateDestination,LOCATION));
-		-setDestination(_);
-		+setDestination(LOCATION);	// **** Remove + for navigation module
+		setDestination(LOCATION);	// Set the destination in the navigation module
 		!goTo(LOCATION,1).
 		
 // Case where the robot has arrived at the destination.
 +!goTo(LOCATION,_)
-	:	destination(LOCATION,LOCATION,arrived)
+	:	direction(LOCATION,arrived)
 	<-	.broadcast(tell, navigationUpdate(arrived));
-		-setDestination(LOCATION);		// **** TODO: Update navigation module actions ****
 		drive(stop).
 	
 // Destination is behind us: turn and start following the path.
 +!goTo(LOCATION,_)
-	:	destination(LOCATION,LOCATION,behind)
+	:	direction(LOCATION,behind)
 	<-	.broadcast(tell, navigationUpdate(behind));
 		turn(left);
 		!followPath;
@@ -294,7 +175,7 @@ destination(LOCATION,LOCATION,left) :-
 		
 // Destiantion is forward. Drive forward, follow the path.
 +!goTo(LOCATION,_)
-	:	destination(LOCATION,LOCATION,forward)
+	:	direction(LOCATION,forward)
 	<-	.broadcast(tell, navigationUpdate(forward));
 		drive(forward);
 		!followPath;
@@ -302,7 +183,7 @@ destination(LOCATION,LOCATION,left) :-
 
 // Destiantion is either left or right. Turn and then follow the path.
 +!goTo(LOCATION,_)
-	:	destination(LOCATION,LOCATION,DIRECTION) &
+	:	direction(LOCATION,DIRECTION) &
 		((DIRECTION = left) | (DIRECTION = right))
 	<-	.broadcast(tell, navigationUpdate(DIRECTION));
 		turn(DIRECTION);
@@ -326,15 +207,17 @@ destination(LOCATION,LOCATION,left) :-
  
  // Case where the postPoint is visible, no driving.
  +!followPath
- 	:	postPoint(A,B)
-	<-	.broadcast(tell, followPath(PostPointStop,A,B));
+ 	:	postPoint(_,_) | 
+		direction(_,_)
+	<-	.broadcast(tell, followPath(PostPointStop));
 		drive(stop).
  
  
 // Line is center, no post point, drive forward
 +!followPath
 	:	line(center) &
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(center));
 		drive(forward);
 		!followPath.
@@ -342,7 +225,8 @@ destination(LOCATION,LOCATION,left) :-
 // Line is lost, use the spiral action to try and find it.
 +!followPath
 	:	line(lost) & 
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(lost));
 		drive(spiral);
 		!followPath.
@@ -350,7 +234,8 @@ destination(LOCATION,LOCATION,left) :-
 // Line is accross, use the turn(left) action to re center it
 +!followPath
 	:	line(across) & 
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(across));
 		drive(left);
 		!followPath.
@@ -359,7 +244,8 @@ destination(LOCATION,LOCATION,left) :-
 +!followPath
 	:	line(DIRECTION) & 
 		((DIRECTION = left) | (DIRECTION = right)) &
-		(not postPoint(_,_))
+		(not postPoint(_,_)) &
+		(not direction(_,_))
 	<-	.broadcast(tell, followPath(DIRECTION));
 		drive(DIRECTION);
 		!followPath.
@@ -387,6 +273,7 @@ destination(LOCATION,LOCATION,left) :-
 // don't want to lose the followPath intention.
 +!followPath
 	<-	.broadcast(tell, followPath(default));
+		drive(stop);	// Safest thing to do is not drive anywhere until something more useful is perceived.
 		!followPath. 
 
 // Ensure recursion while we are waiting for the battery to charge.

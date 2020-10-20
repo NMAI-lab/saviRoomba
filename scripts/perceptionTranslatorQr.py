@@ -10,8 +10,12 @@ current = "unknown"
 # Translate the line sensor data into a perception and publish
 def translatePerception(data, args):
     # Extract the publisher and the message data
-    (publisher) = args
+    (perceptionPublisher, postPointPublisher) = args
     qr = data.data
+    
+    acceptable = ["post1", "post2", "post3", "post4", "post5"]
+    if not (qr in acceptable):
+        return
     
     # Get access to the global variables (a bit hacky)
     global previous
@@ -25,13 +29,15 @@ def translatePerception(data, args):
     # Publish the perception
     postPoint = "postPoint({},{})".format(current, previous)
     rospy.loginfo(postPoint)
-    publisher.publish(postPoint)
+    postPointPublisher.publish(postPoint)
+    perceptionPublisher.publish(postPoint)
 
 # Initialize the node, setup the publisher and subscriber
 def rosMain():
     rospy.init_node('qrTranslator', anonymous=True)
-    publisher = rospy.Publisher('perceptions', String, queue_size=10)
-    rospy.Subscriber('qr', String, translatePerception, (publisher))
+    perceptionPublisher = rospy.Publisher('perceptions', String, queue_size=10)
+    postPointPublisher = rospy.Publisher('postPoint', String, queue_size=10)
+    rospy.Subscriber('qr', String, translatePerception, (perceptionPublisher, postPointPublisher))
     rospy.spin()
 
 if __name__ == '__main__':
