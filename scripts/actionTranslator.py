@@ -37,8 +37,9 @@ def decodeAction(data, args):
     if re.search("setDestination", action):
         destinationPublisher.publish(parameter)
 
-    print("Action Busy: " + str(actionBusy))
+    
     global actionBusy
+    print("Action Busy: " + str(actionBusy))
     if not actionBusy:
         actionBusy = True
         print(action)
@@ -50,7 +51,6 @@ def decodeAction(data, args):
         # Deal with turn message (similar to drive action but continues until the 
         # line sensor detects "c")
         elif re.search("turn", action):
-            print("in turn method")
             turn(drivePublisher,parameter)
     
         # Deal with passing setDestination action to the appropriate topic
@@ -66,6 +66,8 @@ def decodeAction(data, args):
 
 # Turn command, repeated drive commands until the lince sensor detects c again
 def turn(publisher, parameter):
+    print("in turn method")
+    
     # Get the turn started
     drive(publisher,parameter)
     
@@ -74,9 +76,11 @@ def turn(publisher, parameter):
     while (getLine()[0] != "c") and (i < 50):
             drive(publisher,parameter, False)
             i += 1
+            print("in turn method i :" + str(i))
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
+    print("done turning")
 
 
 # Drive command for the robot
