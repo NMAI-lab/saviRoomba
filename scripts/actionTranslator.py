@@ -22,6 +22,10 @@ def decodeAction(data, args):
         dockPublisher.publish()
     elif action == "station(undock)":
         undockPublisher.publish()   # Publish to the undock topic
+        
+        for i in range(10):
+            drive("undock")
+        
         turn(drivePublisher,"left") # Turn the robot around
         
     # Extract the action parameter between the brackets
@@ -85,6 +89,9 @@ def getTwistMesg(parameter, drive):
         #message.angular.z = 0.1
         message.linear.x = 0
         message.angular.z = 0
+    elif parameter == "undock":
+        message.linear.x = -0.01
+        message.linear.z = 0
     else:                           # Line lost or across
         if lastTurn == "right":
             message.linear.x = 0.005
