@@ -137,8 +137,6 @@ def getTwistMesg(parameter, drive):
 
 # Main execution
 def rosMain():
-    global actionBusy
-    actionBusy = False
     drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     dockPublisher = rospy.Publisher('dock', Empty, queue_size=10)
     undockPublisher = rospy.Publisher('undock', Empty, queue_size=10)
