@@ -24,7 +24,7 @@ def decodeAction(data, args):
         undockPublisher.publish()   # Publish to the undock topic
         
         for i in range(10):
-            drive("undock")
+            drive(drivePublisher,"undock")
         
         turn(drivePublisher,"left") # Turn the robot around
         
