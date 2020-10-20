@@ -146,10 +146,10 @@ def getTwistMesg(parameter, drive):
 
 # Main execution
 def rosMain():
-    drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=8000)
-    dockPublisher = rospy.Publisher('dock', Empty, queue_size=10)
-    undockPublisher = rospy.Publisher('undock', Empty, queue_size=10)
-    destinationPublisher = rospy.Publisher('setDestination', String, queue_size=10)
+    drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=1)
+    dockPublisher = rospy.Publisher('dock', Empty, queue_size=1)
+    undockPublisher = rospy.Publisher('undock', Empty, queue_size=1)
+    destinationPublisher = rospy.Publisher('setDestination', String, queue_size=1)
     #perceptionsPublisher = rospy.Publisher('perceptions', String, queue_size=10)
     rospy.init_node('actionTranslator', anonymous=True)
     rospy.Subscriber('actions', String, decodeAction, (drivePublisher, dockPublisher, undockPublisher, destinationPublisher))
