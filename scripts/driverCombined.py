@@ -74,7 +74,7 @@ def getLine():
 
 
 def getQr():
-    qr = "none"
+    qr = "nothingGoodHere"
     
     # Get a frame from the threaded video stream and resize it to have a 
     # maximum width of 400 pixels
@@ -92,7 +92,7 @@ def getQr():
         
     acceptable = ["post1", "post2", "post3", "post4", "post5"]
     if not (qr in acceptable):
-        return "no"
+        return "nothingGoodHere"
     
     # Get access to the global variables (a bit hacky)
     global previous
@@ -126,12 +126,12 @@ def rosMain():
         rospy.loginfo("Qr data: " + str(postPoint))
 
         message = linePerception
-        if not "no" in postPoint:
+        if not "nothingGoodHere" in postPoint:
             message = message + " " + postPoint
 
         perceptionsPub.publish(message)
         
-        if not "no" in postPoint:
+        if not "nothingGoodHere" in postPoint:
             postPointPub.publish(postPoint)
         
         rate.sleep()
