@@ -8,7 +8,7 @@ from geometry_msgs.msg import Twist
 from driverLineSensor import getLine
 
 lastTurn = "left"
-busy = False
+actionBusy = False
 
 
 # Decode and execute the action
@@ -37,9 +37,10 @@ def decodeAction(data, args):
     if re.search("setDestination", action):
         destinationPublisher.publish(parameter)
 
-    global busy
-    if not busy:
-        busy = True
+    print("Action Busy: " + str(actionBusy))
+    global actionBusy
+    if not actionBusy:
+        actionBusy = True
     
         # Deal with drive action
         if re.search("drive", action):
@@ -58,7 +59,7 @@ def decodeAction(data, args):
         else:
             rospy.loginfo("Invalid action ignored")
             
-        busy = False
+        actionBusy = False
 
 # Turn command, repeated drive commands until the lince sensor detects c again
 def turn(publisher, parameter):
@@ -133,6 +134,8 @@ def getTwistMesg(parameter, drive):
 
 # Main execution
 def rosMain():
+    global actionBusy
+    actionBusy = False
     drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     dockPublisher = rospy.Publisher('dock', Empty, queue_size=10)
     undockPublisher = rospy.Publisher('undock', Empty, queue_size=10)
