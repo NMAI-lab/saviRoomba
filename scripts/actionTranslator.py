@@ -81,7 +81,7 @@ def turn(publisher, parameter):
     while (not foundLine) or (i < 80000):
         drive(publisher,parameter, False)
         i += 1
-            
+        print(foundLine)
         print("in turn method i :" + str(i))
             
     # Stop, once the line is centered again
