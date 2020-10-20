@@ -77,7 +77,7 @@ def turn(publisher, parameter):
     # Keep turning until the line is centered again
     line = getLine()[0]
     foundLine = (line == "c") or (line == "l") or (line == "r")
-    t_end = time.time() + 10     # 10 second delay
+    t_end = time.time() + 5     # 5 second delay
     while (not foundLine) or (time.time() < t_end):
         drive(publisher,parameter, False)
         print(foundLine)
