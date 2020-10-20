@@ -97,8 +97,8 @@ def turn(publisher, parameter):
         line = getLine()[0]
         foundLine = (line == "c") or (line == "l") or (line == "r")
      
-    # turn back for 5 seconds (gives about a 45 deg angle)
-    t_end = time.time() + 5     # 5 second delay
+    # turn back
+    t_end = time.time() + 1     # 5 second delay
     while (time.time() < t_end):
         if parameter == "left":
             recoverTurn = "right"
