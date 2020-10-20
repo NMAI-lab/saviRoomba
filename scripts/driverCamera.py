@@ -16,7 +16,7 @@ def rosMain():
     # Initialize the node
     publisher = rospy.Publisher('qr', String, queue_size=10)
     rospy.init_node('cameraDriver', anonymous=True)
-    rate = rospy.Rate(2)
+    rate = rospy.Rate(5)
 
     while not rospy.is_shutdown():
         # Get a frame from the threaded video stream and resize it to have a 
