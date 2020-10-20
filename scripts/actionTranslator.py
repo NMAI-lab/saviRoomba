@@ -75,36 +75,36 @@ def turn(publisher, parameter):
     drive(publisher,parameter)
     
     # turn for 5 seconds (gives about a 45 deg angle)
-    t_end = time.time() + 5     # 5 second delay
+    t_end = time.time() + 10     # 5 second delay
     while (time.time() < t_end):
         drive(publisher,parameter, False)
     
     # Go forward for 2 seconds
-    t_end = time.time() + 2     # 5 second delay
-    while (time.time() < t_end):
-        drive(publisher,"forward", False)
+    #t_end = time.time() + 2     # 5 second delay
+    #while (time.time() < t_end):
+    #    drive(publisher,"forward", False)
 
     # Turn another 90 deg
-    t_end = time.time() + 10     # 10 second delay
-    while (time.time() < t_end):
-        drive(publisher,parameter, False)
+    #t_end = time.time() + 10     # 10 second delay
+    #while (time.time() < t_end):
+    #    drive(publisher,parameter, False)
 
     # Drive forward until the line is seen again
-    line = getLine()[0]
-    foundLine = (line == "c") or (line == "l") or (line == "r")
-    while (not foundLine):
-        drive(publisher,"forward", False)
-        line = getLine()[0]
-        foundLine = (line == "c")# or (line == "l") or (line == "r")
+    #line = getLine()[0]
+    #foundLine = (line == "c") or (line == "l") or (line == "r")
+    #while (not foundLine):
+    #    drive(publisher,"forward", False)
+    #    line = getLine()[0]
+    #    foundLine = (line == "c")# or (line == "l") or (line == "r")
      
     # turn back
-    t_end = time.time() + 1     # 5 second delay
-    while (time.time() < t_end):
-        if parameter == "left":
-            recoverTurn = "right"
-        else:
-            recoverTurn = "left"
-        drive(publisher,recoverTurn, False)
+    #t_end = time.time() + 1     # 5 second delay
+    #while (time.time() < t_end):
+    #    if parameter == "left":
+    #        recoverTurn = "right"
+    #    else:
+    #        recoverTurn = "left"
+    #    drive(publisher,recoverTurn, False)
         
     #global lastTurn
     #if parameter == "left":
