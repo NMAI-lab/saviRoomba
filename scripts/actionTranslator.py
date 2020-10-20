@@ -73,10 +73,11 @@ def turn(publisher, parameter):
     
     # Keep turning until the line is centered again
     i = 0
-    while (getLine()[0] != "c") and (i < 50):
-            drive(publisher,parameter, False)
-            i += 1
-            print("in turn method i :" + str(i))
+    while (getLine()[0] != "c") or (i < 50):
+        drive(publisher,parameter, False)
+        i += 1
+            
+        print("in turn method i :" + str(i))
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
@@ -86,6 +87,7 @@ def turn(publisher, parameter):
 # Drive command for the robot
 def drive(publisher, parameter, driveParam = True):
     message = getTwistMesg(parameter, driveParam)
+    print("drive method")
     publisher.publish(message)
         
 # Get the message to send to the robot in order to drive it
