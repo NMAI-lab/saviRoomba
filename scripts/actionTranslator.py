@@ -75,12 +75,12 @@ def turn(publisher, parameter):
     
     # Keep turning until the line is centered again
     i = 0
-    while (i < 500):
-    #while (getLine()[0] != "c") or (i < 500):
+    #while (i < 500):
+    while (getLine()[0] != "c") or (i < 500):
         drive(publisher,parameter, False)
         i += 1
             
-        #print("in turn method i :" + str(i))
+        print("in turn method i :" + str(i))
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
