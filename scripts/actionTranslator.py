@@ -78,13 +78,14 @@ def turn(publisher, parameter):
     line = getLine()[0]
     foundLine = (line == "c") or (line == "l") or (line == "r")
     t_end = time.time() + 5     # 5 second delay
-    while (not foundLine) or (time.time() < t_end):
+    #while (not foundLine) or (time.time() < t_end):
+    while (time.time() < t_end):
         drive(publisher,parameter, False)
-        print(foundLine)
+        #print(foundLine)
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
-    #print("done turning")
+    print("done turning")
 
 
 # Drive command for the robot
