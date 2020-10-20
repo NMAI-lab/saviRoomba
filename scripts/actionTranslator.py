@@ -41,7 +41,7 @@ def decodeAction(data, args):
     global actionBusy
     #print("Action Busy: " + str(actionBusy))
     if not actionBusy:
-        actionBusy = True
+        #actionBusy = True
         #print(action)
     
         # Deal with drive action
@@ -51,7 +51,9 @@ def decodeAction(data, args):
         # Deal with turn message (similar to drive action but continues until the 
         # line sensor detects "c")
         elif re.search("turn", action):
+            actionBusy = True
             turn(drivePublisher,parameter)
+            actionBusy = False
     
         # Deal with passing setDestination action to the appropriate topic
         #elif re.search("setDestination", action):
@@ -61,7 +63,7 @@ def decodeAction(data, args):
         else:
             rospy.loginfo("Invalid action ignored")
             
-        actionBusy = False
+        #actionBusy = False
         #print("all done")
 
 # Turn command, repeated drive commands until the lince sensor detects c again
