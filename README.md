@@ -1,5 +1,7 @@
 # saviRoomba
 
+This is a prototype demo of a mail delivery system using an iRobot create (Roomba), with line following and position detection with QR codes on the ground, visible by an external camera. This prototype has been published in AREA2020 (https://area2020.github.io/) and is planned to be published in JSAN (https://www.mdpi.com/journal/jsan/special_issues/REA).
+
 This project connects an iRobot Create 2 to a BDI reasoner usign the savi_ros_bdi package, available at https://github.com/NMAI-lab/savi_ros_bdi, and the create_autonomy package, available at https://github.com/AutonomyLab/create_autonomy. Both of those packages are required dependencies for this project to work.
 
 This project was based off of the savi_ros_demo example project, available at https://github.com/NMAI-lab/savi_ros_demo.
@@ -57,3 +59,6 @@ $ source devel_isolated/setup.bash
 $ rosrun saviRoomba userInterface.py
 ```
 Follow the prompts in the terminal to start the robot. The interface will also prin all messages that are sent to and from the robot. These messages are very useful for troubleshooting.
+
+## Notes about hardware
+Please note that this is a prototype for experimental development. The current implementation uses line sensing and QR codes for navigation, however it was found that this is a highly sensitive and tricky means of navigating this robot. Future development is planned (and already under way) on an upgraded version that does not require line following or QR codes for navigation.
