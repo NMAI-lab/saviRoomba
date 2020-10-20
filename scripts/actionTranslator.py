@@ -74,15 +74,29 @@ def turn(publisher, parameter):
     # Get the turn started
     drive(publisher,parameter)
     
-    # Keep turning until the line is centered again
-    line = getLine()[0]
-    foundLine = (line == "c") or (line == "l") or (line == "r")
+    # turn for 5 seconds (gives about a 45 deg angle)
     t_end = time.time() + 5     # 5 second delay
-    #while (not foundLine) or (time.time() < t_end):
     while (time.time() < t_end):
         drive(publisher,parameter, False)
-        #print(foundLine)
-            
+    
+    # Go forward for 2 seconds
+    t_end = time.time() + 2     # 5 second delay
+    while (time.time() < t_end):
+        drive(publisher,"forward", False)
+
+    # Turn another 90 deg
+    t_end = time.time() + 10     # 10 second delay
+    while (time.time() < t_end):
+        drive(publisher,parameter, False)
+
+    # Drive forward until the line is seen again
+    line = getLine()[0]
+    foundLine = (line == "c") or (line == "l") or (line == "r")
+    while (not foundLine):
+        drive(publisher,"forward", False)
+        line = getLine()[0]
+        foundLine = (line == "c") or (line == "l") or (line == "r")
+        
     # Stop, once the line is centered again
     drive(publisher, "stop")
     print("done turning")
