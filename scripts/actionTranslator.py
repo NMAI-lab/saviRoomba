@@ -96,7 +96,13 @@ def turn(publisher, parameter):
         drive(publisher,"forward", False)
         line = getLine()[0]
         foundLine = (line == "c") or (line == "l") or (line == "r")
-        
+       
+    global lastTurn
+    if parameter == "left":
+        lastTurn = "right"
+    else:
+        lastTurn = "left"
+    
     # Stop, once the line is centered again
     drive(publisher, "stop")
     print("done turning")
