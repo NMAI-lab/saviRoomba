@@ -90,7 +90,8 @@ def getTwistMesg(parameter, drive):
         message.linear.x = 0
         message.angular.z = 0
     elif parameter == "back":
-        message.linear.x = -0.01
+        print("drive Back spot")
+        message.linear.x = -0.1
         message.linear.z = 0
     else:                           # Line lost or across
         if lastTurn == "right":
