@@ -95,7 +95,7 @@ def turn(publisher, parameter):
     while (not foundLine):
         drive(publisher,"forward", False)
         line = getLine()[0]
-        foundLine = (line == "c") or (line == "l") or (line == "r")
+        foundLine = (line == "c")# or (line == "l") or (line == "r")
      
     # turn back
     t_end = time.time() + 1     # 5 second delay
