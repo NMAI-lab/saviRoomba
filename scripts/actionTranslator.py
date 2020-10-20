@@ -55,8 +55,10 @@ def turn(publisher, parameter):
     drive(publisher,parameter)
     
     # Keep turning until the line is centered again
-    while getLine()[0] != "c":
+    i = 0
+    while (getLine()[0] != "c") and (i < 10):
             drive(publisher,parameter, False)
+            i += 1
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
