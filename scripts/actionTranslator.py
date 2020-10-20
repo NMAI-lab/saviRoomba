@@ -24,7 +24,7 @@ def decodeAction(data, args):
         undockPublisher.publish()   # Publish to the undock topic
         
         for i in range(10):
-            drive(drivePublisher,"undock")
+            drive(drivePublisher,"back")
         
         turn(drivePublisher,"left") # Turn the robot around
         
@@ -89,7 +89,7 @@ def getTwistMesg(parameter, drive):
         #message.angular.z = 0.1
         message.linear.x = 0
         message.angular.z = 0
-    elif parameter == "undock":
+    elif parameter == "back":
         message.linear.x = -0.01
         message.linear.z = 0
     else:                           # Line lost or across
