@@ -75,8 +75,10 @@ def turn(publisher, parameter):
     
     # Keep turning until the line is centered again
     i = 0
-    #while (i < 500):
-    while (getLine()[0] != "c") or (i < 500):
+    #while (i < 65216):
+    line = getLine()[0]
+    foundLine = (line == "c") or (line == "l") or (line == "r")
+    while (not foundLine) or (i < 80000):
         drive(publisher,parameter, False)
         i += 1
             
