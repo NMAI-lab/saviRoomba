@@ -77,7 +77,7 @@ def turn(publisher, parameter):
     # Keep turning until the line is centered again
     line = getLine()[0]
     foundLine = (line == "c") or (line == "l") or (line == "r")
-    t_end = time.time() + 3     # 3 second delay
+    t_end = time.time() + 10     # 10 second delay
     while (not foundLine) or (time.time() < t_end):
         drive(publisher,parameter, False)
         print(foundLine)
@@ -128,7 +128,7 @@ def getTwistMesg(parameter, drive):
             message.angular.z = 0.05
         
     if (drive == False) and (parameter != "forward"):
-        message.linear.z = message.linear.z * 3
+        message.linear.z = message.linear.z * 5
     
     return message
 
