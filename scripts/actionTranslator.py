@@ -78,7 +78,7 @@ def turn(publisher, parameter):
     #while (i < 65216):
     line = getLine()[0]
     foundLine = (line == "c") or (line == "l") or (line == "r")
-    while (not foundLine) or (i < 600):
+    while (not foundLine):# or (i < 600):
         drive(publisher,parameter, False)
         i += 1
         print(foundLine)
@@ -129,8 +129,8 @@ def getTwistMesg(parameter, drive):
             message.linear.x = 0.005
             message.angular.z = 0.05
         
-    #if (drive == False) and (parameter != "forward"):
-    #    message.linear.x = 0
+    if (drive == False) and (parameter != "forward"):
+        message.linear.z = message.linear.z * 3
     
     return message
 
@@ -148,7 +148,7 @@ def getTwistMesg(parameter, drive):
 
 # Main execution
 def rosMain():
-    drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=8000)
     dockPublisher = rospy.Publisher('dock', Empty, queue_size=10)
     undockPublisher = rospy.Publisher('undock', Empty, queue_size=10)
     destinationPublisher = rospy.Publisher('setDestination', String, queue_size=10)
