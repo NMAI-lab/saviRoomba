@@ -6,6 +6,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
 from driverLineSensor import getLine
+import time
 
 lastTurn = "left"
 actionBusy = False
@@ -74,15 +75,12 @@ def turn(publisher, parameter):
     drive(publisher,parameter)
     
     # Keep turning until the line is centered again
-    i = 0
-    #while (i < 65216):
     line = getLine()[0]
     foundLine = (line == "c") or (line == "l") or (line == "r")
-    while (not foundLine):# or (i < 600):
+    t_end = time.time() + 3     # 3 second delay
+    while (not foundLine) or (time.time() < t_end):
         drive(publisher,parameter, False)
-        i += 1
         print(foundLine)
-        print("in turn method i :" + str(i))
             
     # Stop, once the line is centered again
     drive(publisher, "stop")
