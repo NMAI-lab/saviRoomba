@@ -78,7 +78,7 @@ def turn(publisher, parameter):
     #while (i < 65216):
     line = getLine()[0]
     foundLine = (line == "c") or (line == "l") or (line == "r")
-    while (not foundLine) or (i < 8000):
+    while (not foundLine) or (i < 1000):
         drive(publisher,parameter, False)
         i += 1
         print(foundLine)
