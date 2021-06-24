@@ -5,7 +5,9 @@
 # @author: Simon Yacoub
 
 # SUBSCRIBER:   none
-# PUBLISHER:    String object to 'perception_translator' node
+# PUBLISHER:    String object to 'sensors/Infrared' topic
+# String objects have the following form: "data: "distance: X angle: Y""
+
 
 import time
 import math
