@@ -53,7 +53,7 @@ def distance(dis1, dis2):
         b=1
         
     out = "distance: " + str(abs(b)) + " angle: " + str(180 - A)
-    print(out)
+    rospy.loginfo(out)
     return out
     
 
@@ -90,8 +90,8 @@ def calculate():
     stack2.pop(5)
     
     #prints values and averages for testing
-    print("Sensor1: " + str(values[0]) + "    avg: " + str(avg1))
-    print("Sensor2: " + str(values[1]) + "    avg: " + str(avg2))
+    rospy.loginfo("Sensor1: " + str(values[0]) + "    avg: " + str(avg1))
+    rospy.loginfo("Sensor2: " + str(values[1]) + "    avg: " + str(avg2))
     
     #check if the values are in the range and valid, this will likely need to be tuned in the future
     if values[0] < avg1*1.5 and values[0] > avg1*0.5:
