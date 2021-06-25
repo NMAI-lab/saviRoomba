@@ -23,7 +23,7 @@ def getCharge(data, args):
 
 
     # Publish the perception
-    rospy.loginfo(batteryState + " charge: " + str(charge))
+    # rospy.loginfo(batteryState + " charge: " + str(charge)) 
     publisher.publish(batteryState)
 
 def rosMain():
