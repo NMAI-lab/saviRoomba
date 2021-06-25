@@ -3,8 +3,11 @@
 import rospy
 from std_msgs.msg import String
 from std_msgs.msg import Float64
-from threading import Semaphore    
+from std_msgs.msg import Float32
+from threading import Semaphore   
 
+# @author: Patrick Gavigan
+# @author: Simon Yacoub
 
 # PerceptionTranslator.py creates a node that publishes to the perceptions topic. The message that are published 
 # are a string containing a complete perception for each sensor.
@@ -21,13 +24,21 @@ beaconIndex = 2
 bumperIndex = 3
 sem = Semaphore()
 
-# Translates sensor info from /sensor/Battery into perceptions
+# Translates sensor info from battery/charge_ratio into perceptions
 def translateBattery(data, args):
     (perceptionPublisher) = args
     battery = data.data   
     global batteryPerception, updateReady, batteryIndex, sem
     sem.acquire()
-    batteryPerception = "battery({})".format(battery)
+    if battery < 0.25:
+        batteryPerception = "battery(low)"
+    elif battery > 0.99:
+        batteryPerception = "battery(ok) battery(full)"
+    else:
+        batteryPerception = "battery(ok)"
+
+    
+    #batteryPerception = "battery({})".format(battery)
     updateReady[batteryIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
@@ -93,7 +104,7 @@ def rosMain():
     perceptionPublisher = rospy.Publisher('perceptions', String, queue_size=10)
     rospy.Subscriber('sensor/Infrared', String, translateIR, (perceptionPublisher))
     rospy.Subscriber('sensor/Beacon', Float64, translateBeacon, (perceptionPublisher))
-    rospy.Subscriber('sensor/Battery', Float64, translateBattery, (perceptionPublisher))
+    rospy.Subscriber('battery/charge_ratio', Float32, translateBattery, (perceptionPublisher))
     rospy.Subscriber('sensor/Bumper', Float64, translateBumper, (perceptionPublisher))
     
     rospy.spin()
