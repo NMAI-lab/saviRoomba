@@ -123,8 +123,8 @@ def rosMain():
             MAC_ADDRs = avg.keys()
             to_send = ''
             for MAC in MAC_ADDRs:
-                rospy.loginfo('Beacon: '+str(MAC)+','+str(avg[MAC])+'m')
-                to_send = to_send +str(MAC)+','+str(avg[MAC]) + '\n'
+                #the $ sign is used for splitting the different mac addresses
+                to_send = to_send + str(MAC)+','+str(avg[MAC])+'m$' 
             
             # If at least 1 beacon wasnt an outlier, then publish
             if not to_send == '':
