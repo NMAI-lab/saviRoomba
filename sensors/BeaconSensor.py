@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # @author: Gabriel Ciolac
+# @author: Simon Yacoub
 
 # SUBSCRIBER:   none
 # PUBLISHER:    String object to 'beacons' node
