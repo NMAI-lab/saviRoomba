@@ -30,15 +30,7 @@ def translateBattery(data, args):
     battery = data.data   
     global batteryPerception, updateReady, batteryIndex, sem
     sem.acquire()
-    if battery < 0.25:
-        batteryPerception = "battery(low)"
-    elif battery > 0.99:
-        batteryPerception = "battery(ok) battery(full)"
-    else:
-        batteryPerception = "battery(ok)"
-
-    
-    #batteryPerception = "battery({})".format(battery)
+    batteryPerception = "battery({})".format(battery)
     updateReady[batteryIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
