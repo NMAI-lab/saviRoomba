@@ -64,24 +64,14 @@ def translateBeacon(data, args):
 def translateBumper(data, args):
     (perceptionPublisher) = args
     bumper = data.data
+    #rospy.loginfo("Bumper: " + bumper)
     global bumperPerception, updateReady, bumperIndex, sem
     sem.acquire()
     bumperPerception = "bumper({})".format(bumper)
+    #rospy.loginfo("BumperPerception: " + bumperPerception)
     updateReady[bumperIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
-
-# TODO replace or remove this 
-# This is an asynch perception, send the update directly    
-# def translatePath(data, args):
-#     (perceptionsPublisher) = args
-#     path = data.data
-#     perceptionString = "path(" + path + ")"
-#     perceptionString = perceptionString.replace(" ","")
-#     perceptionString = perceptionString.replace("'","")
-    
-#     rospy.loginfo("Perceptions: " + str(perceptionString))
-#     perceptionsPublisher.publish(perceptionString) 
 
 def sendUpdate(publisher):
     global batteryPerception, irPerception, beaconPerception, bumperPerception, updateReady, sem
@@ -98,9 +88,9 @@ def rosMain():
     rospy.init_node('PerceptionTranslator', anonymous=True)
     perceptionPublisher = rospy.Publisher('perceptions', String, queue_size=10)
     rospy.Subscriber('sensors/Infrared', String, translateIR, (perceptionPublisher))
-    rospy.Subscriber('sensors/Beacon', Float64, translateBeacon, (perceptionPublisher))
+    rospy.Subscriber('sensors/Beacon', String, translateBeacon, (perceptionPublisher))
     rospy.Subscriber('battery/charge_ratio', Float32, translateBattery, (perceptionPublisher))
-    rospy.Subscriber('sensors/Bumper', Float64, translateBumper, (perceptionPublisher))
+    rospy.Subscriber('sensors/Bumper', String, translateBumper, (perceptionPublisher))
     
     rospy.spin()
 
@@ -109,3 +99,4 @@ if __name__ == '__main__':
         rosMain()
     except rospy.ROSInterruptException:
         pass
+    
