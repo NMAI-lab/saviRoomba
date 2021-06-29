@@ -53,7 +53,7 @@ def distance(dis1, dis2):
         b=1
         
     out = "distance: " + str(abs(b)) + " angle: " + str(180 - A)
-    rospy.loginfo(out)
+    #rospy.loginfo(out)
     return out
     
 

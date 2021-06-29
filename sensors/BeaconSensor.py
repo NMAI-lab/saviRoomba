@@ -61,7 +61,7 @@ def __calc_average(mac, distance):
 def rosMain():
     global averages
     
-    pub = rospy.Publisher('beacons', String, queue_size=5)
+    pub = rospy.Publisher('/sensors/Beacon', String, queue_size=5)
     rospy.init_node('bluetoothBeacons', anonymous=True)
     rate = rospy.Rate(10)
     

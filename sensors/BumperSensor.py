@@ -42,7 +42,7 @@ def bumpAndDoSomething(data, args):
 # Initialize the node, setup the publisher and subscriber
 def rosMain():
     rospy.init_node('BumperSensor', anonymous=True)
-    publisher = rospy.Publisher('/sensors/bumper', String, queue_size=10)
+    publisher = rospy.Publisher('/sensors/Bumper', String, queue_size=10)
     rospy.Subscriber('bumper', Bumper, bumpAndDoSomething, (publisher))
     rospy.spin()
 
