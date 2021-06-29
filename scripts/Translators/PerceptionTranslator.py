@@ -39,7 +39,6 @@ def translateBattery(data, args):
 def translateIR(data, args):
     (perceptionPublisher) = args
     ir = data.data
-    ir = ir.split("$")
     global irPerception, updateReady, irIndex, sem
     sem.acquire()
     irPerception = "irWall({})".format(ir)

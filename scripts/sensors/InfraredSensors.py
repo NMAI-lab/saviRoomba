@@ -52,7 +52,7 @@ def distance(dis1, dis2):
     if dis1 < 10.21 or dis2 < 10.21:
         b=1
         
-    out = "distance: " + str(abs(b)) + " angle: " + str(180 - A)
+    out = str(abs(b)) + "," + str(180 - A)
     #rospy.loginfo(out)
     return out
     
