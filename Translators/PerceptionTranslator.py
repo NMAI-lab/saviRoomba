@@ -46,7 +46,8 @@ def translateBattery(data, args):
 # Translates sensor info from /sensor/Infrared into perceptions
 def translateIR(data, args):
     (perceptionPublisher) = args
-    ir = data.data 
+    ir = data.data
+    ir = ir.split("$")
     global irPerception, updateReady, irIndex, sem
     sem.acquire()
     irPerception = "irWall({})".format(ir)
@@ -58,9 +59,11 @@ def translateIR(data, args):
 def translateBeacon(data, args):
     (perceptionPublisher) = args
     beacon = data.data
+    beacon = beacon.split("$")
     global beaconPerception, updateReady, beaconIndex, sem
     sem.acquire()
-    beaconPerception = "beacon({})".format(beacon)
+    for aBeacon in beacon:
+        beaconPerception = " beacon(" aBeacon + ") " + beaconPerception
     updateReady[beaconIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
