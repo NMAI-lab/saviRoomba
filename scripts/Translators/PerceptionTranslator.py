@@ -53,9 +53,11 @@ def translateBeacon(data, args):
     beacon = data.data
     beacon = beacon.split("$")
     global beaconPerception, updateReady, beaconIndex, sem
+    beaconPerception = ""
     sem.acquire()
     for aBeacon in beacon:
-        beaconPerception = " beacon(" + aBeacon + ") " + beaconPerception
+        if(aBeacon != " " or aBeacon != ""):
+            beaconPerception = " beacon(" + aBeacon + ") " + beaconPerception
     updateReady[beaconIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
@@ -64,11 +66,9 @@ def translateBeacon(data, args):
 def translateBumper(data, args):
     (perceptionPublisher) = args
     bumper = data.data
-    #rospy.loginfo("Bumper: " + bumper)
     global bumperPerception, updateReady, bumperIndex, sem
     sem.acquire()
     bumperPerception = "bumper({})".format(bumper)
-    #rospy.loginfo("BumperPerception: " + bumperPerception)
     updateReady[bumperIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
