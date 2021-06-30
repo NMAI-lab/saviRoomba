@@ -19,7 +19,7 @@ import time
 
 # Decode and execute the action
 def decodeAction(data, args):
-    actionMessage = Twist() #the mess
+    actionMessage = Twist() #the message
 
     # Get the parameters
     action = str(data.data)
@@ -40,21 +40,13 @@ def decodeAction(data, args):
         tmp.data = "stop"
         decodeAction(tmp, args)
         drivePublisher.publish(actionMessage)
-
-    # Handle the docking station cases
-    if action == "dock":
+    elif (action == "dock"):
         dockPublisher.publish()
-    elif action == 'undock':
+    elif(action == 'undock'):
         undockPublisher.publish()
     else:
         #publish action
         drivePublisher.publish(actionMessage)
-
-# Drive command for the robot
-def drive(publisher, parameter, driveParam = True):
-    message = getTwistMesg(parameter, driveParam)
-    #print("drive method")
-    publisher.publish(message)
         
 """
 Get a Twist message which consists of a linear and angular component which can be negative or positive.
@@ -80,16 +72,16 @@ def getTwistMesg(action):
     elif action == "right":
         message.linear.x = 0
         message.angular.z = -4
-    elif action == "sleft":
+    elif action == "sleft": # Sudden/Sharp left (not sure need to test)
         message.linear.x = 0.05
         message.angular.z = 0.5
-    elif action == "sright":
+    elif action == "sright": # Sudden/Sharp right (not sure need to test)
         message.linear.x = 0.05
         message.angular.z = -0.5
-    elif action == "avoidright":
+    elif action == "avoidright": #obstacle avoidance when obstacle is to the right of the object
         message.linear.x = 0.08
         message.angular.z = -0.5
-    elif action == "bleft":
+    elif action == "bleft": # This move the robot back and a little left. This is used when the robot gets to close to the wall and needs to readjust itself
         message.linear.x = -0.1
         message.angular.z = 0.5
     elif action == "stop":
