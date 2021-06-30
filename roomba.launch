@@ -1,0 +1,4 @@
+<launch>
+  <node name="infraredSensor" pkg="saviRoomba" type="InfraredSensors.py" />
+  <node name="bumperSensor" pkg="saviRoomba" type="BumperSensor.py" />
+</launch>
