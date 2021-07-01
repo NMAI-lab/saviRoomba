@@ -52,6 +52,11 @@ With the other tools running, it is now possible to start the application node a
 $ source devel_isolated/setup.bash
 $ roslaunch saviRoomba roomba.launch
 ```
+In a seperate terminal, the beacon receiver needs to run. This requires sudo permissions.
+```
+$ sudo su
+$ python BeaconSensor.py
+```
 
 Lastly, it is necessary to start the user interface. This is necessary in order to tell the robot the location of the docking station as well as to command it to perform the mail delivery mission. In a new terminal window run the following:
 ```
