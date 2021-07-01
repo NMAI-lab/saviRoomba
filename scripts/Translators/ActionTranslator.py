@@ -150,7 +150,7 @@ def rosMain():
     drivePublisher = rospy.Publisher('cmd_vel', Twist, queue_size=1)
     dockPublisher = rospy.Publisher('dock', Empty, queue_size=1)
     undockPublisher = rospy.Publisher('undock', Empty, queue_size=1)
-    rospy.init_node('actionTranslator', anonymous=True)
+    rospy.init_node('ActionTranslator', anonymous=True)
     rospy.Subscriber('actions', String, decodeAction, (drivePublisher, dockPublisher, undockPublisher))
 
     rospy.spin()
