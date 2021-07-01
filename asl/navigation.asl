@@ -1,7 +1,4 @@
 
-
-
-
 +!mission(Goal,Parameters)
 	:	Goal = navigate
 		& Parameters = [Destination]
@@ -49,7 +46,7 @@ navigation(navigate).
  */
  
 // A* Nav Rules
-{ include("D:/Local Documents/ROS_Workspaces/saviRoomba/asl/a_star.asl") }
+{ include("/home/pi/create_ws/src/saviRoomba/asl/a_star.asl") }
 
 suc(Current,Next,Range,drive)
 	:-	possible(Current,Next)
