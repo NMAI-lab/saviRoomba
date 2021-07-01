@@ -1,5 +1,5 @@
-batteryMin(50).
-batteryMax(95).
+batteryMin(0.50).
+batteryMax(0.95).
 
 /**
  * When the battery perception is below the minimum, we need to pickup the goal
