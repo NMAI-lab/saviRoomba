@@ -30,6 +30,8 @@ def decodeAction(data, args):
     Handle basic movement commands from actions topic
     Actions:
     drivexy(x,y) Drive the robot linearly with x(+ forward, - backward) and angularly with y(+ right, - left)
+       -- Limits: -0.5 <= linear.x <= 0.5 and -4.25 <= angular.z <= 4.25 (4rads = 45deg) 
+    
     drive(forward) Drive the robot forward
     drive(stop) Stops the robot
     drive(backward) Drive the robot backward
