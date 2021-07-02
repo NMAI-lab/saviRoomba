@@ -67,13 +67,14 @@ def translateBeacon(data, args):
 def translateBumper(data, args):
     (perceptionPublisher) = args
     bumper = data.data
-    #global bumperPerception, updateReady, bumperIndex, sem
-    #sem.acquire()
+    global bumperPerception, updateReady, bumperIndex, sem
+    sem.acquire()
     bumperPerception = "bumper({})".format(bumper)
-    #updateReady[bumperIndex] = True
-    #sem.release()
-    #sendUpdate(perceptionPublisher)
-    sendAsyncUpdate(perceptionPublisher, bumperPerception)
+    updateReady[bumperIndex] = True
+    sem.release()
+    sendUpdate(perceptionPublisher)
+    #if "pressed" in bumperPerception:
+    #    sendAsyncUpdate(perceptionPublisher, bumperPerception)
 
 def sendUpdate(publisher):
     global batteryPerception, irPerception, beaconPerception, bumperPerception, updateReady, sem
