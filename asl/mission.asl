@@ -14,7 +14,7 @@ mission(mission).
     :   Goal = 'collectAndDeliverMail'
         & Parameters = [Sender,Receiver]
     <-  +mission(Goal,Parameters);
-        !collectAndDeliverMail(Sender,Receiver)
+        !collectAndDeliverMail(Sender,Receiver);
         -mission(Goal,Parameters).
  
 		
