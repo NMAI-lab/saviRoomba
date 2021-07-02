@@ -70,7 +70,7 @@ def rosMain():
     beacons = reader.read_beacons()
     
     while not rospy.is_shutdown():
-        timer = time.perf_counter # take time at start of loop
+        timer = time.perf_counter() # take time at start of loop
         # Initialize values
         samples = dict()
         sumDist = dict()
@@ -130,7 +130,7 @@ def rosMain():
             
             # If at least 1 beacon wasnt an outlier, then publish
             if not to_send == '':
-                timer = time.perf_counter - timer # record the time between start of loop and publish perception
+                timer = time.perf_counter() - timer # record the time between start of loop and publish perception
                 rospy.loginfo("Time taken to publish perception: " + timer)
                 rospy.loginfo(to_send)
                 pub.publish(to_send)
