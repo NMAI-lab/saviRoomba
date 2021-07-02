@@ -50,3 +50,24 @@ beaconName(d06ad20242eb,f).
 beaconName(ee16869ac2a8,g).
 beaconName(e487913d1ed7,h).
 
+// Position Rule
+position(X,Y)
+	:-	beacon(Mac,Range)
+		& (beacon(_,Far) & (not (Far < Range)))
+		& beaconName(Mac,Name)
+		& locationName(Name,[X,Y]).
+
+// Successor state
+suc(Current,Next,Range,drive)
+	:-	possible(Current,Next)
+		& range(Current,Next,Range).
+	
+// Heutistic definition: h(CurrentState,Goal,H)
+h(Current,Goal,Range) 
+	:-	range(Current,Goal,Range).
+					
+// Range
+range(A,B,Range)
+	:-	locationName(A,[X1,Y1])
+		& locationName(B,[X2,Y2])
+		& Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).

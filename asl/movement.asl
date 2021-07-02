@@ -10,7 +10,7 @@ movement(waypoint).
         & (not at(Location))
     <-  drive(Direction).
 
-
 at(Location)
-    :-  beacon(Location,Range,_)
-        & (Range < 5).
+    :-  position(X,Y) 
+		& locationName(Location,[X,Y]).
+
