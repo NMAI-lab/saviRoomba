@@ -5,7 +5,7 @@ movement(waypoint).
     <-  drive(stop).
 
 	
-// irWall(A,B)
+// irWall(Distance,Angle)
 // beacon(Mac,Range)
 // position(X,Y)
 // at(Location)
