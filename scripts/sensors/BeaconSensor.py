@@ -95,6 +95,7 @@ def rosMain():
                         if abs(distances[mac] - prevdist[mac]) > 1:
                             samples[mac] -= 1
                             outlier = True
+                            rospy.loginfo("outlier detected data trashed")
                     except KeyError:
                         pass
                     except TypeError:
@@ -105,7 +106,7 @@ def rosMain():
                     for mac in distances.keys():
                         prevdist[mac] = distances[mac]
                         sumDist[mac] = sumDist[mac] + distances[mac]
-                rate.sleep()
+                #rate.sleep() #Even though sampling takes 2.5sec this line forces 10 second wait for the sampels to be released
                 count += 1
             else:
                 valid = False
