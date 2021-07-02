@@ -70,7 +70,7 @@ def rosMain():
     beacons = reader.read_beacons()
     
     while not rospy.is_shutdown():
-        timer = time.perf_counter() # take time at start of loop
+        timer = time.perf_counter # take time at start of loop
         # Initialize values
         samples = dict()
         sumDist = dict()
