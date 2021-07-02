@@ -67,12 +67,13 @@ def translateBeacon(data, args):
 def translateBumper(data, args):
     (perceptionPublisher) = args
     bumper = data.data
-    global bumperPerception, updateReady, bumperIndex, sem
-    sem.acquire()
+    #global bumperPerception, updateReady, bumperIndex, sem
+    #sem.acquire()
     bumperPerception = "bumper({})".format(bumper)
-    updateReady[bumperIndex] = True
-    sem.release()
-    sendUpdate(perceptionPublisher)
+    #updateReady[bumperIndex] = True
+    #sem.release()
+    #sendUpdate(perceptionPublisher)
+    sendAsyncUpdate(perceptionPublisher, bumperPerception)
 
 def sendUpdate(publisher):
     global batteryPerception, irPerception, beaconPerception, bumperPerception, updateReady, sem
@@ -82,6 +83,14 @@ def sendUpdate(publisher):
         rospy.loginfo(perception)
         publisher.publish(perception)
         updateReady = [False,False,False,False]
+    sem.release()
+
+def sendAsyncUpdate(publisher, message):
+    global sem
+    sem.acquire()    
+    #perception = batteryPerception + " " + irPerception + " " + beaconPerception + " " + bumperPerception  
+    rospy.loginfo(message)
+    publisher.publish(message)
     sem.release()
 
 # Initialize the node, setup the publisher and subscriber

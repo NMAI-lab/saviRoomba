@@ -103,7 +103,7 @@ def calculate():
 def rosMain():
     rospy.init_node('IRSensor', anonymous=True)
     publisher = rospy.Publisher('sensors/Infrared', String, queue_size=10)
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(60)
     
     while not rospy.is_shutdown():
         calc = calculate()

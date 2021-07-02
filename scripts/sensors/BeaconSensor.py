@@ -63,7 +63,7 @@ def rosMain():
     
     pub = rospy.Publisher('/sensors/Beacon', String, queue_size=5)
     rospy.init_node('bluetoothBeacons', anonymous=True)
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(60)
     
     reader = BeaconReader()
     beacons = reader.read_beacons()
