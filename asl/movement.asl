@@ -12,9 +12,8 @@ movement(waypoint).
 // range(A,B,Range)
 	
 +!waypoint(Location)
-    :   beacon(Location, Range, Direction)
-        & (not at(Location))
-    <-  drive(Direction).
+    :   (not at(Location))
+    <-  drive(forward).
 
 at(Location)
     :-  position(X,Y) 
