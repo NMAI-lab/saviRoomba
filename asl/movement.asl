@@ -13,14 +13,12 @@ movement(waypoint).
 	
 +!waypoint(Location)
     :   (not at(Location))
-		& irWall(Distance,Angle)
-		
-    <-  drive(forward);
+		& move(Direction)		
+    <-  drive(Direction);
 		!waypoint(Location).
 
 +!waypoint(Location)
     <-  !waypoint(Location).
-
 		
 at(Location)
     :-  beacon(Mac,Range)
