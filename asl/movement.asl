@@ -11,11 +11,14 @@ movement(waypoint).
 // at(Location)
 // range(A,B,Range)
 	
+!waypoint(c).
+
 +!waypoint(Location)
     :   (not at(Location))
     <-  drive(forward).
 
 at(Location)
-    :-  position(X,Y) 
-		& locationName(Location,[X,Y]).
+    :-  beaconName(Mac,Location)
+		& beacon(Mac,Range)
+		& Range < 0.5.
 
