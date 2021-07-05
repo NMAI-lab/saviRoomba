@@ -16,6 +16,10 @@ movement(waypoint).
     <-  drive(forward);
 		!waypoint(Location).
 
++!waypoint(Location)
+    <-  !waypoint(Location).
+
+		
 at(Location)
     :-  beacon(Mac,Range)
 		& beaconName(Mac,Location)
