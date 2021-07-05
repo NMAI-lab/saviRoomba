@@ -51,12 +51,22 @@ beaconName(d06ad20242eb,f).
 beaconName(ee16869ac2a8,g).
 beaconName(e487913d1ed7,h).
 
+
+atLocation(Location,Range)
+    :-  beacon(Mac,Range)
+		& beaconName(Mac,Location)
+		& Range < 0.5.
+		
+nearestLocation(Current,Range)
+	:-	beacon(Mac,Range)
+		& beacon(_,OtherRange)
+		& (not (OtherRange < Range))
+		& beaconName(Mac,Current).
+
 // Position Rule
 position(X,Y)
-	:-	beacon(Mac,Range)
-		& (beacon(_,Far) & (not (Far < Range)))
-		& beaconName(Mac,Name)
-		& locationName(Name,[X,Y]).
+	:-	nearestLocation(Current,_)
+		& locationName(Current,[X,Y]).
 
 // Successor state
 suc(Current,Next,Range,drive)
