@@ -29,10 +29,8 @@ beaconName(b827eb7cff08,e).
 
 /**
  * PG's Map
- * c -- f -- g (Charging) -- h
+ * c -- f -- g -- h
  */
- 
-chargerLocation(g).
  
 locationName(c,[1,0]).
 locationName(f,[2,0]).
