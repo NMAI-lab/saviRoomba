@@ -27,11 +27,11 @@ at(Location)
 		
 move(sright)
 	:-	irWall(Distance,Angle)
-		& Distance > 11.
+		& (Distance > 11.0).
 
 move(sleft)
 	:-	irWall(Distance,Angle)
-		& Distance < 9.
+		& (Distance < 9.0).
 
 move(forward)
 	:-	not (move(sright) | move(sleft)).
