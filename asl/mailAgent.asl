@@ -3,6 +3,7 @@
  * @date	23 June 2021
  */
 
+!waypoint(c).
  
 { include("/home/pi/create_ws/src/saviRoomba/asl/batteryManager.asl") }
 
