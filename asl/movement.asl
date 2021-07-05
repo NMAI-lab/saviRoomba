@@ -13,6 +13,8 @@ movement(waypoint).
 	
 +!waypoint(Location)
     :   (not at(Location))
+		& irWall(Distance,Angle)
+		
     <-  drive(forward);
 		!waypoint(Location).
 
@@ -24,3 +26,15 @@ at(Location)
     :-  beacon(Mac,Range)
 		& beaconName(Mac,Location)
 		& Range < 0.5.
+		
+move(sright)
+	:-	irWall(Distance,Angle)
+		& Distance > 11.
+
+move(sleft)
+	:-	irWall(Distance,Angle)
+		& Distance < 9.
+
+move(forward)
+	:-	not (move(sright) | move(sleft)).
+
