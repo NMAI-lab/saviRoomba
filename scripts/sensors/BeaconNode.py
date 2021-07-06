@@ -18,7 +18,8 @@ import statistics
 # beaconParameters: Parameters of the beacons we care about
 # timeout: How long to wait when polling for beacons
 def pollBeacons(beaconParameters, timeout):
-    beaconScan = Scanner().scan(timeout)
+    # beaconScan = Scanner().scan(timeout)
+    beaconScan = Scanner().scan(1)
     foundBeacons = dict()
     for beacon in beaconScan:
         if beacon.addr in beaconParameters.keys():
