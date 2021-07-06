@@ -20,14 +20,11 @@
 movement(waypoint).
 +!waypoint(Location)
     :   atLocation(Location,_)
-    <-  drive(stop);
-		-visited(_);
-		+visited(Location).
+    <-  drive(stop).
 
 +!waypoint(Location)
-    :   (not at(Location))
-		& move(Direction)		
-    <-  drive(Direction);
+    :   (not at(Location))		
+    <-  !followWall
 		!waypoint(Location).
 
 +!waypoint(Location)
@@ -40,15 +37,18 @@ movement(waypoint).
 +!followWall
 	:	wallRotation(Rotation)
 		& Rotation > 10
-	<-	drivexy(0.0,0.5).
+	<-	drivexy(0.0,0.5);
+		!followWall.
 	
 +!followWall
 	:	wallRotation(Rotation)
 		& Rotation < -10
-	<-	drivexy(0.0,-0.5).
+	<-	drivexy(0.0,-0.5);
+		!followWall.
 
 +!followWall
-	<-	drive(forward).
+	<-	drive(forward);
+		!followWall.
 
 // Wall range rules
 wallRange(tooClose)
