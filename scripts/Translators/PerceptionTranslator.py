@@ -51,14 +51,14 @@ def translateBeacon(data, args):
     (perceptionPublisher) = args
     beacon = data.data
     #rospy.loginfo("Raw data from beacon: " + beacon)
-    beacon = beacon.split("$")
+    #beacon = beacon.split("$")
     global beaconPerception, updateReady, beaconIndex, sem
     sem.acquire()
-    beaconPerception = ''
-    for aBeacon in beacon:
-        if(aBeacon != ''):
-            aBeacon = aBeacon.replace(":","")
-            beaconPerception = " beacon(" + aBeacon + ") " + beaconPerception
+    beaconPerception = beacon
+    #for aBeacon in beacon:
+    #    if(aBeacon != ''):
+    #        aBeacon = aBeacon.replace(":","")
+    #        beaconPerception = " beacon(" + aBeacon + ") " + beaconPerception
     updateReady[beaconIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
