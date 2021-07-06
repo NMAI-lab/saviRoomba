@@ -19,12 +19,24 @@ def pollBeacons(timeout):
     # Return beacon data
     
 
+def removeOutliers(rangeList):
+    # Remove outliers from range list
+    
+    
+def publishData(pub, data):
+    
+    # Publish the data to ROS
+    
+        
+
 def runBeacons(pub,rate):
     print("hello beacons")
     
     beaconParameters = BeaconReader()
     period = 1/rate
     pollBeacons(period)
+    
+    
     
     print("goodbye beacons")
     
