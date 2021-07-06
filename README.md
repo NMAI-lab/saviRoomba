@@ -81,6 +81,7 @@ The environmental variable, and measured value need to be calculated, follow the
 
 - Place Beacon exactly 1m away from the device that will be doing the measurements (1m from the measuring devices bluetooth antenna is preferred) 
 - Install bluepy: sudo pip3 install bluepy
+- switch to root: sudo su
 - Run RSSI_tools.py: python3 RSSI_tools.py
 - Follow on screen instructions
 - Create a new line entry in beacons which matches the information shown on screen.
