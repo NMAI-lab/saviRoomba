@@ -29,8 +29,8 @@ def pollBeacons(beaconParameters, timeout):
 # Convert the signal strength data to a distance (hopefully in meters)
 def calculateDistance(beaconData,beaconParameters):
     macAddresses = beaconData.keys()
-    if len(macAddresses) == 0:
-        return None
+    #if len(macAddresses) == 0:
+    #    return None
 
     distances = dict()
     for mac in macAddresses:
