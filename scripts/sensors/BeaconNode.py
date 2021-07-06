@@ -13,21 +13,29 @@ from std_msgs.msg import String
 from reader import BeaconReader
 
 
-def runBeacons(pub):
+def runBeacons(pub,rate):
     print("hello beacons")
+    
+    beaconParameters = BeaconReader()
+    period = 1/rate
+    beaconList = Scanner().scan(period)
+    
+    print("goodbye beacons")
+    
+    
 
 
 def rosMain():
     
     pub = rospy.Publisher('/sensors/Beacon', String, queue_size=5)
     rospy.init_node('bluetoothBeacons', anonymous=True)
-    rate = rospy.Rate(60)
+    rate = 60
+    rate = rospy.Rate(rate)
     
     while not rospy.is_shutdown():
-        runBeacons(pub)
+        runBeacons(pub,rate)
         rate.sleep()
     
-
 
 if __name__ == '__main__':
     try:
