@@ -37,7 +37,7 @@ def publishData(pub, data):
         
 
 def runBeacons(pub,rate):
-    print("hello beacons")
+    #print("hello beacons")
     
     beaconParameters = BeaconReader()
     period = 1.0/rate
@@ -45,7 +45,7 @@ def runBeacons(pub,rate):
     print(foundBeacons)
     
     
-    print("goodbye beacons")
+    #print("goodbye beacons")
     
     
 
