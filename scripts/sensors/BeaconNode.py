@@ -22,18 +22,18 @@ def pollBeacons(beaconParameters, timeout):
     foundBeacons = dict()
     for beacon in beaconScan:
         if beacon.addr in beaconParameters.read_beacons().keys():
-            foundBeacons[dev.addr] = dev.rssi
+            foundBeacons[beacon.addr] = beacon.rssi
     return foundBeacons
     
 
 def removeOutliers(rangeList):
     # Remove outliers from range list
-    
+    print("outlier function")
     
 def publishData(pub, data):
     
     # Publish the data to ROS
-    
+    print("publish data")
         
 
 def runBeacons(pub,rate):
@@ -41,7 +41,7 @@ def runBeacons(pub,rate):
     
     beaconParameters = BeaconReader()
     period = 1/rate
-    pollBeaconsbeaconParameters, period)
+    foundBeacons = pollBeacons(beaconParameters, period)
     
     
     
