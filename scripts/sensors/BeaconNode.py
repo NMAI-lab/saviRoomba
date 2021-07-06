@@ -59,7 +59,7 @@ def manageBeaconQueue(beaconHistory,newData,queueLength=10):
     
 # Remove outliers from range list
 def removeOutliers(rangeList):
-    if len(rangeList > 10):
+    if len(rangeList) > 10:
         dataMean = statistics.mean(rangeList)
         dataStd = statistics.stdev(rangeList)
         maxValue = dataMean + (3 * dataStd)
