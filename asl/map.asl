@@ -55,7 +55,7 @@ beaconName(e487913d1ed7,h).
 atLocation(Location,Range)
     :-  beacon(Mac,Range)
 		& beaconName(Mac,Location)
-		& Range < 0.5.
+		& Range < 0.8.
 		
 nearestLocation(Current,Range)
 	:-	beacon(Mac,Range)
