@@ -36,7 +36,6 @@ def calculateDistance(beaconData,beaconParameters):
         environmentVariable = beaconParameters[mac][0]
         measuredValue = beaconParameters[mac][1]
         distances[mac] = pow(10,(measuredValue - beaconData[mac])/(10*environmentVariable))
-    
     return distances
     
     
@@ -51,11 +50,9 @@ def publishData(pub, data):
     print("publish data")
         
 
-def runBeacons(pub,rate):
+def runBeacons(pub,rate,beaconParameters):
     #print("hello beacons")
     
-    beaconReader = BeaconReader()
-    beaconParameters = beaconReader.read_beacons()
     period = 1.0/rate
     beaconData = pollBeacons(beaconParameters, period)
     distances = calculateDistance(beaconData,beaconParameters)
@@ -70,13 +67,19 @@ def runBeacons(pub,rate):
 
 def rosMain():
     
+    # Set up the ROS node
     pub = rospy.Publisher('/sensors/Beacon', String, queue_size=5)
     rospy.init_node('bluetoothBeacons', anonymous=True)
     frequency = 10
     rate = rospy.Rate(frequency)
     
+    # Get the beacon parameters from the file
+    beaconReader = BeaconReader()
+    beaconParameters = beaconReader.read_beacons()
+    
+    # Run the node
     while not rospy.is_shutdown():
-        runBeacons(pub,frequency)
+        runBeacons(pub,frequency,beaconParameters)
         rate.sleep()
     
 
