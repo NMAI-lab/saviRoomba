@@ -13,12 +13,18 @@ from std_msgs.msg import String
 from reader import BeaconReader
 
 
+def pollBeacons(timeout):
+    beaconList = Scanner().scan(timeout)
+    
+    # Return beacon data
+    
+
 def runBeacons(pub,rate):
     print("hello beacons")
     
     beaconParameters = BeaconReader()
     period = 1/rate
-    beaconList = Scanner().scan(period)
+    pollBeacons(period)
     
     print("goodbye beacons")
     
