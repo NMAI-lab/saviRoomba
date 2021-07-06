@@ -21,9 +21,24 @@ def pollBeacons(beaconParameters, timeout):
     beaconScan = Scanner().scan(timeout)
     foundBeacons = dict()
     for beacon in beaconScan:
-        if beacon.addr in beaconParameters.read_beacons().keys():
+        if beacon.addr in beaconParameters.keys():
             foundBeacons[beacon.addr] = beacon.rssi
     return foundBeacons
+
+# Convert the signal strength data to a distance (hopefully in meters)
+def calculateDistance(beaconData,beaconParameters):
+    macAddresses = beaconData.keys()
+    if len(macAddresses) == 0:
+        return None
+
+    distances = dict()
+    for mac in macAddresses:
+        environmentVariable = beaconParameters[mac][0]
+        measuredValue = beaconParameters[mac][1]
+        distances[mac] = pow(10,(measuredValue - beaconData[mac])/(10*environmentVariable))
+    
+    return distances
+    
     
 
 def removeOutliers(rangeList):
@@ -39,10 +54,13 @@ def publishData(pub, data):
 def runBeacons(pub,rate):
     #print("hello beacons")
     
-    beaconParameters = BeaconReader()
+    beaconReader = BeaconReader()
+    beaconParameters = beaconReader.read_beacons()
     period = 1.0/rate
-    foundBeacons = pollBeacons(beaconParameters, period)
-    print(foundBeacons)
+    beaconData = pollBeacons(beaconParameters, period)
+    distances = calculateDistance(beaconData,beaconParameters)
+    print(beaconData)
+    print(distances)
     
     
     #print("goodbye beacons")
