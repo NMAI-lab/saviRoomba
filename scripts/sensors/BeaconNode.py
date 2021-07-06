@@ -115,7 +115,7 @@ def rosMain():
     # Set up the ROS node
     pub = rospy.Publisher('/sensors/Beacon', String, queue_size=5)
     rospy.init_node('bluetoothBeacons', anonymous=True)
-    frequency = 10
+    frequency = 5
     rate = rospy.Rate(frequency)
     
     # Get the beacon parameters from the file
