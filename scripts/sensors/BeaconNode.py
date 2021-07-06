@@ -90,7 +90,7 @@ def publishData(pub, data):
     message = ""
     beaconNames = data.keys()
     for beaconName in beaconNames:
-        message = message + "beacon(" + str(data[beaconName]) + ")"
+        message = message + "beacon(" + str(beaconName) + "," + str(data[beaconName]) + ")"
     
     rospy.loginfo(message)
     pub.publish(message)
