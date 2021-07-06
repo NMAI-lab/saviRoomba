@@ -80,7 +80,7 @@ def calculateAverages(beaconData):
     for beaconName in beaconNames:
         if len(beaconData[beaconName]) > 1:
             beaconAverages[beaconName] = statistics.mean(beaconData[beaconName])
-        else:
+        elif len(beaconData[beaconName] == 1):
             beaconAverages[beaconName] = beaconData[beaconName][0]
     return beaconAverages
 
