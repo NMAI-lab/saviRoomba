@@ -18,8 +18,8 @@ import statistics
 # beaconParameters: Parameters of the beacons we care about
 # timeout: How long to wait when polling for beacons
 def pollBeacons(beaconParameters, timeout):
-    # beaconScan = Scanner().scan(timeout)
-    beaconScan = Scanner().scan(1)
+    beaconScan = Scanner().scan(timeout)
+    # beaconScan = Scanner().scan(1)
     foundBeacons = dict()
     for beacon in beaconScan:
         if beacon.addr in beaconParameters.keys():
@@ -59,8 +59,8 @@ def manageBeaconQueue(beaconHistory,newData,queueLength=10):
 
     
 # Remove outliers from range list
-def removeOutliers(rangeList):
-    if len(rangeList) > 10:
+def removeOutliers(rangeList,queueLength=10):
+    if len(rangeList) > queueLength:
         dataMean = statistics.mean(rangeList)
         dataStd = statistics.stdev(rangeList)
         maxValue = dataMean + (3 * dataStd)
