@@ -54,11 +54,11 @@ def rosMain():
     
     pub = rospy.Publisher('/sensors/Beacon', String, queue_size=5)
     rospy.init_node('bluetoothBeacons', anonymous=True)
-    rate = 60
-    rate = rospy.Rate(rate)
+    frequency = 60
+    rate = rospy.Rate(frequency)
     
     while not rospy.is_shutdown():
-        runBeacons(pub,rate)
+        runBeacons(pub,frequency)
         rate.sleep()
     
 
