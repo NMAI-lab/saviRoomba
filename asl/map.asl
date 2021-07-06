@@ -37,14 +37,17 @@ locationName(f,[2,0]).
 locationName(g,[3,0]).
 locationName(h,[4,0]).
 
-possible(c,f).
-possible(f,c).
+//possible(c,f).
+//possible(f,c).
 
-possible(f,g).
-possible(g,f).
+//possible(f,g).
+//possible(g,f).
 
-possible(g,h).
-possible(h,g).
+//possible(g,h).
+//possible(h,g).
+
+possible(h,c).
+possible(c,h).
 
 beaconName(e277fcf90493,c).
 beaconName(d06ad20242eb,f).
