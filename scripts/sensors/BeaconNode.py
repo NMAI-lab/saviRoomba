@@ -13,10 +13,17 @@ from std_msgs.msg import String
 from reader import BeaconReader
 
 
-def pollBeacons(timeout):
-    beaconList = Scanner().scan(timeout)
-    
-    # Return beacon data
+# Polls for bluetooth devices, returns signal strength in a dict, indexed by
+# MAC address.
+# beaconParameters: Parameters of the beacons we care about
+# timeout: How long to wait when polling for beacons
+def pollBeacons(beaconParameters, timeout):
+    beaconScan = Scanner().scan(timeout)
+    foundBeacons = dict()
+    for beacon in beaconScan:
+        if beacon.addr in beaconParameters.read_beacons().keys():
+            foundBeacons[dev.addr] = dev.rssi
+    return foundBeacons
     
 
 def removeOutliers(rangeList):
@@ -34,7 +41,7 @@ def runBeacons(pub,rate):
     
     beaconParameters = BeaconReader()
     period = 1/rate
-    pollBeacons(period)
+    pollBeaconsbeaconParameters, period)
     
     
     
