@@ -40,9 +40,9 @@ def runBeacons(pub,rate):
     print("hello beacons")
     
     beaconParameters = BeaconReader()
-    period = 1/rate
+    period = 1.0/rate
     foundBeacons = pollBeacons(beaconParameters, period)
-    
+    print(foundBeacons)
     
     
     print("goodbye beacons")
