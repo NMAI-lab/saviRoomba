@@ -54,7 +54,7 @@ def translateBeacon(data, args):
     #beacon = beacon.split("$")
     global beaconPerception, updateReady, beaconIndex, sem
     sem.acquire()
-    beaconPerception = beacon
+    beaconPerception = beacon.replace(":","")
     #for aBeacon in beacon:
     #    if(aBeacon != ''):
     #        aBeacon = aBeacon.replace(":","")
