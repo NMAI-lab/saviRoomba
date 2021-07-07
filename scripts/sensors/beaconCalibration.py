@@ -56,8 +56,7 @@ def getMeanRSSI(mac, numSamples=10):
     return (rssi,rssiStdev) 
 
 
-def getMeasuredPower(mac, numSamples = 10):
-#def getMeasuredPower(mac, numSamples = 1000):
+def getMeasuredPower(mac, numSamples = 1000):
     print("Getting Measured Power")
     return getMeanRSSI(mac, numSamples)
          
