@@ -84,7 +84,7 @@ def getEnvironmentFactor(mac,measuredPower,distanceAvailable):
 def calibrate():
     while True:
         mac = input('Enter MAC Address (including colons): ')
-        distanceAvailable = input('How much space do you have in meters?: ')
+        distanceAvailable = input('How far can you place the beacon from the sensor in meters (must be at least 2 meters)?: ')
         input('Place beacon 1m away and press enter to continue:')
         (measuredPower,measuredPowerStdev) = getMeasuredPower(mac)
         (environmentalFactor,environmentalFactorStdev) = getEnvironmentFactor(mac,measuredPower,float(distanceAvailable))
