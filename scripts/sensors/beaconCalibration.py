@@ -65,12 +65,15 @@ def getEnvironmentFactor(mac,measuredPower,distanceAvailable):
     print("Getting Environment Factor")
     
     environmentalFactorList = list()
-    for distance in range(2, distanceAvailable + 1):
+    distance = 1.0
+    distanceIncrement = 0.5
+    while distance <= distanceAvailable:
         print('Place Beacon '+str(distance)+'m away')
         input('Press enter to continue:')
         
         rssi = getMeanRSSI(mac)
         environmentalFactorList.append((measuredPower - rssi) / (10 * math.log(distance,10)))
+        distance = distance + distanceIncrement
     
     environmentalFactor = statistics.mean(environmentalFactorList)
     environmentalFactorStdev = statistics.stdev(environmentalFactorList)
@@ -81,6 +84,7 @@ def calibrate():
     while True:
         mac = input('Enter MAC Address (including colons): ')
         distanceAvailable = input('How much space do you have in meters?: ')
+        input('Place beacon 1m away and press enter to continue:')
         (measuredPower,measuredPowerStdev) = getMeasuredPower(mac)
         (environmentalFactor,environmentalFactorStdev) = getMeasuredPower(mac,measuredPower,distanceAvailable)
         print("-----------------------------")
