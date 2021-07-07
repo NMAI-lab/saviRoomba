@@ -56,7 +56,8 @@ def getMeanRSSI(mac, numSamples=10):
     return (rssi,rssiStdev) 
 
 
-def getMeasuredPower(mac, numSamples = 1000):
+def getMeasuredPower(mac, numSamples = 10):
+#def getMeasuredPower(mac, numSamples = 1000):
     print("Getting Measured Power")
     return getMeanRSSI(mac, numSamples)
          
@@ -65,8 +66,8 @@ def getEnvironmentFactor(mac,measuredPower,distanceAvailable):
     print("Getting Environment Factor")
     
     environmentalFactorList = list()
-    distance = 1.0
     distanceIncrement = 0.5
+    distance = 1.0 + distanceIncrement
     while distance <= distanceAvailable:
         print('Place Beacon '+str(distance)+'m away')
         input('Press enter to continue:')
