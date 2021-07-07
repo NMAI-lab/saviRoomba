@@ -71,7 +71,8 @@ def getEnvironmentFactor(mac,measuredPower,distanceAvailable):
         print('Place Beacon '+str(distance)+'m away')
         input('Press enter to continue:')
         
-        rssi = getMeanRSSI(mac)
+        (rssi,_) = getMeanRSSI(mac)
+        
         environmentalFactorList.append((measuredPower - rssi) / (10 * math.log(distance,10)))
         distance = distance + distanceIncrement
     
