@@ -36,6 +36,8 @@ def calculateDistance(beaconData,beaconParameters):
     for mac in macAddresses:
         environmentVariable = beaconParameters[mac][0]
         measuredValue = beaconParameters[mac][1]
+        
+        # https://iotandelectronics.wordpress.com/2016/10/07/how-to-calculate-distance-from-the-rssi-value-of-the-ble-beacon/
         distances[mac] = pow(10,(measuredValue - beaconData[mac])/(10*environmentVariable))
     return distances
     
