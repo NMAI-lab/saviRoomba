@@ -86,7 +86,7 @@ def calibrate():
         distanceAvailable = input('How much space do you have in meters?: ')
         input('Place beacon 1m away and press enter to continue:')
         (measuredPower,measuredPowerStdev) = getMeasuredPower(mac)
-        (environmentalFactor,environmentalFactorStdev) = getMeasuredPower(mac,measuredPower,distanceAvailable)
+        (environmentalFactor,environmentalFactorStdev) = getEnvironmentFactor(mac,measuredPower,distanceAvailable)
         print("-----------------------------")
         print("Measured Power: " + str(measuredPower))
         print("Measured Power stdev: " + str(measuredPowerStdev))
