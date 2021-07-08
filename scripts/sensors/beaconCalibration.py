@@ -41,7 +41,7 @@ def readRSSI(mac, timeOut = 0.5):
     return None
 
 
-def getMeanRSSI(mac, numSamples=10):
+def getMeanRSSI(mac, numSamples=100):
     print("Measuring RSSIs")
     rssiList = list()
     for i in range(numSamples):
