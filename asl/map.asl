@@ -28,10 +28,37 @@ beaconName(b827eb7cff08,e).
 */
 
 /**
- * PG's Map
- * c -- f -- g -- h
+ * Map
+ * a -- b -- c
+ *		|
+ *		|
+ *		d
  */
  
+ 
+locationName(a,[1.34,0.25]).
+locationName(b,[1.34,0]).
+locationName(c,[1.34,-0.65]).
+locationName(d,[0,0]).	// Robot has to start here, facing b.
+ 
+// Successor state
+suc(Current,Next,Range,drive)
+	:-	possible(Current,Next)
+		& range(Current,Next,Range).
+	
+// Heutistic definition: h(CurrentState,Goal,H)
+h(Current,Goal,Range) 
+	:-	range(Current,Goal,Range).
+					
+// Range
+range(A,B,Range)
+	:-	locationName(A,[X1,Y1])
+		& locationName(B,[X2,Y2])
+		& Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
+ 
+ 
+/**
+ Old beacon map below
 locationName(c,[1,0]).
 locationName(f,[2,0]).
 locationName(g,[3,0]).
@@ -85,3 +112,4 @@ range(A,B,Range)
 	:-	locationName(A,[X1,Y1])
 		& locationName(B,[X2,Y2])
 		& Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
+*/
