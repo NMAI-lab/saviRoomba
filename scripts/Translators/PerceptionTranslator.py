@@ -79,7 +79,11 @@ def translateBumper(data, args):
     
 
 def translateOdometer(data, args):
-    print("got here")
+    position = (data.pose.pose.position.x, data.pose.pose.position.y, data.pose.pose.position.z)
+    orientation = (data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w)
+    print(position)
+    print(orientation)
+    
 
 def sendUpdate(publisher):
     global batteryPerception, irPerception, beaconPerception, bumperPerception, updateReady, sem
