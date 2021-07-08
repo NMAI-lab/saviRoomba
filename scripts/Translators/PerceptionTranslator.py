@@ -4,6 +4,7 @@ import rospy
 from std_msgs.msg import String
 from std_msgs.msg import Float64
 from std_msgs.msg import Float32
+from nav_msgs.Odometry import Message
 from threading import Semaphore   
 
 # @author: Patrick Gavigan
@@ -75,6 +76,10 @@ def translateBumper(data, args):
     sendUpdate(perceptionPublisher)
     #if "pressed" in bumperPerception:
     #    sendAsyncUpdate(perceptionPublisher, bumperPerception)
+    
+
+def translateOdometer(data, args):
+    print("got here")
 
 def sendUpdate(publisher):
     global batteryPerception, irPerception, beaconPerception, bumperPerception, updateReady, sem
@@ -102,7 +107,7 @@ def rosMain():
     rospy.Subscriber('sensors/Beacon', String, translateBeacon, (perceptionPublisher))
     rospy.Subscriber('battery/charge_ratio', Float32, translateBattery, (perceptionPublisher))
     rospy.Subscriber('sensors/Bumper', String, translateBumper, (perceptionPublisher))
-    
+    rospy.Subscriber('odom', Message, translateOdometer, (perceptionPublisher))
     rospy.spin()
 
 if __name__ == '__main__':
