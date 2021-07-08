@@ -21,13 +21,13 @@ beaconPerception = ""
 bumperPerception = ""
 odomPositionPerception = ""
 odomOrientationPerception = ""
-updateReady = [False,False,False,False]
+updateReady = [False,False,False,False,False,False]
 batteryIndex = 0
-irIndex = 1
-beaconIndex = 2
-bumperIndex = 3
-odomPositionIndex = 4
-odomOrientationIndex = 5
+bumperIndex = 1
+odomPositionIndex = 2
+odomOrientationIndex = 3
+irIndex = 4
+beaconIndex = 5
 sem = Semaphore()
 
 
@@ -112,20 +112,27 @@ def translateOdometer(data, args):
     position = (data.pose.pose.position.x, data.pose.pose.position.y, data.pose.pose.position.z)
     orientation = (data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w)
     (x, y, z, w) = orientation
-    angles = euler_from_quaternion(x, y, z, w)
+    (_,_,yawRad) = euler_from_quaternion(x, y, z, w)
+    yaw = math.degrees(yawRad)
     
-    print(position)
-    print(angles)
+    global odomPositionPerception, odomOrientationPerception, updateReady, odomPositionIndex, odomOrientationIndex, sem
+    sem.acquire()
+    odomPositionPerception = "odomPosition{}".format(position)
+    odomOrientationPerception = "odomYaw({})".format(yaw)
+    updateReady[odomPositionIndex] = True
+    updateReady[odomOrientationIndex] = True
+    sem.release()
     
 
 def sendUpdate(publisher):
-    global batteryPerception, irPerception, beaconPerception, bumperPerception, updateReady, sem
+    global batteryPerception, odomPositionPerception, odomOrientationPerception, beaconPerception, bumperPerception, updateReady, sem
     sem.acquire()    
     if not False in updateReady:
-        perception = batteryPerception + " " + irPerception + " " + beaconPerception + " " + bumperPerception  
+        perception = batteryPerception + " " + irPerception + " " + beaconPerception + " " + bumperPerception  + " " + odomPositionPerception + " " + odomOrientationPerception
         rospy.loginfo(perception)
         publisher.publish(perception)
-        updateReady = [False,False,False,False]
+        for i in range(len(updateReady)):
+            updateReady[i] = False
     sem.release()
 
 def sendAsyncUpdate(publisher, message):
