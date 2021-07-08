@@ -92,7 +92,7 @@ def calibrate():
         print("Measured Power: " + str(measuredPower))
         print("Measured Power stdev: " + str(measuredPowerStdev))
         print("Environment Factor: " + str(environmentalFactor))
-        print("Measured Power stdev: " + str(environmentalFactorStdev))
+        print("Environment Factor stdev: " + str(environmentalFactorStdev))
         print("-----------------------------")
 
 if __name__ == '__main__':
