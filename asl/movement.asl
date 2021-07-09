@@ -20,40 +20,43 @@ movement(waypoint).
 		drivexy(0.5,0);
 		!waypoint(Location).
 	
+		
 +!pointToLocation(Location)
-	:	locationBearing(Location,Bearing)
-	<-	.broadcast(tell, pointToLocation(Location,Range)).
+	:	rotationSetting(Location,Rotation)
+		& (math.abs(Rotation) > 0.1)
+	<-	.broadcast(tell, pointToLocation(Location,Rotation));
+		drivexy(0,Rotation).
 	
++!pointToLocation(Location)
+	<-	.broadcast(tell, pointToLocation(Location,onTarget)).
 	
+
+/**
+ * Rule used for calculating the steering setting based on course correction
+ * and target name.
+ */ 
+rotationSetting(TargetName, 2)
+	:-	courseCorrection(TargetName, Correction)
+		& (Correction >= 5).
+ 
+rotationSetting(TargetName, -2)
+	:-	courseCorrection(TargetName, Correction)
+		& (Correction <= -50).
+		
+rotationSetting(TargetName, Correction/180)
+	:-	courseCorrection(TargetName, Correction)
+		& (Correction < 5)
+		& (Correction > -5).	
+		
 /**
  * Calculate the course correction
  */
-courseCorrection(TargetBearing, Correction)
-	:-	compass(CurrentBearing)
-		& declanation(Declanation)
-		& (Correction = TargetBearing - (CurrentBearing + Declanation)).
-		
-/**
- * Rule used for calculating the steering setting based on course correction
- * target bearing.
- * steeringSetting(TargetBearing, SteeringSetting)
- */ 
-
-steeringSetting(TargetBearing, 1)
-	:-	courseCorrection(TargetBearing, Correction)
-		& (Correction >= 20).
- 
-steeringSetting(TargetBearing, -1)
-	:-	courseCorrection(TargetBearing, Correction)
-		& (Correction <= -20).
-		
-steeringSetting(TargetBearing, Correction/180)
-	:-	courseCorrection(TargetBearing, Correction)
-		& (Correction < 20)
-		& (Correction > -20).
-		
+courseCorrection(Location, Angle)
+	:-	odomYaw(CurrentBearing)
+		& locationBearing(Location,TargetBearing) 
+		& (Angle = TargetBearing - CurrentBearing).	
 		
 locationBearing(Location,Bearing) 
-	:- 	locationName(Location,[X,Y])
-		& position(X,Y)
-		& Bearing = math.atan(X/Y).
+	:- 	locationName(Location,[X2,Y2])
+		& position(X1,Y1)
+		& savi_ros_java.savi_ros_bdi.navigation.bearingXY(X1,Y1,X2,Y2,Bearing).
