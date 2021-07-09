@@ -1,3 +1,6 @@
+// A* Nav Rules
+{ include("/home/pi/create_ws/src/saviRoomba/asl/a_star.asl") }
+{ include("/home/pi/create_ws/src/saviRoomba/asl/map.asl") }
 
 +!mission(Goal,Parameters)
 	:	Goal = navigate
@@ -25,7 +28,6 @@ navigation(navigate).
 // We don't have a route plan, get one and set the waypoints.
 +!navigate(Destination)
 	:	(not atLocation(Destination,_))
-		& locationName(Destination,[DestX,DestY])
 		& atLocation(Current,CurrentRange)
 	<-	.broadcast(tell, navigate(gettingRoute(Destination), Range));
 		.broadcast(tell, navigate(current(Current), CurrentRange));
@@ -40,5 +42,3 @@ navigation(navigate).
  +!navigate(Destination)
  	<-	.broadcast(tell, navigate(default, Destination)).
 
-// A* Nav Rules
-{ include("/home/pi/create_ws/src/saviRoomba/asl/a_star.asl") }
