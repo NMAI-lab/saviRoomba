@@ -1,4 +1,4 @@
 <launch>
-  <node name="perceptionTranslator" pkg="saviRoomba" type="scripts/PerceptionTranslator.py" />
-  <node name="actionTranslator" pkg="saviRoomba" type="scripts/ActionTranslator.py" />
+  <node name="perceptionTranslator" pkg="saviRoomba" type="PerceptionTranslator.py" />
+  <node name="actionTranslator" pkg="saviRoomba" type="ActionTranslator.py" />
 </launch>
