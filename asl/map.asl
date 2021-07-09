@@ -1,17 +1,12 @@
-
 /**
- * Definition of the map
+ * Map
+ * a -- b -- c
+ *		|
+ *		|
+ *		d
  */
- 
-/**
 
-locationName(a,[1,1]).
-locationName(b,[1,0]).
-locationName(c,[2,0]).
-locationName(d,[0,0]).
-
-// Possible map transitions.
-// possible(StartingPosition, PossibleNewPosition)
+// Possible routes between locations
 possible(a,b).
 possible(b,a).
 
@@ -21,26 +16,14 @@ possible(c,b).
 possible(b,d).
 possible(d,b).
 
-beaconName(fce22e629b3d,a).
-beaconName(ea2f93a69820,b).
-beaconName(b827ebbd1009,d).
-beaconName(b827eb7cff08,e).
-*/
 
-/**
- * Map
- * a -- b -- c
- *		|
- *		|
- *		d
- */
- 
- 
+// Location definitions
 locationName(a,[1.34,0.25]).
 locationName(b,[1.34,0]).
 locationName(c,[1.34,-0.65]).
 locationName(d,[0,0]).	// Robot has to start here, facing b.
- 
+
+
 // Successor state
 suc(Current,Next,Range,drive)
 	:-	possible(Current,Next)
@@ -51,65 +34,36 @@ h(Current,Goal,Range)
 	:-	range(Current,Goal,Range).
 					
 // Range
-range(A,B,Range)
+rangeName(A,B,Range)
 	:-	locationName(A,[X1,Y1])
 		& locationName(B,[X2,Y2])
-		& Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
- 
- 
-/**
- Old beacon map below
-locationName(c,[1,0]).
-locationName(f,[2,0]).
-locationName(g,[3,0]).
-locationName(h,[4,0]).
-
-//possible(c,f).
-//possible(f,c).
-
-//possible(f,g).
-//possible(g,f).
-
-//possible(g,h).
-//possible(h,g).
-
-possible(h,c).
-possible(c,h).
-
-beaconName(e277fcf90493,c).
-beaconName(d06ad20242eb,f).
-beaconName(ee16869ac2a8,g).
-beaconName(e487913d1ed7,h).
-
-
-atLocation(Location,Range)
-    :-  beacon(Mac,Range)
-		& beaconName(Mac,Location)
-		& Range < 0.8.
+		& range(X1,Y1,X2,Y2,Range).
 		
-nearestLocation(Current,Range)
-	:-	beacon(Mac,Range)
-		& beacon(_,OtherRange)
-		& (not (OtherRange < Range))
-		& beaconName(Mac,Current).
+// Range
+range(X1,Y1,X2,Y2,Range)
+	:-	Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
 
 // Position Rule
 position(X,Y)
-	:-	nearestLocation(Current,_)
-		& locationName(Current,[X,Y]).
+	:-	odomPosition(X,Y).
 
-// Successor state
-suc(Current,Next,Range,drive)
-	:-	possible(Current,Next)
-		& range(Current,Next,Range).
-	
-// Heutistic definition: h(CurrentState,Goal,H)
-h(Current,Goal,Range) 
-	:-	range(Current,Goal,Range).
-					
-// Range
-range(A,B,Range)
-	:-	locationName(A,[X1,Y1])
-		& locationName(B,[X2,Y2])
-		& Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
-*/
+// Get name and range of nearest location
+nearestLocation(Current,Range)
+	:-	position(X,Y)
+		& locationName(Current,[Xcurrent,Ycurrent])
+		& locationName(Other,[Xother,Yother])
+		& range(X,Y,Xcurrent,Ycurrent,Range)
+		& range(X,Y,Xother,Yother,OtherRange)
+		& (not (OtherRange < Range)).
+
+// Identify location of robot, if at a named location
+atLocation(Location,Range)
+    :-  nearestLocation(Location,Range)
+		& Range < 0.1.
+		
+// Identify location of robot, if at a named location
+nearLocation(Location,Range)
+    :-  nearestLocation(Location,Range)
+		& (not atLocation(Location,Range))
+		& Range < 0.2.
+
