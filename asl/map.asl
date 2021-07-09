@@ -66,6 +66,5 @@ atLocation(Location,Range)
 nearLocation(Location,Range)
     :-  position(X,Y)
 		& locationName(Location,[X,Y])
-		& (not atLocation(Location,Range))
 		& Range < 0.5.
 
