@@ -1,6 +1,4 @@
 <launch>
-  <node name="infraredSensor" pkg="saviRoomba" type="InfraredSensors.py" />
-  <node name="bumperSensor" pkg="saviRoomba" type="BumperSensor.py" />
   <node name="perceptionTranslator" pkg="saviRoomba" type="PerceptionTranslator.py" />
   <node name="actionTranslator" pkg="saviRoomba" type="ActionTranslator.py" />
 </launch>

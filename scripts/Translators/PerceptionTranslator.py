@@ -5,6 +5,7 @@ from std_msgs.msg import String
 #from std_msgs.msg import Float64
 from std_msgs.msg import Float32
 from nav_msgs.msg import Odometry
+from ca_msgs.msg import Bumper 
 from threading import Semaphore 
 import math 
 
@@ -97,16 +98,20 @@ def translateBattery(data, args):
     # Translates sensor info from /sensor/Bumper into perceptions
 def translateBumper(data, args):
     (perceptionPublisher) = args
-    bumper = data.data
+    create1 = (data.is_left_pressed, data.is_right_pressed)
+    create2 = (data.is_light_left, data.is_light_front_left, data.is_light_center_left, data.is_light_center_right, data.is_light_front_right, data.is_light_right)
+    if (True in create1) or (True in create2):
+        message = "bumper(pressed)"
+    else:
+        message = "bumper(unpressed)"
+
     global bumperPerception, updateReady, bumperIndex, sem
     sem.acquire()
-    bumperPerception = "bumper({})".format(bumper)
+    bumperPerception = message
     updateReady[bumperIndex] = True
     sem.release()
     sendUpdate(perceptionPublisher)
-    #if "pressed" in bumperPerception:
-    #    sendAsyncUpdate(perceptionPublisher, bumperPerception)
-    
+   
 
 def translateOdometer(data, args):
     position = (data.pose.pose.position.x, data.pose.pose.position.y, data.pose.pose.position.z)
@@ -151,7 +156,7 @@ def rosMain():
     #rospy.Subscriber('sensors/Infrared', String, translateIR, (perceptionPublisher))
     #rospy.Subscriber('sensors/Beacon', String, translateBeacon, (perceptionPublisher))
     rospy.Subscriber('battery/charge_ratio', Float32, translateBattery, (perceptionPublisher))
-    rospy.Subscriber('sensors/Bumper', String, translateBumper, (perceptionPublisher))
+    rospy.Subscriber('bumper', Bumper, translateBumper, (perceptionPublisher))
     rospy.Subscriber('odom', Odometry, translateOdometer, (perceptionPublisher))
     rospy.spin()
 
