@@ -38,16 +38,16 @@ movement(waypoint).
  */ 
 rotationSetting(TargetName, 0.2)
 	:-	courseCorrection(TargetName, Correction)
-		& (Correction >= 5).
+		& (Correction >= 10).
  
 rotationSetting(TargetName, -0.2)
 	:-	courseCorrection(TargetName, Correction)
-		& (Correction <= -5).
+		& (Correction <= -10).
 		
 rotationSetting(TargetName, 0)
 	:-	courseCorrection(TargetName, Correction)
-		& (Correction < 5)
-		& (Correction > -5).
+		& (Correction < 10)
+		& (Correction > -10).
 		
 /**
  * Calculate the course correction

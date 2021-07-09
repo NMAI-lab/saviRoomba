@@ -117,8 +117,10 @@ def translateOdometer(data, args):
     position = (data.pose.pose.position.x, data.pose.pose.position.y, data.pose.pose.position.z)
     orientation = (data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w)
     (x, y, z, w) = orientation
-    (_,_,yawRad) = euler_from_quaternion(x, y, z, w)
+    (pitchRad,rollRad,yawRad) = euler_from_quaternion(x, y, z, w)
     yaw = math.degrees(yawRad)
+    
+    print(pitchRad, rollRad, yawRad)
     
     global odomPositionPerception, odomOrientationPerception, updateReady, odomPositionIndex, odomOrientationIndex, sem
     sem.acquire()
