@@ -26,11 +26,15 @@ locationName(d,[0.0,0.0]).	// Robot has to start here, facing b.
 // Successor state
 suc(Current,Next,Range,drive)
 	:-	possible(Current,Next)
-		& range(Current,Next,Range).
+		& locationName(Current,[X1,Y1])
+		& locationName(Next,[X2,Y2])
+		& range(X1,Y1,X2,Y2,Range).
 	
 // Heutistic definition: h(CurrentState,Goal,H)
 h(Current,Goal,Range) 
-	:-	range(Current,Goal,Range).
+	:-	locationName(Current,[X1,Y1])
+		& locationName(Goal,[X2,Y2])
+		& range(X1,Y1,X2,Y2,Range).
 					
 // Range
 //rangeName(A,B,Range)
