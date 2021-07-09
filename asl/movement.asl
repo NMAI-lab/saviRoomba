@@ -36,11 +36,11 @@ movement(waypoint).
  * Rule used for calculating the steering setting based on course correction
  * and target name.
  */ 
-rotationSetting(TargetName, 0.2)
+rotationSetting(TargetName, 0.8)
 	:-	courseCorrection(TargetName, Correction)
 		& (Correction >= 10).
  
-rotationSetting(TargetName, -0.2)
+rotationSetting(TargetName, -0.8)
 	:-	courseCorrection(TargetName, Correction)
 		& (Correction <= -10).
 		
