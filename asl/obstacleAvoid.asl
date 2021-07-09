@@ -1,3 +1,6 @@
 safety(bumper).
 @Bumper [atomic]
-+bumper(pressed) <- drive(bleft); turn(left).
++bumper(pressed)
+	<-	drive(bleft);
+		turn(left);
+		drive(forward).
