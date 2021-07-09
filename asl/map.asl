@@ -33,10 +33,10 @@ h(Current,Goal,Range)
 	:-	range(Current,Goal,Range).
 					
 // Range
-rangeName(A,B,Range)
-	:-	locationName(A,[X1,Y1])
-		& locationName(B,[X2,Y2])
-		& range(X1,Y1,X2,Y2,Range).
+//rangeName(A,B,Range)
+//	:-	locationName(A,[X1,Y1])
+//		& locationName(B,[X2,Y2])
+//		& range(X1,Y1,X2,Y2,Range).
 		
 // Range
 range(X1,Y1,X2,Y2,Range)
@@ -60,11 +60,12 @@ position(X,Y)
 // Identify location of robot, if at a named location
 atLocation(Location,Range)
     :-  nearLocation(Location,Range)
-		& Range < 0.3.
+		& Range < 0.1.
 		
 // Identify location of robot, if at a named location
 nearLocation(Location,Range)
-    :-  position(X,Y)
-		& locationName(Location,[X,Y])
+    :-  position(X1,Y1)
+		& locationName(Location,[X2,Y2])
+		& range(X1,Y1,X2,Y2,Range)
 		& Range < 0.5.
 
