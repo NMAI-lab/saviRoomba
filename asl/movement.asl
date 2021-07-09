@@ -25,7 +25,8 @@ movement(waypoint).
 	:	rotationSetting(Location,Rotation)
 		& (math.abs(Rotation) > 0.1)
 	<-	.broadcast(tell, pointToLocation(Location,Rotation));
-		drivexy(0,Rotation).
+		drivexy(0,Rotation);
+		!pointToLocation(Location).
 	
 +!pointToLocation(Location)
 	<-	.broadcast(tell, pointToLocation(Location,onTarget)).
