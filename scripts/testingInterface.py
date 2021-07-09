@@ -18,7 +18,7 @@ def sendCommand(publisher):
 
     # Build message with the achievement goal, log and send it
     messageType = "achieve"
-    messageContent = "waypoint(b)"
+    messageContent = "waypoint(a)"
     message = "<" + str(messageID) + "," + userID + "," + messageType + "," + agentID + "," + messageContent + ">"
     rospy.loginfo("Sending message: " + str(message))
     publisher.publish(message)
