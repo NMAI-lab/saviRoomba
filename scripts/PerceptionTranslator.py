@@ -99,8 +99,8 @@ def translateBattery(data, args):
 def translateBumper(data, args):
     (perceptionPublisher) = args
     create1 = (data.is_left_pressed, data.is_right_pressed)
-    create2 = (data.is_light_left, data.is_light_front_left, data.is_light_center_left, data.is_light_center_right, data.is_light_front_right, data.is_light_right)
-    if (True in create1) or (True in create2):
+    #create2 = (data.is_light_left, data.is_light_front_left, data.is_light_center_left, data.is_light_center_right, data.is_light_front_right, data.is_light_right)
+    if (True in create1):# or (True in create2):
         message = "bumper(pressed)"
     else:
         message = "bumper(unpressed)"
