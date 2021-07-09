@@ -52,9 +52,9 @@ nearestLocation(Current,Range)
 	:-	position(X,Y)
 		& locationName(Current,[Xcurrent,Ycurrent])
 		& locationName(Other,[Xother,Yother])
-		& Other \== Current
 		& range(X,Y,Xcurrent,Ycurrent,Range)
 		& range(X,Y,Xother,Yother,OtherRange)
+		& Other \== Current
 		& Range < OtherRange.
 
 // Identify location of robot, if at a named location
