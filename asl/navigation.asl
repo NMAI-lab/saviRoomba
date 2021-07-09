@@ -26,7 +26,7 @@ navigation(navigate).
 +!navigate(Destination)
 	:	(not atLocation(Destination,_))
 		& locationName(Destination,[DestX,DestY])
-		& nearestLocation(Current,Range)
+		& atLocation(Current,Range)
 	<-	.broadcast(tell, navigate(gettingRoute(Destination), Range));
 		.broadcast(tell, navigate(current(Current), CurrentRange));
 		?a_star(Current,Destination,Solution,Cost);
