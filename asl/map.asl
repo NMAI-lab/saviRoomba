@@ -45,16 +45,17 @@ range(X1,Y1,X2,Y2,Range)
 
 // Position Rule
 position(X,Y)
-	:-	odomPosition(X,Y).
+	:-	odomPosition(X,Y,_).
 
 // Get name and range of nearest location
 nearestLocation(Current,Range)
 	:-	position(X,Y)
 		& locationName(Current,[Xcurrent,Ycurrent])
 		& locationName(Other,[Xother,Yother])
+		& Other \== Current
 		& range(X,Y,Xcurrent,Ycurrent,Range)
 		& range(X,Y,Xother,Yother,OtherRange)
-		& (not (OtherRange < Range)).
+		& Range < OtherRange.
 
 // Identify location of robot, if at a named location
 atLocation(Location,Range)
@@ -63,7 +64,8 @@ atLocation(Location,Range)
 		
 // Identify location of robot, if at a named location
 nearLocation(Location,Range)
-    :-  nearestLocation(Location,Range)
+    :-  position(X,Y)
+		& locationName(Location,[X,Y])
 		& (not atLocation(Location,Range))
-		& Range < 0.2.
+		& Range < 0.3.
 
