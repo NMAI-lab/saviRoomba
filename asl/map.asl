@@ -44,10 +44,19 @@ h(Current,Goal,Range)
 range(X1,Y1,X2,Y2,Range)
 	:-	Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
 	
-atLocation(Location,Range)
+atLocation(Location,0)
 	:-	locationName(Location,[X,Y])
 		& position(X,Y).
 		
 // Initial beliefs for position and direction faced.
-position(0,0).
-direction(0).
+position(0,0).		// Initial location is [0,0]
+direction(e).		// See below
+
+// Directions
+// 		n
+// 		|
+// w -- + -- e
+//		|
+//		s
+
+

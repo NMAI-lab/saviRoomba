@@ -1,63 +1,116 @@
 // Component behaviours (think in terms of state)
 
+{ include("map.asl") }
+
 
 movement(waypoint).
 +!waypoint(Location)
-    :   atLocation(Location,Range)
-    <-  .broadcast(tell, waypoint(atLocation(Location,Range)));
-		drive(stop).
+    :   atLocation(Location,_)
+    <-  .print(atLocation(Location)).
+		//.broadcast(tell, waypoint(atLocation(Location,Range)));
+		//.print(drive(stop)).
 
 +!waypoint(Location)
-    :   nearLocation(Location,Range)	
-    <-  !pointToLocation(Location);
-		.broadcast(tell, waypoint(nearLocation(Location,Range)));
-		drivexy(0.1,0);
+	:	locationName(Location,[X,Y])
+    <-  !faceNext(Location);
+		!drive(forward);
+		-position(_,_);
+		+position(X,Y);
 		!waypoint(Location).
 
-+!waypoint(Location)
-    <-	!pointToLocation(Location);
-		.broadcast(tell, waypoint(driving(Location)));
-		drivexy(0.5,0);
-		!waypoint(Location).
-	
++!faceNext(Next)
+	:	direction(CurrentDirection)
+		& directionToNext(Next,NewDirection)
+		& face(CurrentDirection,NewDirection,TurnAction)
+	<-	!turn(TurnAction);
+		-direction(_);
+		+direction(NewDirection).
 		
-+!pointToLocation(Location)
-	:	rotationSetting(Location,Rotation)
-		& (math.abs(Rotation) > 0.1)
-	<-	.broadcast(tell, pointToLocation(Location,Rotation));
-		drivexy(0,Rotation);
-		!pointToLocation(Location).
-	
-+!pointToLocation(Location)
-	<-	.broadcast(tell, pointToLocation(Location,onTarget)).
-	
++!faceNext(_).
+		
+directionToNext(Next,e)
+	:-	position(X1,_)
+		& locationName(Next,[X2,_])
+		& X1 < X2.
 
-/**
- * Rule used for calculating the steering setting based on course correction
- * and target name.
- */ 
-rotationSetting(TargetName, 0.8)
-	:-	courseCorrection(TargetName, Correction)
-		& (Correction >= 10).
- 
-rotationSetting(TargetName, -0.8)
-	:-	courseCorrection(TargetName, Correction)
-		& (Correction <= -10).
+directionToNext(Next,w)
+	:-	position(X1,_)
+		& locationName(Next,[X2,_])
+		& X1 > X2.	
 		
-rotationSetting(TargetName, 0)
-	:-	courseCorrection(TargetName, Correction)
-		& (Correction < 10)
-		& (Correction > -10).
+directionToNext(Next,n)
+	:-	position(_,Y1)
+		& locationName(Next,[_,Y2])
+		& Y1 < Y2.
+
+directionToNext(Next,s)
+	:-	position(_,Y1)
+		& locationName(Next,[_,Y2])
+		& Y1 > Y2.	
 		
+
+face(OldDirection,NewDirection,around)
+	:-	((OldDirection == s) & (NewDirection == n))
+		| ((OldDirection == n) & (NewDirection == s))
+		| ((OldDirection == e) & (NewDirection == w))
+		| ((OldDirection == w) & (NewDirection == e)).
+	
+face(OldDirection,NewDirection,left)
+	:-	((OldDirection == s) & (NewDirection == e))
+		| ((OldDirection == e) & (NewDirection == n))
+		| ((OldDirection == n) & (NewDirection == w))
+		| ((OldDirection == w) & (NewDirection == s)).
+		
+face(OldDirection,NewDirection,right)
+	:-	((OldDirection == s) & (NewDirection == w))
+		| ((OldDirection == w) & (NewDirection == n))
+		| ((OldDirection == n) & (NewDirection == e))
+		| ((OldDirection == e) & (NewDirection == s)).
+		
+face(OldDirection,NewDirection,ok)
+	:-	OldDirection == NewDirection.	
+	
++!turn(left)
+	:	turnRate(X,Y)
+	<-	!move(X,Y,2).
+
++!turn(right)
+	: 	turnRate(X,Y)
+	<-	!move(0-X,0-Y,2).
+
++!turn(around)
+	:	turnRate(X,Y)
+	<-	!move(X,Y,4).
+
++!turn(_)
+	<-	.print(turn(default)).
+
++!drive(forward)
+	:	driveRate(X,Y)
+	<-	!move(X,Y,5).
+	
++!drive(backward)
+	:	driveRate(X,Y)
+	<-	!move(0-X,0-Y,5).
+	
++!drive(_)
+	<-	.print(drive(default)).
+	
+	
++!move(X,Y,Count)
+	: 	Count > 0
+	<-	.print(drive(X,Y));
+		!move(X,Y,Count-1).
+	
++!move(_,_,_)
+	<-	.print(move(default)).
+
+	
 /**
- * Calculate the course correction
+ * Turning and driving rates
  */
-courseCorrection(Location, Angle)
-	:-	odomYaw(CurrentBearing)
-		& locationBearing(Location,TargetBearing) 
-		& (Angle = TargetBearing - CurrentBearing).	
-		
-locationBearing(Location,Bearing) 
-	:- 	locationName(Location,[X2,Y2])
-		& position(X1,Y1)
-		& savi_ros_java.savi_ros_bdi.navigation.bearingXY(X1,Y1,X2,Y2,Bearing).
+turnRate(0,0.41).
+driveRate(0.5,0).
+
+
+
