@@ -1,4 +1,4 @@
 safety(bumper).
 @Bumper [atomic]
 +bumper(pressed)
-	<-	drivexy(0,4).
+	<-	drivexy(0,3.5).
