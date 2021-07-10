@@ -120,7 +120,7 @@ movement(move).
 /**
  * Turning and driving rates
  */
-turnRate(0,0.41).
+turnRate(0,4.1).
 driveRate(0.5,0).
 
 
