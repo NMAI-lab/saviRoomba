@@ -3,7 +3,8 @@ safety(bumper).
 +bumper(pressed)
 	<-	.broadcast(tell, avoid(obstacle));
 		!turn(left);
-		!move(0.5,-4,5).
+		!move(0.5,-3,10);
+		!turn(right).
 		
 
 
