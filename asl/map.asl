@@ -1,9 +1,13 @@
 /**
  * Map
- * a -- b -- c
+ * 
+ * 		a
+ * 		|
+ * 		|
+ * d -- b
  *		|
  *		|
- *		d
+ *		c
  */
  
 // Possible routes between locations
@@ -18,10 +22,10 @@ possible(d,b).
 
 
 // Location definitions
-locationName(a,[1.34,0.25]).
-locationName(b,[1.34,0]).
-locationName(c,[1.34,-0.65]).
-locationName(d,[0.0,0.0]).	// Robot has to start here, facing b.
+locationName(a,[1,1]).
+locationName(b,[1,0]).
+locationName(c,[1,-1]).
+locationName(d,[0,0]).	// Robot has to start here, facing b.
 
 // Successor state
 suc(Current,Next,Range,drive)
@@ -37,39 +41,13 @@ h(Current,Goal,Range)
 		& range(X1,Y1,X2,Y2,Range).
 					
 // Range
-//rangeName(A,B,Range)
-//	:-	locationName(A,[X1,Y1])
-//		& locationName(B,[X2,Y2])
-//		& range(X1,Y1,X2,Y2,Range).
-		
-// Range
 range(X1,Y1,X2,Y2,Range)
 	:-	Range = math.sqrt( ((X2-X1) * (X2-X1)) + ((Y2-Y1) * (Y2-Y1)) ).
-
-// Position Rule
-position(X,Y)
-	:-	odomPosition(X,Y,_).
-
-// Get name and range of nearest location
-//nearestLocation(Current,Range)
-//	:-	position(X,Y)
-//		& locationName(Current,[Xcurrent,Ycurrent])
-//		& locationName(Other,[Xother,Yother])
-//		& Other \== Current
-//		& range(X,Y,Xcurrent,Ycurrent,Range)
-//		& range(X,Y,Xother,Yother,OtherRange)
-//		& not (OtherRange < Range).
-
-
-// Identify location of robot, if at a named location
+	
 atLocation(Location,Range)
-    :-  nearLocation(Location,Range)
-		& Range < 0.1.
+	:-	locationName(Location,[X,Y])
+		& position(X,Y).
 		
-// Identify location of robot, if at a named location
-nearLocation(Location,Range)
-    :-  position(X1,Y1)
-		& locationName(Location,[X2,Y2])
-		& range(X1,Y1,X2,Y2,Range)
-		& Range < 0.5.
-
+// Initial beliefs for position and direction faced.
+position(0,0).
+direction(0).
