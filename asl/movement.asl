@@ -110,7 +110,7 @@ movement(move).
 +!move(X,Y,Count)
 	: 	Count > 0
 	<-	.broadcast(tell, move(X,Y,Count));
-		drive(X,Y);
+		drivexy(X,Y);
 		!move(X,Y,Count-1).
 	
 +!move(_,_,_)
