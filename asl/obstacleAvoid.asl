@@ -1,4 +1,5 @@
 safety(bumper).
 @Bumper [atomic]
 +bumper(pressed)
-	<-	drivexy(0,0).
+	<-	.broadcast(tell, avoid(bumper(pressed),stopped));
+		drivexy(0,0).

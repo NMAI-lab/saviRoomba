@@ -1,32 +1,35 @@
 // Component behaviours (think in terms of state)
 
-{ include("map.asl") }
-
-
 movement(waypoint).
 +!waypoint(Location)
     :   atLocation(Location,_)
-    <-  .print(atLocation(Location)).
-		//.broadcast(tell, waypoint(atLocation(Location,Range)));
-		//.print(drive(stop)).
+    <-  .broadcast(tell, waypoint(atLocation(Location)));
+		drive(stop).
 
 +!waypoint(Location)
 	:	locationName(Location,[X,Y])
-    <-  !faceNext(Location);
+    <-  .broadcast(tell, waypoint(Location));
+		!faceNext(Location);
 		!drive(forward);
 		-position(_,_);
 		+position(X,Y);
 		!waypoint(Location).
 
++!waypoint(Location)
+	<-	.broadcast(tell, waypoint(Location,default)).
+	
+movement(faceNext).	
 +!faceNext(Next)
 	:	direction(CurrentDirection)
 		& directionToNext(Next,NewDirection)
 		& face(CurrentDirection,NewDirection,TurnAction)
-	<-	!turn(TurnAction);
+	<-	.broadcast(tell, faceNext(Next));
+		!turn(TurnAction);
 		-direction(_);
 		+direction(NewDirection).
 		
-+!faceNext(_).
++!faceNext(Next)
+	<-	.broadcast(tell, faceNext(Next,default)).
 		
 directionToNext(Next,e)
 	:-	position(X1,_)
@@ -69,37 +72,45 @@ face(OldDirection,NewDirection,right)
 		
 face(OldDirection,NewDirection,ok)
 	:-	OldDirection == NewDirection.	
-	
+
+movement(turn).	
 +!turn(left)
 	:	turnRate(X,Y)
-	<-	!move(X,Y,2).
+	<-	.broadcast(tell, turn(left));
+		!move(X,Y,2).
 
 +!turn(right)
 	: 	turnRate(X,Y)
-	<-	!move(0-X,0-Y,2).
+	<-	.broadcast(tell, turn(right));
+		!move(0-X,0-Y,2).
 
 +!turn(around)
 	:	turnRate(X,Y)
-	<-	!move(X,Y,4).
+	<-	.broadcast(tell, turn(around));
+		!move(X,Y,4).
 
 +!turn(_)
 	<-	.print(turn(default)).
 
+movement(drive).	
 +!drive(forward)
 	:	driveRate(X,Y)
-	<-	!move(X,Y,5).
+	<-	.broadcast(tell, drive(forwad));
+		!move(X,Y,5).
 	
 +!drive(backward)
 	:	driveRate(X,Y)
-	<-	!move(0-X,0-Y,5).
+	<-	.broadcast(tell, drive(backward));
+		!move(0-X,0-Y,5).
 	
 +!drive(_)
 	<-	.print(drive(default)).
 	
-	
+movement(move).
 +!move(X,Y,Count)
 	: 	Count > 0
-	<-	.print(drive(X,Y));
+	<-	.broadcast(tell, move(X,Y,Count));
+		drive(X,Y);
 		!move(X,Y,Count-1).
 	
 +!move(_,_,_)
