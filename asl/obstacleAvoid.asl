@@ -1,5 +1,16 @@
 safety(bumper).
 @Bumper [atomic]
 +bumper(pressed)
-	<-	.broadcast(tell, avoid(bumper(pressed),stopped));
-		drivexy(0,0).
+	<-	.broadcast(tell, avoid(obstacle));
+		!drive(backward);
+		!turn(left);
+		!drive(forward);
+		!turn(right);
+		!drive(forward);
+		!drive(forward);
+		!turn(right);
+		!drive(forward);
+		!turn(left).
+		
+
+
