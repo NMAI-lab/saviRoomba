@@ -24,7 +24,7 @@ def sendMailMission(publisher):
     
     # Build message with the dock location, log and send it
     messageType = "tell"
-    messageContent = "dockStation(" + str(dock) + ")"
+    messageContent = "chargerLocation(" + str(dock) + ")"
     message = "<" + str(messageID) + "," + userID + "," + messageType + "," + agentID + "," + messageContent + ">"
     rospy.loginfo("Sending message: " + str(message))
     publisher.publish(message)
