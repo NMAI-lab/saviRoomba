@@ -1,5 +1,6 @@
 batteryMin(0.50).
 batteryMax(0.95).
+charging(false).
 
 /**
  * When the battery perception is below the minimum, we need to pickup the goal
@@ -50,7 +51,9 @@ health(chargeBattery).
 		+managingBattery;
 		!navigate(ChargeStation);
 		.broadcast(tell, chargeBattery(atDock));
-		station(dock);
+		station(dock
+		-charging(false);
+		+charging(true);
 		.broadcast(tell, chargeBattery(docked));
 		!chargeBattery.
 		
@@ -60,6 +63,8 @@ health(chargeBattery).
 		& charging(true)
 	<-	.broadcast(tell, chargeBattery(charged));
 		station(undock);
+		-charging(true);
+		+charging(false);
 		-managingBattery;
 		.broadcast(tell, chargeBattery(unDocked)).
 		
