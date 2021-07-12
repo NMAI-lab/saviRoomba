@@ -2,6 +2,7 @@ batteryMin(0.50).
 batteryMax(0.95).
 charging(false).
 battery(0.1).
+chargerLocation(d).
 
 /**
  * When the battery perception is below the minimum, we need to pickup the goal
