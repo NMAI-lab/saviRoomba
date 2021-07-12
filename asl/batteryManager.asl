@@ -20,7 +20,7 @@ health(battery).
 		& mission(Goal,Parameters)
 		& (not managingBattery)
 	<-	.drop_all_intentions;
-		.print(".broadcast(tell, battery(chargingNeeded))");
+		.broadcast(tell, battery(chargingNeeded));
 		!chargeBattery;
 		.broadcast(tell, battery(chargingFinished));
 		!mission(Goal,Parameters).
@@ -32,7 +32,7 @@ health(battery).
 		& lowBattery(State)
 		& (not managingBattery)
 	<-	.drop_all_intentions;
-		.print(".broadcast(tell, battery(chargingNeeded))");
+		.broadcast(tell, battery(chargingNeeded));
 		!chargeBattery;
 		.broadcast(tell, battery(chargingFinished)).
 	
