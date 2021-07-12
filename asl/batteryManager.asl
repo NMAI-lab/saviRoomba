@@ -51,7 +51,7 @@ health(chargeBattery).
 		+managingBattery;
 		!navigate(ChargeStation);
 		.broadcast(tell, chargeBattery(atDock));
-		station(dock
+		station(dock);
 		-charging(false);
 		+charging(true);
 		.broadcast(tell, chargeBattery(docked));
