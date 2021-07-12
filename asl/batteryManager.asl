@@ -1,8 +1,6 @@
 batteryMin(0.50).
 batteryMax(0.95).
 charging(false).
-battery(0.1).
-chargerLocation(d).
 
 /**
  * When the battery perception is below the minimum, we need to pickup the goal
@@ -46,8 +44,8 @@ health(chargeBattery).
  // I'm not docked. Go to the docking station and dock.
  // This is rerursiuve as we need to wait for the battery to charge.
  +!chargeBattery
-	:	//lowBattery(_) &
-		charging(false)
+	:	lowBattery(_) 
+		& charging(false)
 		& chargerLocation(ChargeStation)
 	<-	.broadcast(tell, chargeBattery(chargingNeeded));
 		+managingBattery;
