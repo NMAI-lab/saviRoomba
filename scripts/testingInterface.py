@@ -11,30 +11,14 @@ from datetime import datetime
 
 startTime = 0   # Set the start time as a global variable
 
-def sendMailMission(publisher):
+def sendCommand(publisher):
     messageID = int(round(time.time() * 1000))  # Crude message ID
     agentID = "BROADCAST"
     userID = "user"
-    messageType = "tell"
 
-    # Prompt user for input (using Pyton 7 method, ROS does not use Python 3)
-    sender = raw_input("Please enter the sender location (Example: post1): ")
-    receiver = raw_input("Please enter the receiver location (Example: post4): ")
-    dock = raw_input("Please enter the dock location (Example: post5): ")
-    
-    # Build message with the dock location, log and send it
-    messageType = "tell"
-    messageContent = "chargerLocation(" + str(dock) + ")"
-    message = "<" + str(messageID) + "," + userID + "," + messageType + "," + agentID + "," + messageContent + ">"
-    rospy.loginfo("Sending message: " + str(message))
-    publisher.publish(message)
-
-    # Give it a moment
-    time.sleep(1)
-    
-    # Build message with the mail mission, log and send it
+    # Build message with the achievement goal, log and send it
     messageType = "achieve"
-    messageContent = "collectAndDeliverMail(" + str(sender) + "," + str(receiver) + ")"
+    messageContent = "waypoint(a)"
     message = "<" + str(messageID) + "," + userID + "," + messageType + "," + agentID + "," + messageContent + ">"
     rospy.loginfo("Sending message: " + str(message))
     publisher.publish(message)
@@ -69,7 +53,7 @@ def rosMain():
     time.sleep(5)
 
     # Prompt the use for the mailMission and send it
-    sendMailMission(publisher)
+    sendCommand(publisher)
 
     # Log the start time of the mission
     global startTime

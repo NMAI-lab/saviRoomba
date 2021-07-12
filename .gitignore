@@ -1,2 +1,5 @@
 
 asl/demo.asl~
+roomba
+*.pyc
+*.asl~
